@@ -1,0 +1,6 @@
+# Byte-compiled / optimized / DLL files
+build/
+__pycache__/
+
+# c extensions
+*.so
