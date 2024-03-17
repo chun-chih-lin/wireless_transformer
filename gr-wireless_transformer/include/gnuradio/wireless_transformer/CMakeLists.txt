@@ -9,4 +9,5 @@
 ########################################################################
 # Install public header files
 ########################################################################
-install(FILES api.h DESTINATION include/gnuradio/wireless_transformer)
+install(FILES api.h
+    dump_wifi_signal.h DESTINATION include/gnuradio/wireless_transformer)

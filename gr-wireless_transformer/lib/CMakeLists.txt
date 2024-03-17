@@ -11,7 +11,8 @@
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
-list(APPEND wireless_transformer_sources)
+list(APPEND wireless_transformer_sources
+    dump_wifi_signal_impl.cc)
 
 set(wireless_transformer_sources
     "${wireless_transformer_sources}"

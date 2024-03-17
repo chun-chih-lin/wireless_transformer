@@ -24,7 +24,8 @@ include(GrPybind)
 # Python Bindings
 ########################################################################
 
-list(APPEND wireless_transformer_python_files python_bindings.cc)
+list(APPEND wireless_transformer_python_files
+    dump_wifi_signal_python.cc python_bindings.cc)
 
 gr_pybind_make_oot(wireless_transformer ../../.. gr::wireless_transformer "${wireless_transformer_python_files}")
 
