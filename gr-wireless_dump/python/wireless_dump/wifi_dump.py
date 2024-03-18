@@ -47,7 +47,7 @@ class wifi_dump(gr.sync_block):
             else:
                 # Already detected in the past.
                 # Concatenate self.wifi_signal
-                self.wifi_signal = np.concatenate((self.wifi_signal, in0[]))
+                self.wifi_signal = np.concatenate((self.wifi_signal, in0))
                 print(f"{self.wifi_signal = }, {len(self.wifi_signal) = }")
 
             # # Convert from PMT to python string
