@@ -4,9 +4,10 @@ category: '[Wireless Dump]'
 
 templates:
   imports: from gnuradio import wireless_dump
-  make: wireless_dump.wifi_dump(${mod})
+  make: wireless_dump.wifi_dump(${mod}, ${pkt_len})
   callbacks:
   - set_modulation(${mod})
+  - set_pkt_len(${pkt_len})
 
 #  Make one 'parameters' list entry for every parameter you want settable from the GUI.
 #     Keys include:
@@ -19,9 +20,9 @@ parameters:
   label: Mod
   dtype: int
   default: '0'
-#- id: ...
-#  label: ...
-#  dtype: ...
+- id: pkt_len
+  label: Packet Length
+  dtype: int
 
 #  Make one 'inputs' list entry per input and one 'outputs' list entry per output.
 #  Keys include:

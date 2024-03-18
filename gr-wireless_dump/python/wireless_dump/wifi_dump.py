@@ -15,7 +15,7 @@ class wifi_dump(gr.sync_block):
     """
     docstring for block wifi_dump
     """
-    def __init__(self, mod):
+    def __init__(self, mod, pkt_len):
         gr.sync_block.__init__(self,
             name="wifi_dump",
             in_sig=[np.complex64],
@@ -23,12 +23,25 @@ class wifi_dump(gr.sync_block):
         self.count = 0
         self.wifi_signal = None
         self.detect = False
-        self.wifi_len = 5000
+        self.pkt_len = None
         self.set_modulation(mod)
+        self.set_pkt_len(pkt_len)
         
     def set_modulation(self, mod):
         self.mod = mod
-        print(f"Setting modulation to {self.mod}")
+        if self.pkt_len is not None:
+            self.calculate_wifi_len()
+        
+    def set_pkt_len(self, pkt_len):
+        self.pkt_len = pkt_len
+        self.calculate_wifi_len()
+
+    def calculate_wifi_len(self):
+        print("Updating wifi signal length...")
+        print(f"{self.pkt_len = }, {self.mod = }")
+
+        wifi_len = 5000
+        self.wifi_len = wifi_len
 
     def work(self, input_items, output_items):
         in0 = input_items[0]
