@@ -7,4 +7,5 @@
 #
 
 install(FILES
-    wireless_transformer_dump_wifi_signal.block.yml DESTINATION share/gnuradio/grc/blocks)
+    wireless_transformer_dump_wifi_signal.block.yml
+    wireless_transformer_wifi_dump.block.yml DESTINATION share/gnuradio/grc/blocks)
