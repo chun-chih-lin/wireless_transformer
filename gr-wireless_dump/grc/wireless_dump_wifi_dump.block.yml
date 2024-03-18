@@ -5,6 +5,8 @@ category: '[Wireless Dump]'
 templates:
   imports: from gnuradio import wireless_dump
   make: wireless_dump.wifi_dump(${mod})
+  callbacks:
+  - set_modulation(${mod})
 
 #  Make one 'parameters' list entry for every parameter you want settable from the GUI.
 #     Keys include:
