@@ -1,0 +1,6 @@
+/*!
+ * \defgroup block GNU Radio WIRELESS_DUMP C++ Signal Processing Blocks
+ * \brief All C++ blocks that can be used from the WIRELESS_DUMP GNU Radio
+ *        module are listed here or in the subcategories below.
+ *
+ */
