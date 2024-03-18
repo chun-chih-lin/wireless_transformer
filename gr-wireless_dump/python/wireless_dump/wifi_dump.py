@@ -9,6 +9,7 @@
 
 import numpy as np
 from gnuradio import gr
+import pmt
 
 class wifi_dump(gr.sync_block):
     """
@@ -23,5 +24,14 @@ class wifi_dump(gr.sync_block):
 
     def work(self, input_items, output_items):
         in0 = input_items[0]
-        print(f"{in0.shape = }")
+        tags = self.get_tags_in_window(0, 0, len(input_items[0]))
+        for tag in tags:
+            # Convert from PMT to python string
+            key = pmt.to_python(tag.key)
+
+            # Value can be several things, it depends what PMT type it was.
+            value = pmt.to_python(tag.value)
+
+            print(f"{key = }")
+            print(f"{value = }")
         return False
