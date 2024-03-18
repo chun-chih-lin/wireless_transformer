@@ -19,7 +19,11 @@ add_subdirectory(bindings)
 ########################################################################
 # Install python sources
 ########################################################################
-gr_python_install(FILES __init__.py DESTINATION ${GR_PYTHON_DIR}/gnuradio/wireless_dump)
+gr_python_install(
+    FILES 
+    __init__.py 
+    wifi_dump.py
+    DESTINATION ${GR_PYTHON_DIR}/gnuradio/wireless_dump)
 
 ########################################################################
 # Handle the unit tests
