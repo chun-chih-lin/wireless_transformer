@@ -21,6 +21,7 @@ class wifi_dump(gr.sync_block):
             in_sig=[np.complex64],
             out_sig=None)
         self.count = 0
+        self.wifi_signal = None
 
     def work(self, input_items, output_items):
         in0 = input_items[0]
@@ -29,8 +30,10 @@ class wifi_dump(gr.sync_block):
         if self.count == 0:
             print(f"{self.name = }")
             for tag in tags:
-                print(f"{tag.id = } {type(tag.id) = }")
+
+                # Get the start signal offset
                 print(f"{tag.offset = } {type(tag.offset) = }")
+                offset = tag.offset
 
                 # Convert from PMT to python string
                 key = pmt.to_python(tag.key)
@@ -38,8 +41,7 @@ class wifi_dump(gr.sync_block):
                 # Value can be several things, it depends what PMT type it was.
                 value = pmt.to_python(tag.value)
 
-                print(f"{key = }")
-                print(f"{value = }")
+
             self.count += 1
         elif self.count >= 1000:
             self.count = 0
