@@ -29,8 +29,8 @@ class wifi_dump(gr.sync_block):
         if self.count == 0:
             print(f"{self.name = }")
             for tag in tags:
-                print(f"{tag = } {type(tag) = }")
-                print(tag.offset)
+                print(f"{tag.id = } {type(tag.id) = }")
+                print(f"{tag.offset = } {type(tag.offset) = }")
 
                 # Convert from PMT to python string
                 key = pmt.to_python(tag.key)
