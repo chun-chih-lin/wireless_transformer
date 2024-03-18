@@ -1,6 +1,6 @@
 id: wireless_dump_wifi_dump
-label: wifi_dump
-category: '[wireless_dump]'
+label: WiFi Dump
+category: '[Wireless Dump]'
 
 templates:
   imports: from gnuradio import wireless_dump
@@ -13,10 +13,10 @@ templates:
 #     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
 #     * default
 parameters:
-- id: parametername_replace_me
-  label: FIX ME:
-  dtype: string
-  default: You need to fill in your grc/wireless_dump_wifi_dump.block.yaml
+# - id: parametername_replace_me
+#   label: FIX ME:
+#   dtype: string
+#   default: You need to fill in your grc/wireless_dump_wifi_dump.block.yaml
 #- id: ...
 #  label: ...
 #  dtype: ...

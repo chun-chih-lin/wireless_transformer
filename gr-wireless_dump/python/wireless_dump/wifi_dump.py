@@ -7,7 +7,7 @@
 #
 
 
-import numpy
+import numpy as np
 from gnuradio import gr
 
 class wifi_dump(gr.sync_block):
@@ -17,11 +17,11 @@ class wifi_dump(gr.sync_block):
     def __init__(self):
         gr.sync_block.__init__(self,
             name="wifi_dump",
-            in_sig=[<+numpy.float32+>, ],
+            in_sig=[np.complex64],
             out_sig=None)
 
 
     def work(self, input_items, output_items):
         in0 = input_items[0]
-        # <+signal processing here+>
-        return len(input_items[0])
+        print(f"{in0.shape = }")
+        return False
