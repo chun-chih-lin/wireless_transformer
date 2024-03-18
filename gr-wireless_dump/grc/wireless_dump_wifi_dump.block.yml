@@ -4,7 +4,7 @@ category: '[Wireless Dump]'
 
 templates:
   imports: from gnuradio import wireless_dump
-  make: wireless_dump.wifi_dump()
+  make: wireless_dump.wifi_dump(${mod})
 
 #  Make one 'parameters' list entry for every parameter you want settable from the GUI.
 #     Keys include:
@@ -12,11 +12,11 @@ templates:
 #     * label (label shown in the GUI)
 #     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
 #     * default
-# parameters:
-# - id: parametername_replace_me
-#   label: FIX ME:
-#   dtype: string
-#   default: You need to fill in your grc/wireless_dump_wifi_dump.block.yaml
+parameters:
+- id: mod
+  label: Mod
+  dtype: int
+  default: '0'
 #- id: ...
 #  label: ...
 #  dtype: ...
