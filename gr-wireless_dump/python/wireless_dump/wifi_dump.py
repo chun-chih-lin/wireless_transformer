@@ -27,7 +27,7 @@ class wifi_dump(gr.sync_block):
         tags = self.get_tags_in_window(0, 0, len(input_items[0]))
 
         if self.count == 0:
-            print(f"{name() = }")
+            print(f"{self.name = }")
             for tag in tags:
                 print(f"{tag = } {type(tag) = }")
                 print(tag.offset)
