@@ -20,18 +20,25 @@ class wifi_dump(gr.sync_block):
             name="wifi_dump",
             in_sig=[np.complex64],
             out_sig=None)
-
+        self.count = 0
 
     def work(self, input_items, output_items):
         in0 = input_items[0]
         tags = self.get_tags_in_window(0, 0, len(input_items[0]))
-        for tag in tags:
-            # Convert from PMT to python string
-            key = pmt.to_python(tag.key)
 
-            # Value can be several things, it depends what PMT type it was.
-            value = pmt.to_python(tag.value)
+        if self.count == 0:
+            for tag in tags:
+                # Convert from PMT to python string
+                key = pmt.to_python(tag.key)
 
-            print(f"{key = }")
-            print(f"{value = }")
+                # Value can be several things, it depends what PMT type it was.
+                value = pmt.to_python(tag.value)
+
+                print(f"{key = }")
+                print(f"{value = }")
+            self.count += 1
+        elif self.count >= 1000:
+            self.count = 0
+        else:
+            self.count += 1
         return False
