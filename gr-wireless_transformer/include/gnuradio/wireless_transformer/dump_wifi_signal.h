@@ -32,7 +32,7 @@ namespace gr {
        * class. wireless_transformer::dump_wifi_signal::make is the public interface for
        * creating new instances.
        */
-      static sptr make(unsigned int window_size, float sensitivity, unsigned int sync_length);
+      static sptr make(unsigned int window_size, double sensitivity, unsigned int sync_length);
     };
 
   } // namespace wireless_transformer
