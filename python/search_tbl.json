@@ -1,4 +1,42 @@
 {
     "0": {
+        "indent": [3],
+        "pattern_start": 3,
+        "start_n_symbol": 16
+    },
+    "1": {
+        "indent": [4, 3],
+        "pattern_start": 1,
+        "start_n_symbol": 12
+    },
+    "2": {
+        "indent": [5],
+        "pattern_start": 6,
+        "start_n_symbol": 11
+    },
+    "3": {
+        "indent": [8],
+        "pattern_start": 6,
+        "start_n_symbol": 9
+    },
+    "4": {
+        "indent": [10],
+        "pattern_start": 6,
+        "start_n_symbol": 8
+    },
+    "5": {
+        "indent": [18],
+        "pattern_start": 6,
+        "start_n_symbol": 7
+    },
+    "6": {
+        "indent": [24],
+        "pattern_start": 18,
+        "start_n_symbol": 7
+    },
+    "7": {
+        "indent": [27],
+        "pattern_start": 24,
+        "start_n_symbol": 7
     }
 }
