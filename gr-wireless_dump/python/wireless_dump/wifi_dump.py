@@ -15,7 +15,7 @@ class wifi_dump(gr.sync_block):
     """
     docstring for block wifi_dump
     """
-    def __init__(self, mod, pkt_len):
+    def __init__(self, mod, pdu_len):
         gr.sync_block.__init__(self,
             name="wifi_dump",
             in_sig=[np.complex64],
@@ -23,25 +23,31 @@ class wifi_dump(gr.sync_block):
         self.count = 0
         self.wifi_signal = None
         self.detect = False
-        self.pkt_len = None
+        self.pdu_len = None
         self.set_modulation(mod)
-        self.set_pkt_len(pkt_len)
+        self.set_pdu_len(pdu_len)
         
     def set_modulation(self, mod):
         self.mod = mod
-        if self.pkt_len is not None:
-            self.calculate_wifi_len()
+        if self.pdu_len is not None:
+            self.update_ttl_sample()
         
-    def set_pkt_len(self, pkt_len):
-        self.pkt_len = pkt_len
-        self.calculate_wifi_len()
+    def set_pdu_len(self, pdu_len):
+        self.pdu_len = pdu_len
+        self.update_ttl_sample()
 
-    def calculate_wifi_len(self):
+    def update_ttl_sample(self):
         print("Updating wifi signal length...")
-        print(f"{self.pkt_len = }, {self.mod = }")
+        print(f"{self.pdu_len = }, {self.mod = }")
 
-        wifi_len = 5000
-        self.wifi_len = wifi_len
+        # header size is 24 bytes
+        # pdu size id pdu_len bytes
+        # FCS size is 4 bytes
+
+        
+
+        max_sample = 5000
+        self.max_sample = max_sample
 
     def work(self, input_items, output_items):
         in0 = input_items[0]
@@ -58,9 +64,14 @@ class wifi_dump(gr.sync_block):
                 # Store the wifi signal to self.wifi_signal
                 self.wifi_signal = in0[offset:]
         else:
-            if len(self.wifi_signal) >= self.wifi_len:
+            if len(self.wifi_signal) >= self.max_sample:
                 # The length is longer than the wifi signal.
-                # Do not do anything.
+                # Return the whole sample array.
+                self.ttl_sample = self.wifi_signal
+                # Reset the detect flag
+                #self.detect = False
+                # Clear the wifi_signal buffer
+                self.wifi_signal = None
                 pass
             else:
                 # Already detected in the past.
