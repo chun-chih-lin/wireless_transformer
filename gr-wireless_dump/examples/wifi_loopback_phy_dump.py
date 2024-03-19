@@ -7,7 +7,7 @@
 # GNU Radio Python Flow Graph
 # Title: Not titled yet
 # Author: root
-# GNU Radio version: v3.10.9.2-39-gcf065ee5
+# GNU Radio version: v3.10.9.2-5-gdd01ef52
 
 from PyQt5 import Qt
 from gnuradio import qtgui
@@ -81,7 +81,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         self.pdu_length = pdu_length = 10
         self.out_buf_size = out_buf_size = 96000
         self.max_symbols = max_symbols = int(5 + 1 + ((16 + 800 * 8 + 6) * 2) / 24)
-        self.interval = interval = 2000
+        self.interval = interval = 300
         self.header_formatter = header_formatter = ieee802_11.signal_field()
         self.freq = freq = 5890000000
         self.epsilon = epsilon = 0
@@ -122,29 +122,13 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._interval_range = qtgui.Range(10, 10000, 1, 2000, 200)
+        self._interval_range = qtgui.Range(10, 1000, 1, 300, 200)
         self._interval_win = qtgui.RangeWidget(self._interval_range, self.set_interval, "'interval'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._interval_win, 2, 1, 1, 1)
         for r in range(2, 3):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        # Create the options list
-        self._freq_options = [2412000000.0, 2417000000.0, 2422000000.0, 2427000000.0, 2432000000.0, 2437000000.0, 2442000000.0, 2447000000.0, 2452000000.0, 2457000000.0, 2462000000.0, 2467000000.0, 2472000000.0, 2484000000.0, 5170000000.0, 5180000000.0, 5190000000.0, 5200000000.0, 5210000000.0, 5220000000.0, 5230000000.0, 5240000000.0, 5250000000.0, 5260000000.0, 5270000000.0, 5280000000.0, 5290000000.0, 5300000000.0, 5310000000.0, 5320000000.0, 5500000000.0, 5510000000.0, 5520000000.0, 5530000000.0, 5540000000.0, 5550000000.0, 5560000000.0, 5570000000.0, 5580000000.0, 5590000000.0, 5600000000.0, 5610000000.0, 5620000000.0, 5630000000.0, 5640000000.0, 5660000000.0, 5670000000.0, 5680000000.0, 5690000000.0, 5700000000.0, 5710000000.0, 5720000000.0, 5745000000.0, 5755000000.0, 5765000000.0, 5775000000.0, 5785000000.0, 5795000000.0, 5805000000.0, 5825000000.0, 5860000000.0, 5870000000.0, 5880000000.0, 5890000000.0, 5900000000.0, 5910000000.0, 5920000000.0]
-        # Create the labels list
-        self._freq_labels = ['  1 | 2412.0 | 11g', '  2 | 2417.0 | 11g', '  3 | 2422.0 | 11g', '  4 | 2427.0 | 11g', '  5 | 2432.0 | 11g', '  6 | 2437.0 | 11g', '  7 | 2442.0 | 11g', '  8 | 2447.0 | 11g', '  9 | 2452.0 | 11g', ' 10 | 2457.0 | 11g', ' 11 | 2462.0 | 11g', ' 12 | 2467.0 | 11g', ' 13 | 2472.0 | 11g', ' 14 | 2484.0 | 11g', ' 34 | 5170.0 | 11a', ' 36 | 5180.0 | 11a', ' 38 | 5190.0 | 11a', ' 40 | 5200.0 | 11a', ' 42 | 5210.0 | 11a', ' 44 | 5220.0 | 11a', ' 46 | 5230.0 | 11a', ' 48 | 5240.0 | 11a', ' 50 | 5250.0 | 11a', ' 52 | 5260.0 | 11a', ' 54 | 5270.0 | 11a', ' 56 | 5280.0 | 11a', ' 58 | 5290.0 | 11a', ' 60 | 5300.0 | 11a', ' 62 | 5310.0 | 11a', ' 64 | 5320.0 | 11a', '100 | 5500.0 | 11a', '102 | 5510.0 | 11a', '104 | 5520.0 | 11a', '106 | 5530.0 | 11a', '108 | 5540.0 | 11a', '110 | 5550.0 | 11a', '112 | 5560.0 | 11a', '114 | 5570.0 | 11a', '116 | 5580.0 | 11a', '118 | 5590.0 | 11a', '120 | 5600.0 | 11a', '122 | 5610.0 | 11a', '124 | 5620.0 | 11a', '126 | 5630.0 | 11a', '128 | 5640.0 | 11a', '132 | 5660.0 | 11a', '134 | 5670.0 | 11a', '136 | 5680.0 | 11a', '138 | 5690.0 | 11a', '140 | 5700.0 | 11a', '142 | 5710.0 | 11a', '144 | 5720.0 | 11a', '149 | 5745.0 | 11a (SRD)', '151 | 5755.0 | 11a (SRD)', '153 | 5765.0 | 11a (SRD)', '155 | 5775.0 | 11a (SRD)', '157 | 5785.0 | 11a (SRD)', '159 | 5795.0 | 11a (SRD)', '161 | 5805.0 | 11a (SRD)', '165 | 5825.0 | 11a (SRD)', '172 | 5860.0 | 11p', '174 | 5870.0 | 11p', '176 | 5880.0 | 11p', '178 | 5890.0 | 11p', '180 | 5900.0 | 11p', '182 | 5910.0 | 11p', '184 | 5920.0 | 11p']
-        # Create the combo box
-        self._freq_tool_bar = Qt.QToolBar(self)
-        self._freq_tool_bar.addWidget(Qt.QLabel("'freq'" + ": "))
-        self._freq_combo_box = Qt.QComboBox()
-        self._freq_tool_bar.addWidget(self._freq_combo_box)
-        for _label in self._freq_labels: self._freq_combo_box.addItem(_label)
-        self._freq_callback = lambda i: Qt.QMetaObject.invokeMethod(self._freq_combo_box, "setCurrentIndex", Qt.Q_ARG("int", self._freq_options.index(i)))
-        self._freq_callback(self.freq)
-        self._freq_combo_box.currentIndexChanged.connect(
-            lambda i: self.set_freq(self._freq_options[i]))
-        # Create the radio buttons
-        self.top_layout.addWidget(self._freq_tool_bar)
         self._epsilon_range = qtgui.Range(-20e-6, 20e-6, 1e-6, 0, 200)
         self._epsilon_win = qtgui.RangeWidget(self._epsilon_range, self.set_epsilon, "'epsilon'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._epsilon_win, 3, 1, 1, 1)
@@ -172,84 +156,8 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        # Create the options list
-        self._chan_est_options = [0, 1, 2, 3]
-        # Create the labels list
-        self._chan_est_labels = ['LS', 'LMS', 'Linear Comb', 'STA']
-        # Create the combo box
-        # Create the radio buttons
-        self._chan_est_group_box = Qt.QGroupBox("'chan_est'" + ": ")
-        self._chan_est_box = Qt.QVBoxLayout()
-        class variable_chooser_button_group(Qt.QButtonGroup):
-            def __init__(self, parent=None):
-                Qt.QButtonGroup.__init__(self, parent)
-            @pyqtSlot(int)
-            def updateButtonChecked(self, button_id):
-                self.button(button_id).setChecked(True)
-        self._chan_est_button_group = variable_chooser_button_group()
-        self._chan_est_group_box.setLayout(self._chan_est_box)
-        for i, _label in enumerate(self._chan_est_labels):
-            radio_button = Qt.QRadioButton(_label)
-            self._chan_est_box.addWidget(radio_button)
-            self._chan_est_button_group.addButton(radio_button, i)
-        self._chan_est_callback = lambda i: Qt.QMetaObject.invokeMethod(self._chan_est_button_group, "updateButtonChecked", Qt.Q_ARG("int", self._chan_est_options.index(i)))
-        self._chan_est_callback(self.chan_est)
-        self._chan_est_button_group.buttonClicked[int].connect(
-            lambda i: self.set_chan_est(self._chan_est_options[i]))
-        self.top_layout.addWidget(self._chan_est_group_box)
         self.sync_short = ieee802_11.sync_short(sensitivity, 2, False, False)
         self.sync_long = ieee802_11.sync_long(sync_length, False, False)
-        self.qtgui_time_sink_x_0_0 = qtgui.time_sink_c(
-            1024, #size
-            samp_rate, #samp_rate
-            "TX Signal", #name
-            1, #number of inputs
-            None # parent
-        )
-        self.qtgui_time_sink_x_0_0.set_update_time(0.10)
-        self.qtgui_time_sink_x_0_0.set_y_axis(-2, 2)
-
-        self.qtgui_time_sink_x_0_0.set_y_label('Amplitude', "")
-
-        self.qtgui_time_sink_x_0_0.enable_tags(True)
-        self.qtgui_time_sink_x_0_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, 0, "")
-        self.qtgui_time_sink_x_0_0.enable_autoscale(False)
-        self.qtgui_time_sink_x_0_0.enable_grid(False)
-        self.qtgui_time_sink_x_0_0.enable_axis_labels(True)
-        self.qtgui_time_sink_x_0_0.enable_control_panel(False)
-        self.qtgui_time_sink_x_0_0.enable_stem_plot(False)
-
-
-        labels = ['Signal 1', 'Signal 2', 'Signal 3', 'Signal 4', 'Signal 5',
-            'Signal 6', 'Signal 7', 'Signal 8', 'Signal 9', 'Signal 10']
-        widths = [1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1]
-        colors = ['blue', 'red', 'green', 'black', 'cyan',
-            'magenta', 'yellow', 'dark red', 'dark green', 'dark blue']
-        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-            1.0, 1.0, 1.0, 1.0, 1.0]
-        styles = [1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1]
-        markers = [-1, -1, -1, -1, -1,
-            -1, -1, -1, -1, -1]
-
-
-        for i in range(2):
-            if len(labels[i]) == 0:
-                if (i % 2 == 0):
-                    self.qtgui_time_sink_x_0_0.set_line_label(i, "Re{{Data {0}}}".format(i/2))
-                else:
-                    self.qtgui_time_sink_x_0_0.set_line_label(i, "Im{{Data {0}}}".format(i/2))
-            else:
-                self.qtgui_time_sink_x_0_0.set_line_label(i, labels[i])
-            self.qtgui_time_sink_x_0_0.set_line_width(i, widths[i])
-            self.qtgui_time_sink_x_0_0.set_line_color(i, colors[i])
-            self.qtgui_time_sink_x_0_0.set_line_style(i, styles[i])
-            self.qtgui_time_sink_x_0_0.set_line_marker(i, markers[i])
-            self.qtgui_time_sink_x_0_0.set_line_alpha(i, alphas[i])
-
-        self._qtgui_time_sink_x_0_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0_0.qwidget(), Qt.QWidget)
-        self.top_layout.addWidget(self._qtgui_time_sink_x_0_0_win)
         self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
             1024, #size
             samp_rate, #samp_rate
@@ -258,7 +166,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
             None # parent
         )
         self.qtgui_time_sink_x_0.set_update_time(0.10)
-        self.qtgui_time_sink_x_0.set_y_axis(-10, 10)
+        self.qtgui_time_sink_x_0.set_y_axis(-1, 1)
 
         self.qtgui_time_sink_x_0.set_y_label('Amplitude', "")
 
@@ -307,17 +215,28 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
             flt_size=32,
             atten=100)
         self.pfb_arb_resampler_xxx_0.declare_sample_delay(0)
-        self.ieee802_11_parse_mac_0 = ieee802_11.parse_mac(False, False)
         self.ieee802_11_mapper_0 = ieee802_11.mapper(encoding, False)
         self.ieee802_11_mac_0_0 = ieee802_11.mac([0x23, 0x23, 0x23, 0x23, 0x23, 0x23], [0x42, 0x42, 0x42, 0x42, 0x42, 0x42], [0xff, 0xff, 0xff, 0xff, 0xff, 0xff])
-        self.ieee802_11_frame_equalizer_0 = ieee802_11.frame_equalizer(chan_est, freq, samp_rate, False, False)
-        self.ieee802_11_extract_csi_0 = ieee802_11.extract_csi()
-        self.ieee802_11_decode_mac_0 = ieee802_11.decode_mac(False, False)
         self.ieee802_11_chunks_to_symbols_xx_0 = ieee802_11.chunks_to_symbols()
         self.ieee802_11_chunks_to_symbols_xx_0.set_min_output_buffer((max_symbols * 48 * 8))
+        # Create the options list
+        self._freq_options = [2412000000.0, 2417000000.0, 2422000000.0, 2427000000.0, 2432000000.0, 2437000000.0, 2442000000.0, 2447000000.0, 2452000000.0, 2457000000.0, 2462000000.0, 2467000000.0, 2472000000.0, 2484000000.0, 5170000000.0, 5180000000.0, 5190000000.0, 5200000000.0, 5210000000.0, 5220000000.0, 5230000000.0, 5240000000.0, 5250000000.0, 5260000000.0, 5270000000.0, 5280000000.0, 5290000000.0, 5300000000.0, 5310000000.0, 5320000000.0, 5500000000.0, 5510000000.0, 5520000000.0, 5530000000.0, 5540000000.0, 5550000000.0, 5560000000.0, 5570000000.0, 5580000000.0, 5590000000.0, 5600000000.0, 5610000000.0, 5620000000.0, 5630000000.0, 5640000000.0, 5660000000.0, 5670000000.0, 5680000000.0, 5690000000.0, 5700000000.0, 5710000000.0, 5720000000.0, 5745000000.0, 5755000000.0, 5765000000.0, 5775000000.0, 5785000000.0, 5795000000.0, 5805000000.0, 5825000000.0, 5860000000.0, 5870000000.0, 5880000000.0, 5890000000.0, 5900000000.0, 5910000000.0, 5920000000.0]
+        # Create the labels list
+        self._freq_labels = ['  1 | 2412.0 | 11g', '  2 | 2417.0 | 11g', '  3 | 2422.0 | 11g', '  4 | 2427.0 | 11g', '  5 | 2432.0 | 11g', '  6 | 2437.0 | 11g', '  7 | 2442.0 | 11g', '  8 | 2447.0 | 11g', '  9 | 2452.0 | 11g', ' 10 | 2457.0 | 11g', ' 11 | 2462.0 | 11g', ' 12 | 2467.0 | 11g', ' 13 | 2472.0 | 11g', ' 14 | 2484.0 | 11g', ' 34 | 5170.0 | 11a', ' 36 | 5180.0 | 11a', ' 38 | 5190.0 | 11a', ' 40 | 5200.0 | 11a', ' 42 | 5210.0 | 11a', ' 44 | 5220.0 | 11a', ' 46 | 5230.0 | 11a', ' 48 | 5240.0 | 11a', ' 50 | 5250.0 | 11a', ' 52 | 5260.0 | 11a', ' 54 | 5270.0 | 11a', ' 56 | 5280.0 | 11a', ' 58 | 5290.0 | 11a', ' 60 | 5300.0 | 11a', ' 62 | 5310.0 | 11a', ' 64 | 5320.0 | 11a', '100 | 5500.0 | 11a', '102 | 5510.0 | 11a', '104 | 5520.0 | 11a', '106 | 5530.0 | 11a', '108 | 5540.0 | 11a', '110 | 5550.0 | 11a', '112 | 5560.0 | 11a', '114 | 5570.0 | 11a', '116 | 5580.0 | 11a', '118 | 5590.0 | 11a', '120 | 5600.0 | 11a', '122 | 5610.0 | 11a', '124 | 5620.0 | 11a', '126 | 5630.0 | 11a', '128 | 5640.0 | 11a', '132 | 5660.0 | 11a', '134 | 5670.0 | 11a', '136 | 5680.0 | 11a', '138 | 5690.0 | 11a', '140 | 5700.0 | 11a', '142 | 5710.0 | 11a', '144 | 5720.0 | 11a', '149 | 5745.0 | 11a (SRD)', '151 | 5755.0 | 11a (SRD)', '153 | 5765.0 | 11a (SRD)', '155 | 5775.0 | 11a (SRD)', '157 | 5785.0 | 11a (SRD)', '159 | 5795.0 | 11a (SRD)', '161 | 5805.0 | 11a (SRD)', '165 | 5825.0 | 11a (SRD)', '172 | 5860.0 | 11p', '174 | 5870.0 | 11p', '176 | 5880.0 | 11p', '178 | 5890.0 | 11p', '180 | 5900.0 | 11p', '182 | 5910.0 | 11p', '184 | 5920.0 | 11p']
+        # Create the combo box
+        self._freq_tool_bar = Qt.QToolBar(self)
+        self._freq_tool_bar.addWidget(Qt.QLabel("'freq'" + ": "))
+        self._freq_combo_box = Qt.QComboBox()
+        self._freq_tool_bar.addWidget(self._freq_combo_box)
+        for _label in self._freq_labels: self._freq_combo_box.addItem(_label)
+        self._freq_callback = lambda i: Qt.QMetaObject.invokeMethod(self._freq_combo_box, "setCurrentIndex", Qt.Q_ARG("int", self._freq_options.index(i)))
+        self._freq_callback(self.freq)
+        self._freq_combo_box.currentIndexChanged.connect(
+            lambda i: self.set_freq(self._freq_options[i]))
+        # Create the radio buttons
+        self.top_layout.addWidget(self._freq_tool_bar)
         self.foo_packet_pad2_0 = foo.packet_pad2(False, False, 0.001, 500, 0)
         self.foo_packet_pad2_0.set_min_output_buffer((out_buf_size * 10))
-        self.fft_vxx_0_1 = fft.fft_vcc(64, True, window.rectangular(64), True, 1)
         self.fft_vxx_0_0 = fft.fft_vcc(64, False, tuple([1/52**.5] * 64), True, 1)
         self.fft_vxx_0_0.set_min_output_buffer((max_symbols * 48 * 8 * 10))
         self.digital_packet_headergenerator_bb_0 = digital.packet_headergenerator_bb(header_formatter.formatter(), "packet_len")
@@ -338,11 +257,33 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
             taps=[1.0],
             noise_seed=0,
             block_tags=False)
+        # Create the options list
+        self._chan_est_options = [0, 1, 2, 3]
+        # Create the labels list
+        self._chan_est_labels = ['LS', 'LMS', 'Linear Comb', 'STA']
+        # Create the combo box
+        # Create the radio buttons
+        self._chan_est_group_box = Qt.QGroupBox("'chan_est'" + ": ")
+        self._chan_est_box = Qt.QVBoxLayout()
+        class variable_chooser_button_group(Qt.QButtonGroup):
+            def __init__(self, parent=None):
+                Qt.QButtonGroup.__init__(self, parent)
+            @pyqtSlot(int)
+            def updateButtonChecked(self, button_id):
+                self.button(button_id).setChecked(True)
+        self._chan_est_button_group = variable_chooser_button_group()
+        self._chan_est_group_box.setLayout(self._chan_est_box)
+        for i, _label in enumerate(self._chan_est_labels):
+            radio_button = Qt.QRadioButton(_label)
+            self._chan_est_box.addWidget(radio_button)
+            self._chan_est_button_group.addButton(radio_button, i)
+        self._chan_est_callback = lambda i: Qt.QMetaObject.invokeMethod(self._chan_est_button_group, "updateButtonChecked", Qt.Q_ARG("int", self._chan_est_options.index(i)))
+        self._chan_est_callback(self.chan_est)
+        self._chan_est_button_group.buttonClicked[int].connect(
+            lambda i: self.set_chan_est(self._chan_est_options[i]))
+        self.top_layout.addWidget(self._chan_est_group_box)
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_gr_complex*1, "packet_len", 1)
         self.blocks_tagged_stream_mux_0.set_min_output_buffer((max_symbols * 48 * 8))
-        self.blocks_tag_debug_0 = blocks.tag_debug(gr.sizeof_gr_complex*52, '', "")
-        self.blocks_tag_debug_0.set_display(True)
-        self.blocks_stream_to_vector_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, 64)
         self.blocks_multiply_xx_0 = blocks.multiply_vcc(1)
         self.blocks_multiply_const_xx_0 = blocks.multiply_const_cc((10**(snr/10.0))**.5, 1)
         self.blocks_moving_average_xx_1 = blocks.moving_average_ff((window_size  + 16), 1, 4000, 1)
@@ -360,9 +301,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         # Connections
         ##################################################
         self.msg_connect((self.blocks_message_strobe_0_0, 'strobe'), (self.ieee802_11_mac_0_0, 'app in'))
-        self.msg_connect((self.ieee802_11_decode_mac_0, 'out'), (self.ieee802_11_parse_mac_0, 'in'))
         self.msg_connect((self.ieee802_11_mac_0_0, 'phy out'), (self.ieee802_11_mapper_0, 'in'))
-        self.msg_connect((self.ieee802_11_parse_mac_0, 'out'), (self.ieee802_11_extract_csi_0, 'pdu in'))
         self.connect((self.blocks_complex_to_mag_0, 0), (self.blocks_divide_xx_0, 0))
         self.connect((self.blocks_complex_to_mag_squared_0, 0), (self.blocks_moving_average_xx_1, 0))
         self.connect((self.blocks_conjugate_cc_0, 0), (self.blocks_multiply_xx_0, 1))
@@ -375,26 +314,20 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_moving_average_xx_1, 0), (self.blocks_divide_xx_0, 1))
         self.connect((self.blocks_multiply_const_xx_0, 0), (self.channels_channel_model_0, 0))
         self.connect((self.blocks_multiply_xx_0, 0), (self.blocks_moving_average_xx_0, 0))
-        self.connect((self.blocks_stream_to_vector_0, 0), (self.fft_vxx_0_1, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_ofdm_carrier_allocator_cvc_0_0_0, 0))
         self.connect((self.channels_channel_model_0, 0), (self.pfb_arb_resampler_xxx_0, 0))
         self.connect((self.digital_chunks_to_symbols_xx_0, 0), (self.blocks_tagged_stream_mux_0, 0))
         self.connect((self.digital_ofdm_carrier_allocator_cvc_0_0_0, 0), (self.fft_vxx_0_0, 0))
         self.connect((self.digital_ofdm_cyclic_prefixer_0_0, 0), (self.foo_packet_pad2_0, 0))
-        self.connect((self.digital_ofdm_cyclic_prefixer_0_0, 0), (self.qtgui_time_sink_x_0_0, 0))
         self.connect((self.digital_packet_headergenerator_bb_0, 0), (self.digital_chunks_to_symbols_xx_0, 0))
         self.connect((self.fft_vxx_0_0, 0), (self.digital_ofdm_cyclic_prefixer_0_0, 0))
-        self.connect((self.fft_vxx_0_1, 0), (self.ieee802_11_frame_equalizer_0, 0))
         self.connect((self.foo_packet_pad2_0, 0), (self.blocks_multiply_const_xx_0, 0))
         self.connect((self.ieee802_11_chunks_to_symbols_xx_0, 0), (self.blocks_tagged_stream_mux_0, 1))
-        self.connect((self.ieee802_11_extract_csi_0, 0), (self.blocks_tag_debug_0, 0))
-        self.connect((self.ieee802_11_frame_equalizer_0, 0), (self.ieee802_11_decode_mac_0, 0))
         self.connect((self.ieee802_11_mapper_0, 0), (self.digital_packet_headergenerator_bb_0, 0))
         self.connect((self.ieee802_11_mapper_0, 0), (self.ieee802_11_chunks_to_symbols_xx_0, 0))
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_complex_to_mag_squared_0, 0))
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_delay_0_0, 0))
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_multiply_xx_0, 0))
-        self.connect((self.sync_long, 0), (self.blocks_stream_to_vector_0, 0))
         self.connect((self.sync_long, 0), (self.qtgui_time_sink_x_0, 0))
         self.connect((self.sync_short, 0), (self.blocks_delay_0, 0))
         self.connect((self.sync_short, 0), (self.sync_long, 0))
@@ -442,9 +375,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
         self._samp_rate_callback(self.samp_rate)
-        self.ieee802_11_frame_equalizer_0.set_bandwidth(self.samp_rate)
         self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
-        self.qtgui_time_sink_x_0_0.set_samp_rate(self.samp_rate)
 
     def get_pdu_length(self):
         return self.pdu_length
@@ -484,7 +415,6 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
     def set_freq(self, freq):
         self.freq = freq
         self._freq_callback(self.freq)
-        self.ieee802_11_frame_equalizer_0.set_frequency(self.freq)
 
     def get_epsilon(self):
         return self.epsilon
@@ -508,7 +438,6 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
     def set_chan_est(self, chan_est):
         self.chan_est = chan_est
         self._chan_est_callback(self.chan_est)
-        self.ieee802_11_frame_equalizer_0.set_algorithm(self.chan_est)
 
 
 

@@ -60,7 +60,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [280, 12.0]
+    coordinate: [184, 12.0]
     rotation: 0
     state: enabled
 - name: encoding
@@ -91,7 +91,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [456, 12.0]
+    coordinate: [360, 12.0]
     rotation: 0
     state: enabled
 - name: epsilon
@@ -112,7 +112,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [744, 12.0]
+    coordinate: [648, 12.0]
     rotation: 0
     state: enabled
 - name: freq
@@ -173,7 +173,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1280, 12.0]
+    coordinate: [1184, 12.0]
     rotation: 0
     state: enabled
 - name: header_formatter
@@ -185,7 +185,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1096, 12.0]
+    coordinate: [1000, 12.0]
     rotation: 0
     state: enabled
 - name: interval
@@ -199,14 +199,14 @@ blocks:
     rangeType: int
     start: '10'
     step: '1'
-    stop: '10000'
-    value: '2000'
+    stop: '1000'
+    value: '300'
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [856, 12.0]
+    coordinate: [760, 12.0]
     rotation: 0
     state: enabled
 - name: max_symbols
@@ -218,7 +218,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1096, 76.0]
+    coordinate: [1000, 76.0]
     rotation: 0
     state: enabled
 - name: out_buf_size
@@ -251,7 +251,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 12.0]
+    coordinate: [528, 12.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -281,7 +281,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1456, 12.0]
+    coordinate: [1360, 12.0]
     rotation: 0
     state: enabled
 - name: snr
@@ -302,7 +302,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [976, 12.0]
+    coordinate: [880, 12.0]
     rotation: 0
     state: enabled
 - name: sync_length
@@ -542,28 +542,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [472, 584.0]
+    coordinate: [472, 656.0]
     rotation: 180
-    state: enabled
-- name: blocks_tag_debug_0
-  id: blocks_tag_debug
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    display: 'True'
-    filter: '""'
-    name: ''
-    num_inputs: '1'
-    type: complex
-    vlen: '52'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1144, 660.0]
-    rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_tagged_stream_mux_0
   id: blocks_tagged_stream_mux
   parameters:
@@ -770,9 +751,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [240, 548.0]
+    coordinate: [240, 620.0]
     rotation: 180
-    state: enabled
+    state: disabled
 - name: foo_packet_pad2_0
   id: foo_packet_pad2
   parameters:
@@ -822,24 +803,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [464, 676.0]
+    coordinate: [464, 716.0]
     rotation: 0
-    state: enabled
-- name: ieee802_11_extract_csi_0
-  id: ieee802_11_extract_csi
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [952, 688.0]
-    rotation: 0
-    state: enabled
+    state: disabled
 - name: ieee802_11_frame_equalizer_0
   id: ieee802_11_frame_equalizer
   parameters:
@@ -857,9 +823,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [152, 668.0]
+    coordinate: [152, 740.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: ieee802_11_mac_0_0
   id: ieee802_11_mac
   parameters:
@@ -909,9 +875,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [752, 676.0]
+    coordinate: [752, 716.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: pdu_pdu_to_tagged_stream_0
   id: pdu_pdu_to_tagged_stream
   parameters:
@@ -926,7 +892,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [408, 748.0]
+    coordinate: [408, 788.0]
     rotation: 0
     state: disabled
 - name: pfb_arb_resampler_xxx_0
@@ -1039,7 +1005,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [752, 740.0]
+    coordinate: [752, 780.0]
     rotation: 0
     state: disabled
 - name: qtgui_time_sink_x_0
@@ -1129,112 +1095,15 @@ blocks:
     width8: '1'
     width9: '1'
     ylabel: Amplitude
-    ymax: '10'
-    ymin: '-10'
+    ymax: '1'
+    ymin: '-1'
     yunit: '""'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [456, 500.0]
+    coordinate: [456, 492.0]
     rotation: 180
-    state: enabled
-- name: qtgui_time_sink_x_0_0
-  id: qtgui_time_sink_x
-  parameters:
-    affinity: ''
-    alias: ''
-    alpha1: '1.0'
-    alpha10: '1.0'
-    alpha2: '1.0'
-    alpha3: '1.0'
-    alpha4: '1.0'
-    alpha5: '1.0'
-    alpha6: '1.0'
-    alpha7: '1.0'
-    alpha8: '1.0'
-    alpha9: '1.0'
-    autoscale: 'False'
-    axislabels: 'True'
-    color1: blue
-    color10: dark blue
-    color2: red
-    color3: green
-    color4: black
-    color5: cyan
-    color6: magenta
-    color7: yellow
-    color8: dark red
-    color9: dark green
-    comment: ''
-    ctrlpanel: 'False'
-    entags: 'True'
-    grid: 'False'
-    gui_hint: ''
-    label1: Signal 1
-    label10: Signal 10
-    label2: Signal 2
-    label3: Signal 3
-    label4: Signal 4
-    label5: Signal 5
-    label6: Signal 6
-    label7: Signal 7
-    label8: Signal 8
-    label9: Signal 9
-    legend: 'True'
-    marker1: '-1'
-    marker10: '-1'
-    marker2: '-1'
-    marker3: '-1'
-    marker4: '-1'
-    marker5: '-1'
-    marker6: '-1'
-    marker7: '-1'
-    marker8: '-1'
-    marker9: '-1'
-    name: '"TX Signal"'
-    nconnections: '1'
-    size: '1024'
-    srate: samp_rate
-    stemplot: 'False'
-    style1: '1'
-    style10: '1'
-    style2: '1'
-    style3: '1'
-    style4: '1'
-    style5: '1'
-    style6: '1'
-    style7: '1'
-    style8: '1'
-    style9: '1'
-    tr_chan: '0'
-    tr_delay: '0'
-    tr_level: '0.0'
-    tr_mode: qtgui.TRIG_MODE_FREE
-    tr_slope: qtgui.TRIG_SLOPE_POS
-    tr_tag: '""'
-    type: complex
-    update_time: '0.10'
-    width1: '1'
-    width10: '1'
-    width2: '1'
-    width3: '1'
-    width4: '1'
-    width5: '1'
-    width6: '1'
-    width7: '1'
-    width8: '1'
-    width9: '1'
-    ylabel: Amplitude
-    ymax: '2'
-    ymin: '-2'
-    yunit: '""'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [376, 188.0]
-    rotation: 0
     state: enabled
 - name: sensitivity
   id: parameter
@@ -1296,13 +1165,13 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    mod: encoding
-    pkt_len: pdu_length
+    mod: '0'
+    pdu_len: pdu_length
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [576, 628.0]
+    coordinate: [496, 572.0]
     rotation: 180
     state: disabled
 
@@ -1326,20 +1195,17 @@ connections:
 - [digital_chunks_to_symbols_xx_0, '0', blocks_tagged_stream_mux_0, '0']
 - [digital_ofdm_carrier_allocator_cvc_0_0_0, '0', fft_vxx_0_0, '0']
 - [digital_ofdm_cyclic_prefixer_0_0, '0', foo_packet_pad2_0, '0']
-- [digital_ofdm_cyclic_prefixer_0_0, '0', qtgui_time_sink_x_0_0, '0']
 - [digital_packet_headergenerator_bb_0, '0', digital_chunks_to_symbols_xx_0, '0']
 - [fft_vxx_0_0, '0', digital_ofdm_cyclic_prefixer_0_0, '0']
 - [fft_vxx_0_1, '0', ieee802_11_frame_equalizer_0, '0']
 - [foo_packet_pad2_0, '0', blocks_multiply_const_xx_0, '0']
 - [ieee802_11_chunks_to_symbols_xx_0, '0', blocks_tagged_stream_mux_0, '1']
 - [ieee802_11_decode_mac_0, out, ieee802_11_parse_mac_0, in]
-- [ieee802_11_extract_csi_0, '0', blocks_tag_debug_0, '0']
 - [ieee802_11_frame_equalizer_0, '0', ieee802_11_decode_mac_0, '0']
 - [ieee802_11_frame_equalizer_0, symbols, pdu_pdu_to_tagged_stream_0, pdus]
 - [ieee802_11_mac_0_0, phy out, ieee802_11_mapper_0, in]
 - [ieee802_11_mapper_0, '0', digital_packet_headergenerator_bb_0, '0']
 - [ieee802_11_mapper_0, '0', ieee802_11_chunks_to_symbols_xx_0, '0']
-- [ieee802_11_parse_mac_0, out, ieee802_11_extract_csi_0, pdu in]
 - [pdu_pdu_to_tagged_stream_0, '0', qtgui_const_sink_x_0, '0']
 - [pfb_arb_resampler_xxx_0, '0', blocks_complex_to_mag_squared_0, '0']
 - [pfb_arb_resampler_xxx_0, '0', blocks_delay_0_0, '0']
@@ -1352,4 +1218,4 @@ connections:
 
 metadata:
   file_format: 1
-  grc_version: v3.10.9.2-39-gcf065ee5
+  grc_version: v3.10.9.2-5-gdd01ef52

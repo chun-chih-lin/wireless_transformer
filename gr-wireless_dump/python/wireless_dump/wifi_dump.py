@@ -40,6 +40,8 @@ class wifi_dump(gr.sync_block):
         print("Updating wifi signal length...")
         print(f"{self.pdu_len = }, {self.mod = }")
 
+        
+
         # header size is 24 bytes
         # pdu size id pdu_len bytes
         # FCS size is 4 bytes
@@ -63,7 +65,7 @@ class wifi_dump(gr.sync_block):
 
                 # Store the wifi signal to self.wifi_signal
                 self.wifi_signal = in0[offset:]
-        else:
+        elif self.wifi_signal is not None:
             if len(self.wifi_signal) >= self.max_sample:
                 # The length is longer than the wifi signal.
                 # Return the whole sample array.
@@ -72,12 +74,13 @@ class wifi_dump(gr.sync_block):
                 #self.detect = False
                 # Clear the wifi_signal buffer
                 self.wifi_signal = None
+                self.detect = False
                 pass
             else:
                 # Already detected in the past.
                 # Concatenate self.wifi_signal
                 self.wifi_signal = np.concatenate((self.wifi_signal, in0))
-                print(f"{self.wifi_signal = }, {len(self.wifi_signal) = }")
+                # print(f"{self.wifi_signal = }, {len(self.wifi_signal) = }")
 
             # # Convert from PMT to python string
             # key = pmt.to_python(tag.key)
