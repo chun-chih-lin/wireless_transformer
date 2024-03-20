@@ -56,10 +56,7 @@ SEARCH_TBL = {
 
 def calculation_len(mod, pdu_l):
     try:
-        # with open('./search_tbl.json', 'r') as f:
         search_tbl = SEARCH_TBL
-        # print(f"Mod: {mod}, Length: {pdu_l}")
-
         details = search_tbl[f"{mod}"]
 
         i = details['indent']
@@ -75,7 +72,6 @@ def calculation_len(mod, pdu_l):
                 r = int(((pdu_l - p)%sum(i))/i[0])
                 t += r
         return t*80
-
 
     except Exception as exp:
         e_type, e_obj, e_tb = sys.exc_info()

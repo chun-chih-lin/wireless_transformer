@@ -9,7 +9,7 @@
 
 import numpy as np
 from gnuradio import gr
-import pmt, json
+import pmt, json, sys
 
 SEARCH_TBL = {
     "0": {
@@ -82,52 +82,67 @@ class wifi_dump(gr.sync_block):
     def update_ttl_sample(self):
         print("Updating wifi signal length...")
         print(f"{self.pdu_len = }, {self.mod = }")
+        try:
+            search_tbl = SEARCH_TBL
+            details = search_tbl[f"{self.mod}"]
 
-        
+            i = details['indent']
+            p = details['pattern_start']
+            s = details['start_n_symbol']
 
-        # header size is 24 bytes
-        # pdu size id pdu_len bytes
-        # FCS size is 4 bytes
+            if self.pdu_len < p:
+                t = s
+            else:
+                t = s + int((self.pdu_len - p)/sum(i))*len(i) + 1
 
-        
+                if self.mod == 1:
+                    r = int(((self.pdu_len - p)%sum(i))/i[0])
+                    t += r
+            self.max_sample = t*80
+            print(f"Update sample to {self.max_sample}")
 
-        max_sample = 5000
-        self.max_sample = max_sample
+        except Exception as exp:
+            e_type, e_obj, e_tb = sys.exc_info()
+            print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
     def work(self, input_items, output_items):
-        in0 = input_items[0]
-        tags = self.get_tags_in_window(0, 0, len(input_items[0]))
-        
-        if not self.detect:
-            for tag in tags:
-                # Update to detected a wifi_start
-                self.detect = True
-
-                # Get the start signal offset
-                offset = tag.offset
-
-                # Store the wifi signal to self.wifi_signal
-                self.wifi_signal = in0[offset:]
-        elif self.wifi_signal is not None:
-            if len(self.wifi_signal) >= self.max_sample:
-                # The length is longer than the wifi signal.
-                # Return the whole sample array.
-                self.ttl_sample = self.wifi_signal
-                # Reset the detect flag
-                #self.detect = False
-                # Clear the wifi_signal buffer
-                self.wifi_signal = None
-                self.detect = False
-                pass
-            else:
+        try:
+            in0 = input_items[0]
+            tags = self.get_tags_in_window(0, 0, len(input_items[0]))
+            
+            if not self.detect:
+                for tag in tags:
+                    # Update to detected a wifi_start
+                    # Convert from PMT to python string
+                    key = pmt.to_python(tag.key)
+                    print(f"tag key: {key}")
+                    self.detect = True
+                    # Get the start signal offset
+                    offset = tag.offset
+                    # Store the wifi signal to self.wifi_signal
+                    self.wifi_signal = in0[offset:]
+            elif self.wifi_signal is not None:
                 # Already detected in the past.
                 # Concatenate self.wifi_signal
                 self.wifi_signal = np.concatenate((self.wifi_signal, in0))
-                # print(f"{self.wifi_signal = }, {len(self.wifi_signal) = }")
+                if len(self.wifi_signal) >= self.max_sample:
+                    # The length is longer than the wifi signal.
+                    # Return the cut-off sample array.
+                    # This ttl_sample should be output to the database
+                    self.ttl_sample = self.wifi_signal[:self.max_sample]
+                    print(f"Complete packet with sample size: {self.ttl_sample.shape}")
 
-            # # Convert from PMT to python string
-            # key = pmt.to_python(tag.key)
-            # # Value can be several things, it depends what PMT type it was.
-            # value = pmt.to_python(tag.value)
+                    # ---- Resetting
+                    # Reset the detect flag
+                    self.detect = False
+                    # Clear the wifi_signal buffer
+                    self.wifi_signal = None
+                    pass
+                # # Value can be several things, it depends what PMT type it was.
+                # value = pmt.to_python(tag.value)
 
-        return False
+            return False
+        except Exception as exp:
+            e_type, e_obj, e_tb = sys.exc_info()
+            print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
+
