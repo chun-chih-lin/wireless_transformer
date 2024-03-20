@@ -62,7 +62,7 @@ class wifi_dump(gr.sync_block):
     """
     docstring for block wifi_dump
     """
-    def __init__(self, mod, pdu_len):
+    def __init__(self, mod, pdu_len, debug):
         gr.sync_block.__init__(self,
             name="wifi_dump",
             in_sig=[np.complex64],
@@ -76,7 +76,14 @@ class wifi_dump(gr.sync_block):
 
         self.set_modulation(mod)
         self.set_pdu_len(pdu_len)
-        
+        self.set_debug(debug)
+
+    def d_msg(self, msg):
+        if self.debug:
+            print(msg)
+    
+    # ----------------------------------------------
+    # Callback functions
     def set_modulation(self, mod):
         self.mod = mod
         if self.pdu_len is not None:
@@ -86,9 +93,13 @@ class wifi_dump(gr.sync_block):
         self.pdu_len = pdu_len
         self.update_ttl_sample()
 
+    def set_debug(self, debug):
+        self.debug = debug
+
+    # ----------------------------------------------
     def update_ttl_sample(self):
-        print("Updating wifi signal length...")
-        print(f"{self.pdu_len = }, {self.mod = }")
+        self.d_msg("Updating wifi signal length...")
+        self.d_msg(f"{self.pdu_len = }, {self.mod = }")
         try:
             search_tbl = SEARCH_TBL
             details = search_tbl[f"{self.mod}"]
@@ -106,11 +117,11 @@ class wifi_dump(gr.sync_block):
                     r = int(((self.pdu_len - p)%sum(i))/i[0])
                     t += r
             self.max_sample = t*80
-            print(f"Update sample to {self.max_sample}")
+            self.d_msg(f"Update sample to {self.max_sample}")
 
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
-            print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
+            self.d_msg(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
     def save_to_db(self, save_ary):
         try:
@@ -121,12 +132,14 @@ class wifi_dump(gr.sync_block):
                 patch_indicator = self.db.get(CURRENT_PATCH)
                 number = self.db.get(CURRENT_NUM_PATCH)
                 set_key = f"WIRELESS_PACKET:WIFI:{self.mod}:{self.pdu_len}:{patch_indicator}:{number}"
+            else:
+                self.d_msg(f"Patch keys do not exist. Using default key: {set_key}")
 
             self.db.set(set_key, pickled_obj)
 
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
-            print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
+            self.d_msg(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
     def work(self, input_items, output_items):
         try:
@@ -148,13 +161,13 @@ class wifi_dump(gr.sync_block):
                 # Already detected in the past.
                 # Concatenate self.wifi_signal
                 self.wifi_signal = np.concatenate((self.wifi_signal, in0))
-                print(f"{self.wifi_signal.shape = }, {len(self.wifi_signal) = }")
+                self.d_msg(f"{self.wifi_signal.shape = }, {len(self.wifi_signal) = }")
                 if len(self.wifi_signal) >= self.max_sample:
                     # The length is longer than the wifi signal.
                     # Return the cut-off sample array.
                     # This ttl_sample should be output to the database
                     self.ttl_sample = self.wifi_signal[:self.max_sample]
-                    print(f"Complete packet with sample size: {self.ttl_sample.shape}")
+                    self.d_msg(f"Complete packet with sample size: {self.ttl_sample.shape}")
                     self.save_to_db(self.ttl_sample)
                     # Erase the received packet
                     self.ttl_sample = None
@@ -171,7 +184,7 @@ class wifi_dump(gr.sync_block):
 
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
-            print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
+            self.d_msg(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
         return False
 
