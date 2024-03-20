@@ -1173,7 +1173,7 @@ blocks:
     bus_structure: null
     coordinate: [496, 572.0]
     rotation: 180
-    state: disabled
+    state: enabled
 
 connections:
 - [blocks_complex_to_mag_0, '0', blocks_divide_xx_0, '0']

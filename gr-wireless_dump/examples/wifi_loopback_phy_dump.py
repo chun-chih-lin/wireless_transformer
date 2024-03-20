@@ -27,6 +27,7 @@ from PyQt5 import Qt
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
+from gnuradio import wireless_dump
 from gnuradio.filter import pfb
 import foo
 import ieee802_11
@@ -156,6 +157,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
+        self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(0, pdu_length)
         self.sync_short = ieee802_11.sync_short(sensitivity, 2, False, False)
         self.sync_long = ieee802_11.sync_long(sync_length, False, False)
         self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
@@ -329,6 +331,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_delay_0_0, 0))
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_multiply_xx_0, 0))
         self.connect((self.sync_long, 0), (self.qtgui_time_sink_x_0, 0))
+        self.connect((self.sync_long, 0), (self.wireless_dump_wifi_dump_0, 0))
         self.connect((self.sync_short, 0), (self.blocks_delay_0, 0))
         self.connect((self.sync_short, 0), (self.sync_long, 0))
 
@@ -383,6 +386,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
     def set_pdu_length(self, pdu_length):
         self.pdu_length = pdu_length
         self.blocks_message_strobe_0_0.set_msg(pmt.intern("".join("x" for i in range(self.pdu_length))))
+        self.wireless_dump_wifi_dump_0.set_pdu_len(self.pdu_length)
 
     def get_out_buf_size(self):
         return self.out_buf_size
