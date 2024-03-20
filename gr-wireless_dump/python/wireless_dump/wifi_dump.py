@@ -133,7 +133,9 @@ class wifi_dump(gr.sync_block):
             if self.db.exists(CURRENT_PATCH) and self.db.exists(CURRENT_NUM_PATCH):
                 patch_indicator = self.db.get(CURRENT_PATCH)
                 number = self.db.get(CURRENT_NUM_PATCH)
+
                 set_key = f"WIRELESS_PACKET:WIFI:{self.mod}:{self.pdu_len}:{patch_indicator}:{number}"
+                self.d_msg(f"Saving to Patch keys: {set_key}")
             else:
                 self.d_msg(f"Patch keys do not exist. Using default key: {set_key}")
 
