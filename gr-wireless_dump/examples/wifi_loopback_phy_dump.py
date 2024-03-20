@@ -88,6 +88,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         self.epsilon = epsilon = 0
         self.encoding = encoding = 0
         self.chan_est = chan_est = 0
+        self.Debug = Debug = 0
 
         ##################################################
         # Blocks
@@ -157,7 +158,23 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(0, pdu_length, True)
+        # Create the options list
+        self._Debug_options = [0, 1]
+        # Create the labels list
+        self._Debug_labels = [False, True]
+        # Create the combo box
+        self._Debug_tool_bar = Qt.QToolBar(self)
+        self._Debug_tool_bar.addWidget(Qt.QLabel("'Debug'" + ": "))
+        self._Debug_combo_box = Qt.QComboBox()
+        self._Debug_tool_bar.addWidget(self._Debug_combo_box)
+        for _label in self._Debug_labels: self._Debug_combo_box.addItem(_label)
+        self._Debug_callback = lambda i: Qt.QMetaObject.invokeMethod(self._Debug_combo_box, "setCurrentIndex", Qt.Q_ARG("int", self._Debug_options.index(i)))
+        self._Debug_callback(self.Debug)
+        self._Debug_combo_box.currentIndexChanged.connect(
+            lambda i: self.set_Debug(self._Debug_options[i]))
+        # Create the radio buttons
+        self.top_layout.addWidget(self._Debug_tool_bar)
+        self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(0, pdu_length, Debug)
         self.sync_short = ieee802_11.sync_short(sensitivity, 2, False, False)
         self.sync_long = ieee802_11.sync_long(sync_length, False, False)
         self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
@@ -442,6 +459,14 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
     def set_chan_est(self, chan_est):
         self.chan_est = chan_est
         self._chan_est_callback(self.chan_est)
+
+    def get_Debug(self):
+        return self.Debug
+
+    def set_Debug(self, Debug):
+        self.Debug = Debug
+        self._Debug_callback(self.Debug)
+        self.wireless_dump_wifi_dump_0.set_debug(self.Debug)
 
 
 

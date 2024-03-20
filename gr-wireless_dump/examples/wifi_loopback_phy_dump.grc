@@ -33,6 +33,36 @@ options:
     state: enabled
 
 blocks:
+- name: Debug
+  id: variable_qtgui_chooser
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    label0: ''
+    label1: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    labels: '["Disable", "Enable"]'
+    num_opts: '0'
+    option0: '0'
+    option1: '1'
+    option2: '2'
+    option3: '3'
+    option4: '4'
+    options: '[0, 1]'
+    orient: Qt.QVBoxLayout
+    type: int
+    value: '0'
+    widget: combo_box
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1296, 676.0]
+    rotation: 0
+    state: enabled
 - name: chan_est
   id: variable_qtgui_chooser
   parameters:
@@ -1165,7 +1195,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    debug: 'True'
+    debug: Debug
     mod: '0'
     pdu_len: pdu_length
   states:
