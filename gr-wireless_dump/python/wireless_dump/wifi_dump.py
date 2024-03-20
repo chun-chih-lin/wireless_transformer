@@ -6,11 +6,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 
-
 import numpy as np
 from gnuradio import gr
 import pmt, json, sys
-import redis, pickle
+import redis
+import _pickle as pickle
 
 SEARCH_TBL = {
     "0": {
@@ -54,6 +54,9 @@ SEARCH_TBL = {
         "start_n_symbol": 7
     }
 }
+
+CURRENT_PATCH="CURRENT_PATCH"
+CURRENT_NUM_PATCH="CURRENT_NUM_PATCH"
 
 class wifi_dump(gr.sync_block):
     """
@@ -110,8 +113,20 @@ class wifi_dump(gr.sync_block):
             print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
     def save_to_db(self, save_ary):
-        pickled_obj = pickle.dumps(save_ary)
-        self.db.set("TEST_KEY", pickled_obj)
+        try:
+            pickled_obj = pickle.dumps(save_ary)
+
+            set_key = "TEST_KEY"
+            if self.db.exists(CURRENT_PATCH) and self.db.exists(CURRENT_NUM_PATCH):
+                patch_indicator = self.db.get(CURRENT_PATCH)
+                number = self.db.get(CURRENT_NUM_PATCH)
+                set_key = f"WIRELESS_PACKET:WIFI:{self.mod}:{self.pdu_len}:{patch_indicator}:{number}"
+
+            self.db.set(set_key, pickled_obj)
+
+        except Exception as exp:
+            e_type, e_obj, e_tb = sys.exc_info()
+            print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
     def work(self, input_items, output_items):
         try:
@@ -143,7 +158,6 @@ class wifi_dump(gr.sync_block):
                     self.save_to_db(self.ttl_sample)
                     # Erase the received packet
                     self.ttl_sample = None
-
 
                     # ---- Resetting
                     # Reset the detect flag
