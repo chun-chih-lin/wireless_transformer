@@ -141,6 +141,7 @@ class wifi_dump(gr.sync_block):
                     pass
                 # # Value can be several things, it depends what PMT type it was.
                 # value = pmt.to_python(tag.value)
+            self.consume(0, input_items)
 
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
