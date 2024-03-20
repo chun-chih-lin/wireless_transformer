@@ -10,6 +10,7 @@
 import numpy as np
 from gnuradio import gr
 import pmt, json, sys
+import redis, pickle
 
 SEARCH_TBL = {
     "0": {
@@ -67,6 +68,9 @@ class wifi_dump(gr.sync_block):
         self.wifi_signal = None
         self.detect = False
         self.pdu_len = None
+
+        self.db = redis.Redis(host='localhost', port=6379, db=0)
+
         self.set_modulation(mod)
         self.set_pdu_len(pdu_len)
         
@@ -105,6 +109,10 @@ class wifi_dump(gr.sync_block):
             e_type, e_obj, e_tb = sys.exc_info()
             print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
+    def save_to_db(self, save_ary):
+        pickled_obj = pickle.dumps(save_ary)
+        self.db.set("TEST_KEY", pickled_obj)
+
     def work(self, input_items, output_items):
         try:
             in0 = input_items[0]
@@ -132,6 +140,10 @@ class wifi_dump(gr.sync_block):
                     # This ttl_sample should be output to the database
                     self.ttl_sample = self.wifi_signal[:self.max_sample]
                     print(f"Complete packet with sample size: {self.ttl_sample.shape}")
+                    self.save_to_db(self.ttl_sample)
+                    # Erase the received packet
+                    self.ttl_sample = None
+
 
                     # ---- Resetting
                     # Reset the detect flag
