@@ -129,7 +129,7 @@ class wifi_dump(gr.sync_block):
         try:
             pickled_obj = pickle.dumps(save_ary)
 
-            set_key = "TEST_KEY"
+            set_key = "WIRELESS_PACKET:WIFI:TEST_KEY"
             if self.db.exists(CURRENT_PATCH) and self.db.exists(CURRENT_NUM_PATCH):
                 patch_indicator = self.db.get(CURRENT_PATCH).decode()
                 number = self.db.get(CURRENT_NUM_PATCH).decode()
