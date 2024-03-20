@@ -5,22 +5,22 @@
         "start_n_symbol": 16
     },
     "1": {
-        "indent": [4, 3],
+        "indent": [5, 4],
         "pattern_start": 1,
         "start_n_symbol": 12
     },
     "2": {
-        "indent": [5],
+        "indent": [6],
         "pattern_start": 6,
         "start_n_symbol": 11
     },
     "3": {
-        "indent": [8],
+        "indent": [9],
         "pattern_start": 6,
         "start_n_symbol": 9
     },
     "4": {
-        "indent": [10],
+        "indent": [12],
         "pattern_start": 6,
         "start_n_symbol": 8
     },
