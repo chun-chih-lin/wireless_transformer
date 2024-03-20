@@ -125,6 +125,7 @@ class wifi_dump(gr.sync_block):
                 # Already detected in the past.
                 # Concatenate self.wifi_signal
                 self.wifi_signal = np.concatenate((self.wifi_signal, in0))
+                print(f"{self.wifi_signal.shape = }, {len(self.wifi_signal) = }")
                 if len(self.wifi_signal) >= self.max_sample:
                     # The length is longer than the wifi signal.
                     # Return the cut-off sample array.
