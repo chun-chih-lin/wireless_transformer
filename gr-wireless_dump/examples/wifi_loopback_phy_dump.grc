@@ -199,8 +199,8 @@ blocks:
     rangeType: int
     start: '10'
     step: '1'
-    stop: '1000'
-    value: '300'
+    stop: '10000'
+    value: '2000'
     widget: counter_slider
   states:
     bus_sink: false
@@ -314,7 +314,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1280, 124.0]
+    coordinate: [1256, 124.0]
     rotation: 0
     state: enabled
 - name: window_size
@@ -326,7 +326,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1376, 124.0]
+    coordinate: [1352, 124.0]
     rotation: 0
     state: enabled
 - name: blocks_complex_to_mag_0
@@ -1119,7 +1119,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1480, 124.0]
+    coordinate: [1456, 124.0]
     rotation: 0
     state: enabled
 - name: sync_long
