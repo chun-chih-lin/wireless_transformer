@@ -1165,13 +1165,14 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
+    debug: 'True'
     mod: '0'
     pdu_len: pdu_length
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [496, 572.0]
+    coordinate: [496, 564.0]
     rotation: 180
     state: enabled
 
