@@ -56,8 +56,8 @@ SEARCH_TBL = {
 
 def calculation_len(mod, pdu_l):
     try:
-        with open('./search_tbl.json', 'r') as f:
-            search_tbl = json.load(f)
+        # with open('./search_tbl.json', 'r') as f:
+        search_tbl = SEARCH_TBL
         # print(f"Mod: {mod}, Length: {pdu_l}")
 
         details = search_tbl[f"{mod}"]

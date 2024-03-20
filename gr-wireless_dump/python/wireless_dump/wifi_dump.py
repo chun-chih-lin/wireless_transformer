@@ -9,7 +9,50 @@
 
 import numpy as np
 from gnuradio import gr
-import pmt
+import pmt, json
+
+SEARCH_TBL = {
+    "0": {
+        "indent": [3],
+        "pattern_start": 3,
+        "start_n_symbol": 16
+    },
+    "1": {
+        "indent": [5, 4],
+        "pattern_start": 1,
+        "start_n_symbol": 12
+    },
+    "2": {
+        "indent": [6],
+        "pattern_start": 6,
+        "start_n_symbol": 11
+    },
+    "3": {
+        "indent": [9],
+        "pattern_start": 6,
+        "start_n_symbol": 9
+    },
+    "4": {
+        "indent": [12],
+        "pattern_start": 6,
+        "start_n_symbol": 8
+    },
+    "5": {
+        "indent": [18],
+        "pattern_start": 6,
+        "start_n_symbol": 7
+    },
+    "6": {
+        "indent": [24],
+        "pattern_start": 18,
+        "start_n_symbol": 7
+    },
+    "7": {
+        "indent": [27],
+        "pattern_start": 24,
+        "start_n_symbol": 7
+    }
+}
 
 class wifi_dump(gr.sync_block):
     """
