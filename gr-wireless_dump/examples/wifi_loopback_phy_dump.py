@@ -161,7 +161,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         # Create the options list
         self._Debug_options = [0, 1]
         # Create the labels list
-        self._Debug_labels = [False, True]
+        self._Debug_labels = ['Disable', 'Enable']
         # Create the combo box
         self._Debug_tool_bar = Qt.QToolBar(self)
         self._Debug_tool_bar.addWidget(Qt.QLabel("'Debug'" + ": "))
