@@ -26,9 +26,9 @@ parameters:
   dtype: int
 - id: debug
   label: Debug
-  dtype: bool
-  default: 'False'
-  options: ['True', 'False']
+  dtype: int
+  default: 0
+  options: [1, 0]
   option_labels: [Enable, Disable]
 
 
