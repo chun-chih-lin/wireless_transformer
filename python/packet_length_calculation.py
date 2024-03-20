@@ -1,11 +1,13 @@
 import numpy as np
 import sys, os, json
 
-ret = os.system('clear')
-if ret != 0:
-    os.system('cls')
 
+def clc_screen():
+    ret = os.system('clear')
+    if ret != 0:
+        os.system('cls')
 
+clc_screen()
 
 def calculation_len(mod, pdu_l):
     try:
@@ -21,14 +23,25 @@ def calculation_len(mod, pdu_l):
 
         print(f"{i = }, {p = }, {s = }")
 
-        add_symbol = int((pdu_l - p)/i[0]) + 1
-        print(f"{add_symbol = }")
-
-        ttl_symbols = s + add_symbol
-        print(f"{ttl_symbols = }")
+        print(f"{len(i)}, {sum(i) = }")
 
 
-        return ttl_symbols*80
+
+        if pdu_l < p:
+            t = s
+            print(f"symbols = {t}")
+        else:
+
+            t = s + int((pdu_l - p)/sum(i))*len(i) + 1
+
+            if mod == 1:
+                r = 1
+                print(f"{r = }")
+                t += r
+            print(f"symbols = {s} + ({pdu_l}-{p})/{sum(i)}*{len(i)} + 1 = {t}")
+        
+
+        return t*80
 
 
     except Exception as exp:
@@ -47,7 +60,7 @@ def main():
             break
         else:
             try:
-
+                clc_screen()
                 print(f"input: {cmd}")
 
                 mod, pdu_len = [int(x) for x in cmd.split()]
