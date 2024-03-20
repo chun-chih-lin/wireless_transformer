@@ -115,12 +115,12 @@ class wifi_dump(gr.sync_block):
                     # Update to detected a wifi_start
                     # Convert from PMT to python string
                     key = pmt.to_python(tag.key)
-                    print(f"tag key: {key}")
-                    self.detect = True
-                    # Get the start signal offset
-                    offset = tag.offset
-                    # Store the wifi signal to self.wifi_signal
-                    self.wifi_signal = in0[offset:]
+                    if key == "wifi_start":
+                        self.detect = True
+                        # Get the start signal offset
+                        offset = tag.offset
+                        # Store the wifi signal to self.wifi_signal
+                        self.wifi_signal = in0[offset:]
             elif self.wifi_signal is not None:
                 # Already detected in the past.
                 # Concatenate self.wifi_signal
@@ -141,8 +141,9 @@ class wifi_dump(gr.sync_block):
                 # # Value can be several things, it depends what PMT type it was.
                 # value = pmt.to_python(tag.value)
 
-            return False
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
             print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
+
+        return False
 
