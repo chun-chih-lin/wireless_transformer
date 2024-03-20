@@ -95,6 +95,7 @@ class wifi_dump(gr.sync_block):
 
     def set_debug(self, debug):
         self.debug = debug
+        print(f"Setting self.debug: {self.debug}")
 
     # ----------------------------------------------
     def update_ttl_sample(self):
