@@ -157,7 +157,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(0, pdu_length)
+        self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(0, pdu_length, True)
         self.sync_short = ieee802_11.sync_short(sensitivity, 2, False, False)
         self.sync_long = ieee802_11.sync_long(sync_length, False, False)
         self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
