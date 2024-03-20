@@ -13,7 +13,7 @@ def calculation_len(mod, pdu_l):
     try:
         with open('./search_tbl.json', 'r') as f:
             search_tbl = json.load(f)
-        print(f"Mod: {mod}, Length: {pdu_l}")
+        # print(f"Mod: {mod}, Length: {pdu_l}")
 
         details = search_tbl[f"{mod}"]
 
@@ -21,26 +21,14 @@ def calculation_len(mod, pdu_l):
         p = details['pattern_start']
         s = details['start_n_symbol']
 
-        print(f"{i = }, {p = }, {s = }")
-
-        print(f"{len(i)}, {sum(i) = }")
-
-
-
         if pdu_l < p:
             t = s
-            print(f"symbols = {t}")
         else:
-
             t = s + int((pdu_l - p)/sum(i))*len(i) + 1
 
             if mod == 1:
-                r = 1
-                print(f"{r = }")
+                r = int(((pdu_l - p)%sum(i))/i[0])
                 t += r
-            print(f"symbols = {s} + ({pdu_l}-{p})/{sum(i)}*{len(i)} + 1 = {t}")
-        
-
         return t*80
 
 
