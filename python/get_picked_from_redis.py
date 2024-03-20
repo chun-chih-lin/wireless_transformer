@@ -15,6 +15,14 @@ def main():
     print(f"{unpacked_obj = }, {unpacked_obj.shape}")
 
 
+    key_list = db.keys("WIRELESS_PACKET:WIFI:*")
+    for key in key_list:
+        print(f"{key = }")
+        unpacked_obj = pickle.loads(db.get(key))
+        print(f"{unpacked_obj = }")
+        print("\n****************\n")
+
+
 
     pass
 
