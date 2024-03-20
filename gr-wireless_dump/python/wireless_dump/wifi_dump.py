@@ -74,9 +74,10 @@ class wifi_dump(gr.sync_block):
 
         self.db = redis.Redis(host='localhost', port=6379, db=0)
 
+        self.set_debug(debug)
         self.set_modulation(mod)
         self.set_pdu_len(pdu_len)
-        self.set_debug(debug)
+        
 
     def d_msg(self, msg):
         if self.debug:
