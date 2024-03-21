@@ -7,6 +7,7 @@ import random
 import string
 import sys, os
 from datetime import datetime
+import _pickle as pickle
 # import socket
 # import scapy.all as scapy
 
@@ -104,18 +105,49 @@ class CollectAgent(BasicAgent):
             else:
                 cur_n = int(self.db.get(self.cur_num_patch_key).decode())
                 if cur_n >= self.c["MAX_PATCH_NUM"]:
+                    # Reach the MAX number, pack data to file
                     self.db.set(self.cur_num_patch_key, 0)
-                    # TODO update the current patch name
-                    new_patch_name = self.get_new_patch_name()
-                    self.db.set(self.patch_key, new_patch_name)
-                    self.d_msg(f"Counter to the max. New patch name: {new_patch_name}")
+                    self.pack_data()
+                    # Update the new patch name
+                    self.d_msg(f"Counter to the max. New patch name.")
+                    self.cur_patch_name = self.get_new_patch_name()
+                    self.db.set(self.patch_key, self.cur_patch_name)
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
             self.d_msg(f'Exception occurs: {exp}. At line {e_tb.tb_lineno}')
 
 
+    # --------------------------------------------------------------
+    def pack_data(self):
+        
+        for key in self.db.scan_iter(f"{self.subprefix}:{self.cur_patch_name}:*"):
+            value = pickle.loads(self.db.get(key))
+            print(f"{value.shape = }")
+
+        # Register the information to the file
+        save_filename = f"{self.c['SAVE_DIRECTORY']}{self.c['PATCH_INFO_FILENAME']}"
+        self.d_msg(f"Packing data to file: {save_filename}")
+        save_description = "Description"
+
+        if os.path.isfile(save_filename):
+            with open(save_filename) as f:
+                file_info = json.load(f)
+        else:
+            file_info = {}
+
+        file_info[self.cur_patch_name] = {
+            "Description": save_description
+        }
+
+        with open(save_filename, 'w') as f:
+            json.dump(file_info, f, indent=4)
+
+        
+
+
 def main():
     print('Running Collect Agent...')
+
     CollectAgent('SYSTEM:COLLECT:*', 'AGENT:COLLECT')
 
 if __name__ == "__main__":

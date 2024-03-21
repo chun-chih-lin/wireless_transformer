@@ -23,6 +23,10 @@ def main():
         print("\n****************\n")
 
 
+    print(f"{type(db.keys('SYSTEM:COLLECT:WIFI:*'))}")
+    print(f"{type(db.scan_iter('SYSTEM:COLLECT:WIFI:*'))}")
+    for key in db.scan_iter("SYSTEM:COLLECT:WIFI:*"):
+        print(f"{key = }")
 
     pass
 

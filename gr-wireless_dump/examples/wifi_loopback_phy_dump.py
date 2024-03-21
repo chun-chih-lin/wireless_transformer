@@ -82,7 +82,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         self.pdu_length = pdu_length = 10
         self.out_buf_size = out_buf_size = 96000
         self.max_symbols = max_symbols = int(5 + 1 + ((16 + 800 * 8 + 6) * 2) / 24)
-        self.interval = interval = 2000
+        self.interval = interval = 500
         self.header_formatter = header_formatter = ieee802_11.signal_field()
         self.freq = freq = 5890000000
         self.epsilon = epsilon = 0
@@ -124,7 +124,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._interval_range = qtgui.Range(10, 10000, 1, 2000, 200)
+        self._interval_range = qtgui.Range(10, 10000, 1, 500, 200)
         self._interval_win = qtgui.RangeWidget(self._interval_range, self.set_interval, "'interval'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._interval_win, 2, 1, 1, 1)
         for r in range(2, 3):
