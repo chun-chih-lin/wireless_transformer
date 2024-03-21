@@ -6,8 +6,8 @@ import json
 import random
 import string
 import sys, os
-import socket
-import scapy.all as scapy
+# import socket
+# import scapy.all as scapy
 
 from BasicAgent import BasicAgent
 
