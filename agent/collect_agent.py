@@ -13,7 +13,7 @@ from BasicAgent import BasicAgent
 
 class CollectAgent(BasicAgent):
     """docstring for CollectAgent"""
-    def __init__(self, arg):
+    def __init__(self, subprefix, agentkey):
         super(CollectAgent, self).__init__("CollectAgent", subprefix, agentkey, debug=True)
         self.d_msg('ActionAgent Initialization done.')
 
