@@ -37,7 +37,8 @@ class CollectAgent(BasicAgent):
             self.d_msg(f"{db_key = }")
             if action == "DEBUG":
                 self.d_msg(f"Get action: {action}")
-                self.db.get(db_key)
+                d = self.db.get(db_key)
+                self.d_msg(f"{d = }, {type(d) = }")
             else:
                 self.d_msg(f"Get action: {action}")
 
