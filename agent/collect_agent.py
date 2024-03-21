@@ -32,6 +32,9 @@ class CollectAgent(BasicAgent):
     def event_handler(self, msg):
         try:
             self.d_msg(f"event handler: {msg}")
+            action = self.get_action(msg)
+            self.d_msg(f"Get action: {action}")
+
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
             self.d_msg(f'Exception occurs: {exp}. At line {e_tb.tb_lineno}')
