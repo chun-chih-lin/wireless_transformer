@@ -33,6 +33,14 @@ class BasicAgent(object):
 
         self.get_config()
 
+    def get_action(self, msg):
+        try:
+            return self.utf8_decode(msg['channel']).split(":")[3]
+        except Exception as exp:
+            e_type, e_obj, e_tb = sys.exc_info()
+            self.d_msg(f'Exception occurs: {exp}. At line {e_tb.tb_lineno}')
+            return False
+
     def d_msg(self, msg):
         if self.debug:
             print(f"[{self.agent_name}] {msg}")
