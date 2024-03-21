@@ -60,7 +60,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1296, 676.0]
+    coordinate: [1400, 204.0]
     rotation: 0
     state: enabled
 - name: chan_est
