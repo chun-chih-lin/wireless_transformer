@@ -77,6 +77,8 @@ class wifi_dump(gr.sync_block):
         self.set_debug(debug)
         self.set_modulation(mod)
         self.set_pdu_len(pdu_len)
+
+        self.system_prefix_key = "SYSTEM:COLLECT"
         
 
     def d_msg(self, msg):
@@ -129,12 +131,12 @@ class wifi_dump(gr.sync_block):
         try:
             pickled_obj = pickle.dumps(save_ary)
 
-            set_key = "WIRELESS_PACKET:WIFI:TEST_KEY"
+            set_key = f"{self.system_prefix_key}:TEST_KEY"
             if self.db.exists(CURRENT_PATCH) and self.db.exists(CURRENT_NUM_PATCH):
                 patch_indicator = self.db.get(CURRENT_PATCH).decode()
                 number = self.db.get(CURRENT_NUM_PATCH).decode()
 
-                set_key = f"WIRELESS_PACKET:WIFI:{self.mod}:{self.pdu_len}:{patch_indicator}:{number}"
+                set_key = f"{self.system_prefix_key}:{self.mod}:{self.pdu_len}:{patch_indicator}:{number}"
                 self.d_msg(f"Saving to Patch keys: {set_key}")
             else:
                 self.d_msg(f"Patch keys do not exist. Using default key: {set_key}")
