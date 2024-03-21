@@ -60,7 +60,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1296, 676.0]
+    coordinate: [1400, 204.0]
     rotation: 0
     state: enabled
 - name: chan_est
@@ -536,7 +536,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [92.0, 320]
+    coordinate: [92.0, 304]
     rotation: 270
     state: true
 - name: blocks_multiply_xx_0
@@ -572,7 +572,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [472, 656.0]
+    coordinate: [496, 648.0]
     rotation: 180
     state: disabled
 - name: blocks_tagged_stream_mux_0
@@ -781,7 +781,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [240, 620.0]
+    coordinate: [264, 612.0]
     rotation: 180
     state: disabled
 - name: foo_packet_pad2_0
@@ -833,7 +833,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [464, 716.0]
+    coordinate: [488, 708.0]
     rotation: 0
     state: disabled
 - name: ieee802_11_frame_equalizer_0
@@ -853,7 +853,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [152, 740.0]
+    coordinate: [176, 732.0]
     rotation: 0
     state: disabled
 - name: ieee802_11_mac_0_0
@@ -905,7 +905,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [752, 716.0]
+    coordinate: [776, 708.0]
     rotation: 0
     state: disabled
 - name: pdu_pdu_to_tagged_stream_0
@@ -922,7 +922,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [408, 788.0]
+    coordinate: [432, 780.0]
     rotation: 0
     state: disabled
 - name: pfb_arb_resampler_xxx_0
@@ -1035,7 +1035,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [752, 780.0]
+    coordinate: [776, 772.0]
     rotation: 0
     state: disabled
 - name: qtgui_time_sink_x_0
@@ -1132,7 +1132,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [456, 492.0]
+    coordinate: [456, 484.0]
     rotation: 180
     state: enabled
 - name: sensitivity
