@@ -45,11 +45,8 @@ class CollectAgent(BasicAgent):
             self.d_msg(f"{db_key = }")
             if action == "DEBUG":
                 self.d_msg(f"Get action: {action}")
-                d = self.db.get(db_key).decode()
-                if d == "True":
-                    self.debug = True
-                elif d == "False":
-                    self.debug = False
+                self.update_debug(db_key)
+                
             elif action == "WIFI":
                 self.d_msg(f"Collecting a WiFi packet")
 
@@ -62,6 +59,22 @@ class CollectAgent(BasicAgent):
             e_type, e_obj, e_tb = sys.exc_info()
             self.d_msg(f'Exception occurs: {exp}. At line {e_tb.tb_lineno}')
         pass
+
+    # --------------------------------------------------------------
+    def update_debug(self, db_key):
+        try:
+            d = self.db.get(db_key).decode()
+            if d == "True":
+                self.debug = True
+            elif d == "False":
+                self.debug = False
+
+        except Exception as exp:
+            e_type, e_obj, e_tb = sys.exc_info()
+            self.d_msg(f'Exception occurs: {exp}. At line {e_tb.tb_lineno}')
+        pass
+
+    # --------------------------------------------------------------
 
     def get_new_patch_name(self):
         now = datetime.now()
