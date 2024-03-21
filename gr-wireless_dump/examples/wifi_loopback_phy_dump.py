@@ -7,7 +7,7 @@
 # GNU Radio Python Flow Graph
 # Title: Not titled yet
 # Author: root
-# GNU Radio version: v3.10.9.2-5-gdd01ef52
+# GNU Radio version: v3.10.9.2-39-gcf065ee5
 
 from PyQt5 import Qt
 from gnuradio import qtgui

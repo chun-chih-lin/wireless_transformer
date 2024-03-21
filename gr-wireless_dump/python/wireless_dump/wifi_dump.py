@@ -78,7 +78,7 @@ class wifi_dump(gr.sync_block):
         self.set_modulation(mod)
         self.set_pdu_len(pdu_len)
 
-        self.system_prefix_key = "SYSTEM:COLLECT"
+        self.system_prefix_key = "SYSTEM:COLLECT:WIFI"
         
 
     def d_msg(self, msg):
