@@ -32,8 +32,13 @@ class CollectAgent(BasicAgent):
     def event_handler(self, msg):
         try:
             self.d_msg(f"event handler: {msg}")
+            db_key = self.get_key(msg)
             action = self.get_action(msg)
-            if action:
+            self.d_msg(f"{db_key = }")
+            if action == "DEBUG":
+                self.d_msg(f"Get action: {action}")
+                self.db.get(db_key)
+            else:
                 self.d_msg(f"Get action: {action}")
 
         except Exception as exp:
