@@ -35,7 +35,7 @@ class BasicAgent(object):
 
     def get_key(self, msg):
         try:
-            return ":".join(self.utf8_decode(msg['channel']).split(":")[1:3])
+            return ":".join(self.utf8_decode(msg['channel']).split(":")[1:])
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
             self.d_msg(f'Exception occurs: {exp}. At line {e_tb.tb_lineno}')
