@@ -40,11 +40,11 @@ class CollectAgent(BasicAgent):
 
     def event_handler(self, msg):
         try:
-            self.d_msg(f"event handler: {msg}")
+            # self.d_msg(f"event handler: {msg}")
             db_key = self.get_key(msg)
             action = self.get_action(msg)
             data = self.get_db_data(msg)
-            self.d_msg(f"{db_key = }")
+            # self.d_msg(f"{db_key = }")
             if data == 'del':
                 # Nothing for del operation for now.
                 pass

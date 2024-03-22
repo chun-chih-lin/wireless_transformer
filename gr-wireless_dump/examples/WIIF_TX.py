@@ -73,12 +73,13 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
         self.tx_gain = tx_gain = 0.75
         self.sdr_addr = sdr_addr = "addr=192.168.20.2"
         self.samp_rate = samp_rate = 20e6
-        self.pdu_length = pdu_length = 500
+        self.pdu_length = pdu_length = 10
         self.out_buf_size = out_buf_size = 96000
         self.lo_offset = lo_offset = 0
         self.interval = interval = 300
-        self.freq = freq = 2412000000
+        self.freq = freq = 5170000000
         self.encoding = encoding = 0
+        self.custom_freq = custom_freq = 3812e6
 
         ##################################################
         # Blocks
@@ -103,7 +104,7 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
             lambda i: self.set_samp_rate(self._samp_rate_options[i]))
         # Create the radio buttons
         self.top_layout.addWidget(self._samp_rate_tool_bar)
-        self._pdu_length_range = qtgui.Range(0, 1500, 1, 500, 200)
+        self._pdu_length_range = qtgui.Range(0, 1500, 1, 10, 200)
         self._pdu_length_win = qtgui.RangeWidget(self._pdu_length_range, self.set_pdu_length, "'pdu_length'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._pdu_length_win)
         # Create the options list
@@ -166,6 +167,9 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
         self._encoding_button_group.buttonClicked[int].connect(
             lambda i: self.set_encoding(self._encoding_options[i]))
         self.top_layout.addWidget(self._encoding_group_box)
+        self._custom_freq_range = qtgui.Range(2412e6, 5920e6, 5e6, 3812e6, 200)
+        self._custom_freq_win = qtgui.RangeWidget(self._custom_freq_range, self.set_custom_freq, "'custom_freq'", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._custom_freq_win)
         self.wifi_phy_hier_0 = wifi_phy_hier(
             bandwidth=samp_rate,
             chan_est=ieee802_11.LS,
@@ -185,7 +189,7 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
         self.uhd_usrp_sink_0.set_samp_rate(samp_rate)
         self.uhd_usrp_sink_0.set_time_now(uhd.time_spec(time.time()), uhd.ALL_MBOARDS)
 
-        self.uhd_usrp_sink_0.set_center_freq(uhd.tune_request(freq, rf_freq = freq - lo_offset, rf_freq_policy=uhd.tune_request.POLICY_MANUAL), 0)
+        self.uhd_usrp_sink_0.set_center_freq(uhd.tune_request(custom_freq, rf_freq = custom_freq - lo_offset, rf_freq_policy=uhd.tune_request.POLICY_MANUAL), 0)
         self.uhd_usrp_sink_0.set_normalized_gain(tx_gain, 0)
         self.network_socket_pdu_0 = network.socket_pdu('TCP_SERVER', '', '52001', 10000, False)
         self.ieee802_11_mac_0 = ieee802_11.mac([0x23, 0x23, 0x23, 0x23, 0x23, 0x23], [0x42, 0x42, 0x42, 0x42, 0x42, 0x42], [0xff, 0xff, 0xff, 0xff, 0xff, 255])
@@ -258,7 +262,7 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
     def set_lo_offset(self, lo_offset):
         self.lo_offset = lo_offset
         self._lo_offset_callback(self.lo_offset)
-        self.uhd_usrp_sink_0.set_center_freq(uhd.tune_request(self.freq, rf_freq = self.freq - self.lo_offset, rf_freq_policy=uhd.tune_request.POLICY_MANUAL), 0)
+        self.uhd_usrp_sink_0.set_center_freq(uhd.tune_request(self.custom_freq, rf_freq = self.custom_freq - self.lo_offset, rf_freq_policy=uhd.tune_request.POLICY_MANUAL), 0)
 
     def get_interval(self):
         return self.interval
@@ -273,7 +277,6 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
     def set_freq(self, freq):
         self.freq = freq
         self._freq_callback(self.freq)
-        self.uhd_usrp_sink_0.set_center_freq(uhd.tune_request(self.freq, rf_freq = self.freq - self.lo_offset, rf_freq_policy=uhd.tune_request.POLICY_MANUAL), 0)
         self.wifi_phy_hier_0.set_frequency(self.freq)
 
     def get_encoding(self):
@@ -283,6 +286,13 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
         self.encoding = encoding
         self._encoding_callback(self.encoding)
         self.wifi_phy_hier_0.set_encoding(self.encoding)
+
+    def get_custom_freq(self):
+        return self.custom_freq
+
+    def set_custom_freq(self, custom_freq):
+        self.custom_freq = custom_freq
+        self.uhd_usrp_sink_0.set_center_freq(uhd.tune_request(self.custom_freq, rf_freq = self.custom_freq - self.lo_offset, rf_freq_policy=uhd.tune_request.POLICY_MANUAL), 0)
 
 
 
