@@ -119,57 +119,61 @@ class CollectAgent(BasicAgent):
 
     # --------------------------------------------------------------
     def pack_data(self):
-        # Collecting all data to the dataset.
-        current_mod = None
-        for key in self.db.scan_iter(f"{self.subprefix}:{self.cur_patch_name}:*"):
-            if current_mod is None:
-                current_mod = key.decode().split(":")
-            value = pickle.loads(self.db.get(key))
-            print(f"{value.shape = }")
-            r_part = np.expand_dims(np.real(value), axis=0)
-            i_part = np.expand_dims(np.imag(value), axis=0)
+        try:
+            # Collecting all data to the dataset.
+            current_mod = None
+            for key in self.db.scan_iter(f"{self.subprefix}:{self.cur_patch_name}:*"):
+                if current_mod is None:
+                    current_mod = key.decode().split(":")
+                value = pickle.loads(self.db.get(key))
+                print(f"{value.shape = }")
+                r_part = np.expand_dims(np.real(value), axis=0)
+                i_part = np.expand_dims(np.imag(value), axis=0)
 
-            two_ch_value = np.concatenate((r_part, i_part), axis=0).reshape(1, 2, r_part.shape[1])
-            if dataset is None:
-                dataset = two_ch_value
+                two_ch_value = np.concatenate((r_part, i_part), axis=0).reshape(1, 2, r_part.shape[1])
+                if dataset is None:
+                    dataset = two_ch_value
+                else:
+                    dataset = np.append(dataset, two_ch_value, axis=0)
+
+            
+            # Save the dataset to a pickle file
+            mod_mcs = int(current_mod[3])
+            mod_str = self.c["MOD_INFO"][current_mod[2]][mod_mcs]["Modulation"]
+            mod_codr = self.c["MOD_INFO"][current_mod[2]][mod_mcs]["CodingRate"]
+            
+            dataset_dict = {
+                (mod_str, mod_mcs): dataset
+            }
+
+            self.d_msg(f"save {dataset_dict = }")
+            # with open(save_dataset_name, 'wb') as f:
+            #     pickle.dump(dataset_dict, f)
+            #     pass
+
+            # Register the information to the file.
+            save_filename = f"{self.c['SAVE_DIRECTORY']}{self.c['PATCH_INFO_FILENAME']}"
+            self.d_msg(f"Packing data to file: {save_filename}")
+            save_description = "Description"
+
+            if os.path.isfile(save_filename):
+                with open(save_filename) as f:
+                    file_info = json.load(f)
             else:
-                dataset = np.append(dataset, two_ch_value, axis=0)
+                file_info = {}
 
-        
-        # Save the dataset to a pickle file
-        mod_mcs = int(current_mod[3])
-        mod_str = self.c["MOD_INFO"][current_mod[2]][mod_mcs]["Modulation"]
-        mod_codr = self.c["MOD_INFO"][current_mod[2]][mod_mcs]["CodingRate"]
-        
-        dataset_dict = {
-            (mod_str, mod_mcs): dataset
-        }
+            file_info[self.cur_patch_name] = {
+                "Description": save_description
+            }
 
-        self.d_msg(f"save {dataset_dict = }")
-        # with open(save_dataset_name, 'wb') as f:
-        #     pickle.dump(dataset_dict, f)
-        #     pass
+            with open(save_filename, 'w') as f:
+                json.dump(file_info, f, indent=4)
 
-        # Register the information to the file.
-        save_filename = f"{self.c['SAVE_DIRECTORY']}{self.c['PATCH_INFO_FILENAME']}"
-        self.d_msg(f"Packing data to file: {save_filename}")
-        save_description = "Description"
-
-        if os.path.isfile(save_filename):
-            with open(save_filename) as f:
-                file_info = json.load(f)
-        else:
-            file_info = {}
-
-        file_info[self.cur_patch_name] = {
-            "Description": save_description
-        }
-
-        with open(save_filename, 'w') as f:
-            json.dump(file_info, f, indent=4)
-
-        # delete the key of the patch
-        self.del_key_pattern(self.cur_patch_name)
+            # delete the key of the patch
+            self.del_key_pattern(self.cur_patch_name)
+        except Exception as exp:
+            e_type, e_obj, e_tb = sys.exc_info()
+            self.d_msg(f'Exception occurs: {exp}. At line {e_tb.tb_lineno}')
 
     def del_key_pattern(self, key_p):
         for key in self.db.scan_iter(key_p):
