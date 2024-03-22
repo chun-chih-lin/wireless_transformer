@@ -33,6 +33,27 @@ options:
     state: enabled
 
 blocks:
+- name: custom_freq
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: 2412e6
+    step: 5e6
+    stop: 5920e6
+    value: 3812e6
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1280, 52.0]
+    rotation: 0
+    state: enabled
 - name: encoding
   id: variable_qtgui_chooser
   parameters:
@@ -116,7 +137,7 @@ blocks:
       5910000000.0, 5920000000.0]'
     orient: Qt.QVBoxLayout
     type: real
-    value: '2412000000'
+    value: '5170000000'
     widget: combo_box
   states:
     bus_sink: false
@@ -454,7 +475,8 @@ blocks:
     bw7: '0'
     bw8: '0'
     bw9: '0'
-    center_freq0: uhd.tune_request(freq, rf_freq = freq - lo_offset, rf_freq_policy=uhd.tune_request.POLICY_MANUAL)
+    center_freq0: uhd.tune_request(custom_freq, rf_freq = custom_freq - lo_offset,
+      rf_freq_policy=uhd.tune_request.POLICY_MANUAL)
     center_freq1: '0'
     center_freq10: '0'
     center_freq11: '0'
