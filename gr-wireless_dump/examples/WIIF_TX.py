@@ -71,7 +71,7 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.tx_gain = tx_gain = 0.75
-        self.sdr_addr = sdr_addr = "addr=192.168.40.2"
+        self.sdr_addr = sdr_addr = "addr=192.168.20.2"
         self.samp_rate = samp_rate = 20e6
         self.pdu_length = pdu_length = 10
         self.out_buf_size = out_buf_size = 96000
