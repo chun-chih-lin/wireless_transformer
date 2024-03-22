@@ -574,7 +574,7 @@ blocks:
     bus_structure: null
     coordinate: [496, 648.0]
     rotation: 180
-    state: disabled
+    state: enabled
 - name: blocks_tagged_stream_mux_0
   id: blocks_tagged_stream_mux
   parameters:
@@ -783,7 +783,7 @@ blocks:
     bus_structure: null
     coordinate: [264, 612.0]
     rotation: 180
-    state: disabled
+    state: enabled
 - name: foo_packet_pad2_0
   id: foo_packet_pad2
   parameters:
@@ -835,7 +835,7 @@ blocks:
     bus_structure: null
     coordinate: [488, 708.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: ieee802_11_frame_equalizer_0
   id: ieee802_11_frame_equalizer
   parameters:
@@ -855,7 +855,7 @@ blocks:
     bus_structure: null
     coordinate: [176, 732.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: ieee802_11_mac_0_0
   id: ieee802_11_mac
   parameters:
@@ -924,7 +924,7 @@ blocks:
     bus_structure: null
     coordinate: [432, 780.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: pfb_arb_resampler_xxx_0
   id: pfb_arb_resampler_xxx
   parameters:
@@ -1037,7 +1037,7 @@ blocks:
     bus_structure: null
     coordinate: [776, 772.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: qtgui_time_sink_x_0
   id: qtgui_time_sink_x
   parameters:
