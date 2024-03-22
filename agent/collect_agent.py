@@ -154,7 +154,7 @@ class CollectAgent(BasicAgent):
                 (mod_str, mod_mcs): dataset
             }
 
-            save_dataset_name = f"{mod_str}_{self.cur_patch_name}"
+            save_dataset_name = f"{mod_str}.{mod_mcs}.{self.cur_patch_name}.pkl"
 
             self.d_msg(f"save {dataset_dict = }")
             with open(f"{self.c['SAVE_DIRECTORY']}{save_dataset_name}", 'wb') as f:
