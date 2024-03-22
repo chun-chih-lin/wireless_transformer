@@ -33,6 +33,9 @@ class BasicAgent(object):
 
         self.get_config()
 
+    def get_db_data(self, msg):
+        return msg['data'].decode()
+
     def get_key(self, msg):
         try:
             return ":".join(self.utf8_decode(msg['channel']).split(":")[1:])

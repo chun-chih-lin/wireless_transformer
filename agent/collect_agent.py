@@ -43,18 +43,23 @@ class CollectAgent(BasicAgent):
             self.d_msg(f"event handler: {msg}")
             db_key = self.get_key(msg)
             action = self.get_action(msg)
+            data = self.get_db_data(msg)
             self.d_msg(f"{db_key = }")
-            if action == "DEBUG":
-                self.d_msg(f"Get action: {action}")
-                self.update_debug(db_key)
-                
-            elif action == "WIFI":
-                self.d_msg(f"Collecting a WiFi packet")
-
-                self.d_msg("Increment the count by 1")
-                self.increment_patch_count()
+            if data == 'del':
+                # Nothing for del operation for now.
+                pass
             else:
-                self.d_msg(f"Get action: {action}")
+                if action == "DEBUG":
+                    self.d_msg(f"Get action: {action}")
+                    self.update_debug(db_key)
+                    
+                elif action == "WIFI":
+                    self.d_msg(f"Collecting a WiFi packet")
+    
+                    self.d_msg("Increment the count by 1")
+                    self.increment_patch_count()
+                else:
+                    self.d_msg(f"Get action: {action}")
 
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
@@ -122,11 +127,14 @@ class CollectAgent(BasicAgent):
         try:
             # Collecting all data to the dataset.
             current_mod = None
-            for key in self.db.scan_iter(f"{self.subprefix}:{self.cur_patch_name}:*"):
+            dataset = None
+
+            patch_key_p = f"{self.subprefix}:{self.cur_patch_name}:*"
+
+            for key in self.db.scan_iter(patch_key_p):
                 if current_mod is None:
                     current_mod = key.decode().split(":")
                 value = pickle.loads(self.db.get(key))
-                print(f"{value.shape = }")
                 r_part = np.expand_dims(np.real(value), axis=0)
                 i_part = np.expand_dims(np.imag(value), axis=0)
 
@@ -139,17 +147,19 @@ class CollectAgent(BasicAgent):
             
             # Save the dataset to a pickle file
             mod_mcs = int(current_mod[3])
-            mod_str = self.c["MOD_INFO"][current_mod[2]][mod_mcs]["Modulation"]
-            mod_codr = self.c["MOD_INFO"][current_mod[2]][mod_mcs]["CodingRate"]
+            mod_str = self.c["MOD_INFO"][current_mod[2]][current_mod[3]]["Modulation"]
+            mod_codr = self.c["MOD_INFO"][current_mod[2]][current_mod[3]]["CodingRate"]
             
             dataset_dict = {
                 (mod_str, mod_mcs): dataset
             }
 
+            save_dataset_name = f"{mod_str}_{self.cur_patch_name}"
+
             self.d_msg(f"save {dataset_dict = }")
-            # with open(save_dataset_name, 'wb') as f:
-            #     pickle.dump(dataset_dict, f)
-            #     pass
+            with open(f"{self.c['SAVE_DIRECTORY']}{save_dataset_name}", 'wb') as f:
+                pickle.dump(dataset_dict, f)
+                pass
 
             # Register the information to the file.
             save_filename = f"{self.c['SAVE_DIRECTORY']}{self.c['PATCH_INFO_FILENAME']}"
@@ -163,14 +173,16 @@ class CollectAgent(BasicAgent):
                 file_info = {}
 
             file_info[self.cur_patch_name] = {
-                "Description": save_description
+                    "MCS": mod_mcs,
+                    "CodingRate": mod_codr,
+                    "MOD": mod_str
             }
 
             with open(save_filename, 'w') as f:
                 json.dump(file_info, f, indent=4)
 
             # delete the key of the patch
-            self.del_key_pattern(self.cur_patch_name)
+            self.del_key_pattern(patch_key_p)
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
             self.d_msg(f'Exception occurs: {exp}. At line {e_tb.tb_lineno}')
