@@ -75,7 +75,7 @@ class WIFI_RX(gr.top_block, Qt.QWidget):
         self.lo_offset = lo_offset = 0
         self.gain = gain = 0.75
         self.freq = freq = 5170000000
-        self.custom_freq = custom_freq = 3812e6
+        self.custom_freq = custom_freq = 2900e6
         self.chan_est = chan_est = 0
         self.Debug = Debug = 0
 
@@ -141,7 +141,7 @@ class WIFI_RX(gr.top_block, Qt.QWidget):
             lambda i: self.set_freq(self._freq_options[i]))
         # Create the radio buttons
         self.top_layout.addWidget(self._freq_tool_bar)
-        self._custom_freq_range = qtgui.Range(2412e6, 5920e6, 5e6, 3812e6, 200)
+        self._custom_freq_range = qtgui.Range(2412e6, 5920e6, 5e6, 2900e6, 200)
         self._custom_freq_win = qtgui.RangeWidget(self._custom_freq_range, self.set_custom_freq, "'custom_freq'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._custom_freq_win)
         # Create the options list
@@ -377,9 +377,9 @@ class WIFI_RX(gr.top_block, Qt.QWidget):
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
         self._samp_rate_callback(self.samp_rate)
+        self.ieee802_11_frame_equalizer_0.set_bandwidth(self.samp_rate)
         self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
         self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
-        self.ieee802_11_frame_equalizer_0.set_bandwidth(self.samp_rate)
 
     def get_pdu_length(self):
         return self.pdu_length

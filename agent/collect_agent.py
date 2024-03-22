@@ -117,6 +117,8 @@ class CollectAgent(BasicAgent):
                     self.d_msg(f"Counter to the max. New patch name.")
                     self.cur_patch_name = self.get_new_patch_name()
                     self.db.set(self.patch_key, self.cur_patch_name)
+                else:
+                    self.d_msg(f"Current: {cur_n}")
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
             self.d_msg(f'Exception occurs: {exp}. At line {e_tb.tb_lineno}')
