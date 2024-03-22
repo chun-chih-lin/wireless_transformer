@@ -265,7 +265,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [104, 332.0]
+    coordinate: [120, 356.0]
     rotation: 0
     state: enabled
 - name: sync_length
