@@ -200,7 +200,7 @@ blocks:
     start: '0'
     step: '1'
     stop: '1500'
-    value: '500'
+    value: '10'
     widget: counter_slider
   states:
     bus_sink: false
@@ -243,7 +243,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '"addr=192.168.20.2"'
+    value: '"addr=192.168.40.2"'
   states:
     bus_sink: false
     bus_source: false
@@ -286,7 +286,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [72, 156.0]
+    coordinate: [96, 156.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_0
