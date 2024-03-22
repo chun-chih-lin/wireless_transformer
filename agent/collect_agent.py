@@ -119,12 +119,23 @@ class CollectAgent(BasicAgent):
 
     # --------------------------------------------------------------
     def pack_data(self):
-        
+        # Collecting all data to the dataset.
         for key in self.db.scan_iter(f"{self.subprefix}:{self.cur_patch_name}:*"):
             value = pickle.loads(self.db.get(key))
             print(f"{value.shape = }")
+            r_part = np.expand_dims(np.real(value), axis=0)
+            i_part = np.expand_dims(np.imag(value), axis=0)
 
-        # Register the information to the file
+            two_ch_value = np.concatenate((r_part, i_part), axis=0).reshape(1, 2, r_part.shape[1])
+            if dataset is None:
+                dataset = two_ch_value
+            else:
+                dataset = np.append(dataset, two_ch_value, axis=0)
+
+        # Save the dataset to a pickle file
+
+
+        # Register the information to the file.
         save_filename = f"{self.c['SAVE_DIRECTORY']}{self.c['PATCH_INFO_FILENAME']}"
         self.d_msg(f"Packing data to file: {save_filename}")
         save_description = "Description"
@@ -142,8 +153,14 @@ class CollectAgent(BasicAgent):
         with open(save_filename, 'w') as f:
             json.dump(file_info, f, indent=4)
 
-        
+        # delete the key of the patch
+        self.del_key_pattern(self.cur_patch_name)
 
+    def del_key_pattern(self, key_p):
+        for key in self.db.scan_iter(key_p):
+            self.db.delete(key)
+
+    # --------------------------------------------------------------
 
 def main():
     print('Running Collect Agent...')
