@@ -8,10 +8,6 @@ ret = os.system("clear")
 if ret != 0:
     os.system("cls")
 
-def del_key_pattern(db, key_p):
-    for key in db.scan_iter(key_p):
-        db.delete(key)
-
 def save_to_file(db, patch_name):
     try:
         key_pattern = f"SYSTEM:COLLECT:WIFI:*:{patch_name}:*"
@@ -26,10 +22,27 @@ def save_to_file(db, patch_name):
                 dataset = two_ch_value
             else:
                 dataset = np.append(dataset, two_ch_value, axis=0)
-        return dataset
+
+        save_filename = "test.pkl"
+        dataset_dict = {
+            ('BPSK', 0): dataset
+        }
+        with open(save_filename, 'wb') as f:
+            pickle.dump(dataset_dict, f)
+
+
     except Exception as exp:
         e_type, e_obj, e_tb = sys.exc_info()
         print(f'Exception occurs: {exp}. At line {e_tb.tb_lineno}')
+
+def load_pickle(filename):
+    with open(filename, 'rb') as f:
+        data = pickle.load(f, encoding='latin1')
+
+    print(f"{type(data) = }")
+    keys = data.keys()
+    for key in keys:
+        print(f"{key = }")
 
 
 def main():
@@ -51,6 +64,7 @@ def main():
     print(f"{type(db.scan_iter('SYSTEM:COLLECT:WIFI:*'))}")
     patch_name = "2024_03_21_16_09_45"
     save_to_file(db, patch_name)
+    load_pickle('test.pkl')
 
     pass
 
