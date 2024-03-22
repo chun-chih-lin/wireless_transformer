@@ -120,7 +120,10 @@ class CollectAgent(BasicAgent):
     # --------------------------------------------------------------
     def pack_data(self):
         # Collecting all data to the dataset.
+        current_mod = None
         for key in self.db.scan_iter(f"{self.subprefix}:{self.cur_patch_name}:*"):
+            if current_mod is None:
+                current_mod = key.decode().split(":")
             value = pickle.loads(self.db.get(key))
             print(f"{value.shape = }")
             r_part = np.expand_dims(np.real(value), axis=0)
@@ -132,8 +135,20 @@ class CollectAgent(BasicAgent):
             else:
                 dataset = np.append(dataset, two_ch_value, axis=0)
 
+        
         # Save the dataset to a pickle file
+        mod_mcs = int(current_mod[3])
+        mod_str = self.c["MOD_INFO"][current_mod[2]][mod_mcs]["Modulation"]
+        mod_codr = self.c["MOD_INFO"][current_mod[2]][mod_mcs]["CodingRate"]
+        
+        dataset_dict = {
+            (mod_str, mod_mcs): dataset
+        }
 
+        self.d_msg(f"save {dataset_dict = }")
+        # with open(save_dataset_name, 'wb') as f:
+        #     pickle.dump(dataset_dict, f)
+        #     pass
 
         # Register the information to the file.
         save_filename = f"{self.c['SAVE_DIRECTORY']}{self.c['PATCH_INFO_FILENAME']}"

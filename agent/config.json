@@ -10,5 +10,42 @@
 
     "MAX_PATCH_NUM": 500,
     "SAVE_DIRECTORY": "./wireless_data/", 
-    "PATCH_INFO_FILENAME": "patch_info.json"
+    "PATCH_INFO_FILENAME": "patch_info.json",
+
+    "MOD_INFO": {
+        "WIFI": {
+            "0": {
+                "Modulation": "BPSK",
+                "CodingRate": "1/2"
+            },
+            "1": {
+                "Modulation": "BPSK",
+                "CodingRate": "3/4"
+            },
+            "2": {
+                "Modulation": "QPSK",
+                "CodingRate": "1/2"
+            },
+            "3": {
+                "Modulation": "QPSK",
+                "CodingRate": "3/4"
+            },
+            "4": {
+                "Modulation": "16QAM",
+                "CodingRate": "1/2"
+            },
+            "5": {
+                "Modulation": "16QAM",
+                "CodingRate": "3/4"
+            },
+            "6": {
+                "Modulation": "64QAM",
+                "CodingRate": "2/3"
+            },
+            "7": {
+                "Modulation": "64QAM",
+                "CodingRate": "3/4"
+            }
+        }
+    }
 }
