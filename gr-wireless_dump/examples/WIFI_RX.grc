@@ -493,7 +493,7 @@ blocks:
     bus_structure: null
     coordinate: [520, 568.0]
     rotation: 180
-    state: enabled
+    state: disabled
 - name: fft_vxx_0_1
   id: fft_vxx
   parameters:
@@ -514,7 +514,7 @@ blocks:
     bus_structure: null
     coordinate: [288, 532.0]
     rotation: 180
-    state: enabled
+    state: disabled
 - name: ieee802_11_decode_mac_0
   id: ieee802_11_decode_mac
   parameters:
@@ -531,7 +531,7 @@ blocks:
     bus_structure: null
     coordinate: [512, 628.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: ieee802_11_frame_equalizer_0
   id: ieee802_11_frame_equalizer
   parameters:
@@ -551,7 +551,7 @@ blocks:
     bus_structure: null
     coordinate: [200, 652.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: ieee802_11_sync_long_0
   id: ieee802_11_sync_long
   parameters:
@@ -605,7 +605,7 @@ blocks:
     bus_structure: null
     coordinate: [464, 700.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_const_sink_x_0
   id: qtgui_const_sink_x
   parameters:
@@ -697,7 +697,7 @@ blocks:
     bus_structure: null
     coordinate: [696, 692.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_time_sink_x_0
   id: qtgui_time_sink_x
   parameters:
@@ -1239,7 +1239,7 @@ blocks:
     alias: ''
     comment: ''
     debug: Debug
-    mod: '0'
+    mod: '7'
     pdu_len: pdu_length
   states:
     bus_sink: false

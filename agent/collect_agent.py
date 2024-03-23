@@ -177,7 +177,8 @@ class CollectAgent(BasicAgent):
             file_info[self.cur_patch_name] = {
                     "MCS": mod_mcs,
                     "CodingRate": mod_codr,
-                    "MOD": mod_str
+                    "MOD": mod_str, 
+                    "Filename": save_dataset_name
             }
 
             with open(save_filename, 'w') as f:
