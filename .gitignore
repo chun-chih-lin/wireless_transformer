@@ -2,6 +2,8 @@
 build/
 __pycache__/
 
+Dataset_*/
+
 # c extensions
 *.so
 
