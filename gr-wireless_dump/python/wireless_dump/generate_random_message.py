@@ -59,8 +59,8 @@ class generate_random_message(gr.sync_block):
                 sleep(self.interval)
 
         except Exception as exp:
-        _, _, e_tb = sys.exc_info()
-        print(f'[MSG Generator] Exception: {exp}, Line {e_tb.tb_lineno}')
+            _, _, e_tb = sys.exc_info()
+            print(f'[MSG Generator] Exception: {exp}, Line {e_tb.tb_lineno}')
 
     def event_handler(self, msg):
         try:
@@ -87,7 +87,6 @@ class generate_random_message(gr.sync_block):
                     self.is_busy = False
                 else:
                     print(f"{db_key = }")
-
 
         except Exception as exp:
             _, _, e_tb = sys.exc_info()
