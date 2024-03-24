@@ -88,7 +88,7 @@ blocks:
     start: '10'
     step: '1'
     stop: '10000'
-    value: '2000'
+    value: '100'
     widget: counter_slider
   states:
     bus_sink: false
@@ -154,7 +154,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [560, 528.0]
+    coordinate: [384, 256.0]
     rotation: 0
     state: enabled
 - name: blocks_message_strobe_0_0
@@ -171,9 +171,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [88, 164.0]
+    coordinate: [72, 164.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: blocks_tagged_stream_mux_0
   id: blocks_tagged_stream_mux
   parameters:
@@ -688,18 +688,18 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    interval: '100'
+    interval: interval
     maxoutbuf: '0'
     minoutbuf: '0'
     num_msg: '10'
     pattern: '"x"'
-    pdu_length: '10'
+    pdu_length: pdu_length
     random: '0'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [248, 524.0]
+    coordinate: [48, 252.0]
     rotation: 0
     state: enabled
 

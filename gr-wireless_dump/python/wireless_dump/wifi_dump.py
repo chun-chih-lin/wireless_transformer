@@ -79,6 +79,9 @@ class wifi_dump(gr.sync_block):
         self.set_pdu_len(pdu_len)
 
         self.system_prefix_key = "SYSTEM:COLLECT:WIFI"
+
+        self.input_c = 0
+
         
 
     def d_msg(self, msg):
@@ -151,6 +154,9 @@ class wifi_dump(gr.sync_block):
         try:
             in0 = input_items[0]
             tags = self.get_tags_in_window(0, 0, len(input_items[0]))
+
+            print(f"{self.input_c = }, {len(in0) = }")
+            self.input_c += 1
             
             if not self.detect:
                 for tag in tags:
@@ -174,6 +180,7 @@ class wifi_dump(gr.sync_block):
                     # This ttl_sample should be output to the database
                     self.ttl_sample = self.wifi_signal[:self.max_sample]
                     self.d_msg(f"Complete packet with sample size: {self.ttl_sample.shape}")
+                    print(f"save to db with sample: {len(self.ttl_sample) = }, {len(self.wifi_signal) = }")
                     self.save_to_db(self.ttl_sample)
                     # Erase the received packet
                     self.ttl_sample = None

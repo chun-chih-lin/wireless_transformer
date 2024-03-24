@@ -7,14 +7,13 @@
 # GNU Radio Python Flow Graph
 # Title: Not titled yet
 # Author: root
-# GNU Radio version: v3.10.9.2-5-gdd01ef52
+# GNU Radio version: v3.10.9.2-39-gcf065ee5
 
 from PyQt5 import Qt
 from gnuradio import qtgui
 from PyQt5 import QtCore
 from PyQt5.QtCore import QObject, pyqtSlot
 from gnuradio import blocks
-import pmt
 from gnuradio import channels
 from gnuradio.filter import firdes
 from gnuradio import digital
@@ -158,34 +157,19 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        # Create the options list
-        self._Debug_options = [0, 1]
-        # Create the labels list
-        self._Debug_labels = ['Disable', 'Enable']
-        # Create the combo box
-        self._Debug_tool_bar = Qt.QToolBar(self)
-        self._Debug_tool_bar.addWidget(Qt.QLabel("'Debug'" + ": "))
-        self._Debug_combo_box = Qt.QComboBox()
-        self._Debug_tool_bar.addWidget(self._Debug_combo_box)
-        for _label in self._Debug_labels: self._Debug_combo_box.addItem(_label)
-        self._Debug_callback = lambda i: Qt.QMetaObject.invokeMethod(self._Debug_combo_box, "setCurrentIndex", Qt.Q_ARG("int", self._Debug_options.index(i)))
-        self._Debug_callback(self.Debug)
-        self._Debug_combo_box.currentIndexChanged.connect(
-            lambda i: self.set_Debug(self._Debug_options[i]))
-        # Create the radio buttons
-        self.top_layout.addWidget(self._Debug_tool_bar)
-        self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(0, pdu_length, Debug)
+        self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(0, pdu_length, 0)
+        self.wireless_dump_generate_random_message_0 = wireless_dump.generate_random_message("x", pdu_length, 0, interval, 1)
         self.sync_short = ieee802_11.sync_short(sensitivity, 2, False, False)
         self.sync_long = ieee802_11.sync_long(sync_length, False, False)
         self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
-            1024, #size
+            1521, #size
             samp_rate, #samp_rate
             "", #name
             1, #number of inputs
             None # parent
         )
         self.qtgui_time_sink_x_0.set_update_time(0.10)
-        self.qtgui_time_sink_x_0.set_y_axis(-1, 1)
+        self.qtgui_time_sink_x_0.set_y_axis(-10, 10)
 
         self.qtgui_time_sink_x_0.set_y_label('Amplitude', "")
 
@@ -307,20 +291,35 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         self.blocks_multiply_const_xx_0 = blocks.multiply_const_cc((10**(snr/10.0))**.5, 1)
         self.blocks_moving_average_xx_1 = blocks.moving_average_ff((window_size  + 16), 1, 4000, 1)
         self.blocks_moving_average_xx_0 = blocks.moving_average_cc(window_size, 1, 4000, 1)
-        self.blocks_message_strobe_0_0 = blocks.message_strobe(pmt.intern("".join("x" for i in range(pdu_length))), interval)
         self.blocks_divide_xx_0 = blocks.divide_ff(1)
         self.blocks_delay_0_0 = blocks.delay(gr.sizeof_gr_complex*1, 16)
         self.blocks_delay_0 = blocks.delay(gr.sizeof_gr_complex*1, sync_length)
         self.blocks_conjugate_cc_0 = blocks.conjugate_cc()
         self.blocks_complex_to_mag_squared_0 = blocks.complex_to_mag_squared(1)
         self.blocks_complex_to_mag_0 = blocks.complex_to_mag(1)
+        # Create the options list
+        self._Debug_options = [0, 1]
+        # Create the labels list
+        self._Debug_labels = ['Disable', 'Enable']
+        # Create the combo box
+        self._Debug_tool_bar = Qt.QToolBar(self)
+        self._Debug_tool_bar.addWidget(Qt.QLabel("'Debug'" + ": "))
+        self._Debug_combo_box = Qt.QComboBox()
+        self._Debug_tool_bar.addWidget(self._Debug_combo_box)
+        for _label in self._Debug_labels: self._Debug_combo_box.addItem(_label)
+        self._Debug_callback = lambda i: Qt.QMetaObject.invokeMethod(self._Debug_combo_box, "setCurrentIndex", Qt.Q_ARG("int", self._Debug_options.index(i)))
+        self._Debug_callback(self.Debug)
+        self._Debug_combo_box.currentIndexChanged.connect(
+            lambda i: self.set_Debug(self._Debug_options[i]))
+        # Create the radio buttons
+        self.top_layout.addWidget(self._Debug_tool_bar)
 
 
         ##################################################
         # Connections
         ##################################################
-        self.msg_connect((self.blocks_message_strobe_0_0, 'strobe'), (self.ieee802_11_mac_0_0, 'app in'))
         self.msg_connect((self.ieee802_11_mac_0_0, 'phy out'), (self.ieee802_11_mapper_0, 'in'))
+        self.msg_connect((self.wireless_dump_generate_random_message_0, 'out'), (self.ieee802_11_mac_0_0, 'app in'))
         self.connect((self.blocks_complex_to_mag_0, 0), (self.blocks_divide_xx_0, 0))
         self.connect((self.blocks_complex_to_mag_squared_0, 0), (self.blocks_moving_average_xx_1, 0))
         self.connect((self.blocks_conjugate_cc_0, 0), (self.blocks_multiply_xx_0, 1))
@@ -402,7 +401,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
 
     def set_pdu_length(self, pdu_length):
         self.pdu_length = pdu_length
-        self.blocks_message_strobe_0_0.set_msg(pmt.intern("".join("x" for i in range(self.pdu_length))))
+        self.wireless_dump_generate_random_message_0.set_pdu_len(self.pdu_length)
         self.wireless_dump_wifi_dump_0.set_pdu_len(self.pdu_length)
 
     def get_out_buf_size(self):
@@ -422,7 +421,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
 
     def set_interval(self, interval):
         self.interval = interval
-        self.blocks_message_strobe_0_0.set_period(self.interval)
+        self.wireless_dump_generate_random_message_0.set_interval(self.interval)
 
     def get_header_formatter(self):
         return self.header_formatter
@@ -466,7 +465,6 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
     def set_Debug(self, Debug):
         self.Debug = Debug
         self._Debug_callback(self.Debug)
-        self.wireless_dump_wifi_dump_0.set_debug(self.Debug)
 
 
 

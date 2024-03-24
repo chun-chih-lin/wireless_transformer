@@ -45,7 +45,7 @@ class generate_random_message(gr.sync_block):
     def generate_message(self):
         try:
             msg_count = 0
-            while msg_count <= self.num_msg:
+            while msg_count < self.num_msg:
                 print(f"Sending #{msg_count} Message.")
                 if self.random:
                     # Generate random output message
