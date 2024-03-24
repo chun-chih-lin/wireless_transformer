@@ -78,16 +78,17 @@ class generate_random_message(gr.sync_block):
 
             if db_key and not self.is_busy:
                 # Prepare to generate messages
-                if split_key[1] == "SEND" and self.db.get(db_key) == "True":
-                    print("Sending message")
-                    print("Set to be busy.")
+                if split_key[-1] == "SEND" and self.db.get(db_key).decode() == "True":
                     self.is_busy = True
                     self.generate_message()
-                    self.db.set(db_key, "False")
-                    print("Reset to be not busy.")
+                    self.db.delete(db_key)
                     self.is_busy = False
                 else:
-                    print(f"{db_key = }")
+                    # print(f"{db_key = }")
+                    pass
+            else:
+                # print(f"{self.is_busy = }")
+                pass
 
         except Exception as exp:
             _, _, e_tb = sys.exc_info()

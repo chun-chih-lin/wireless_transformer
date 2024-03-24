@@ -14,7 +14,6 @@ from gnuradio import qtgui
 from PyQt5 import QtCore
 from PyQt5.QtCore import QObject, pyqtSlot
 from gnuradio import blocks
-import pmt
 from gnuradio import blocks, gr
 from gnuradio import digital
 from gnuradio import fft
@@ -27,6 +26,7 @@ from PyQt5 import Qt
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
+from gnuradio import wireless_dump
 import ieee802_11
 import sip
 
@@ -78,20 +78,6 @@ class header_test(gr.top_block, Qt.QWidget):
         # Blocks
         ##################################################
 
-        self._pdu_length_range = qtgui.Range(0, 1500, 1, 10, 200)
-        self._pdu_length_win = qtgui.RangeWidget(self._pdu_length_range, self.set_pdu_length, "'pdu_length'", "counter_slider", int, QtCore.Qt.Horizontal)
-        self.top_grid_layout.addWidget(self._pdu_length_win, 0, 0, 1, 1)
-        for r in range(0, 1):
-            self.top_grid_layout.setRowStretch(r, 1)
-        for c in range(0, 1):
-            self.top_grid_layout.setColumnStretch(c, 1)
-        self._interval_range = qtgui.Range(10, 10000, 1, 2000, 200)
-        self._interval_win = qtgui.RangeWidget(self._interval_range, self.set_interval, "'interval'", "counter_slider", int, QtCore.Qt.Horizontal)
-        self.top_grid_layout.addWidget(self._interval_win, 0, 2, 1, 1)
-        for r in range(0, 1):
-            self.top_grid_layout.setRowStretch(r, 1)
-        for c in range(2, 3):
-            self.top_grid_layout.setColumnStretch(c, 1)
         # Create the options list
         self._encoding_options = [0, 1, 2, 3, 4, 5, 6, 7]
         # Create the labels list
@@ -112,6 +98,7 @@ class header_test(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
+        self.wireless_dump_generate_random_message_0 = wireless_dump.generate_random_message("x", 10, 0, 100, 10)
         self.qtgui_time_sink_x_0_0_0 = qtgui.time_sink_c(
             (672+48), #size
             samp_rate, #samp_rate
@@ -163,6 +150,20 @@ class header_test(gr.top_block, Qt.QWidget):
 
         self._qtgui_time_sink_x_0_0_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0_0_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_time_sink_x_0_0_0_win)
+        self._pdu_length_range = qtgui.Range(0, 1500, 1, 10, 200)
+        self._pdu_length_win = qtgui.RangeWidget(self._pdu_length_range, self.set_pdu_length, "'pdu_length'", "counter_slider", int, QtCore.Qt.Horizontal)
+        self.top_grid_layout.addWidget(self._pdu_length_win, 0, 0, 1, 1)
+        for r in range(0, 1):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 1):
+            self.top_grid_layout.setColumnStretch(c, 1)
+        self._interval_range = qtgui.Range(10, 10000, 1, 2000, 200)
+        self._interval_win = qtgui.RangeWidget(self._interval_range, self.set_interval, "'interval'", "counter_slider", int, QtCore.Qt.Horizontal)
+        self.top_grid_layout.addWidget(self._interval_win, 0, 2, 1, 1)
+        for r in range(0, 1):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(2, 3):
+            self.top_grid_layout.setColumnStretch(c, 1)
         self.ieee802_11_mapper_0 = ieee802_11.mapper(encoding, False)
         self.ieee802_11_mac_0_0 = ieee802_11.mac([0x23, 0x23, 0x23, 0x23, 0x23, 0x23], [0x42, 0x42, 0x42, 0x42, 0x42, 0x42], [0xff, 0xff, 0xff, 0xff, 0xff, 0xff])
         self.ieee802_11_chunks_to_symbols_xx_0 = ieee802_11.chunks_to_symbols()
@@ -181,20 +182,15 @@ class header_test(gr.top_block, Qt.QWidget):
         self.digital_chunks_to_symbols_xx_0 = digital.chunks_to_symbols_bc([-1, 1], 1)
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_gr_complex*1, "packet_len", 1)
         self.blocks_tagged_stream_mux_0.set_min_output_buffer((max_symbols * 48 * 8))
-        self.blocks_message_strobe_0_0 = blocks.message_strobe(pmt.intern("".join("x" for i in range(pdu_length))), interval)
         self.blocks_message_debug_0 = blocks.message_debug(True, gr.log_levels.info)
-        self.Message_Push_Button = _Message_Push_Button_toggle_button = qtgui.MsgPushButton('Message Push Button', 'pressed','pmt.intern("".join("x" for i in range(pdu_length)))',"default","default")
-        self.Message_Push_Button = _Message_Push_Button_toggle_button
-
-        self.top_layout.addWidget(_Message_Push_Button_toggle_button)
 
 
         ##################################################
         # Connections
         ##################################################
-        self.msg_connect((self.Message_Push_Button, 'pressed'), (self.blocks_message_debug_0, 'print'))
-        self.msg_connect((self.blocks_message_strobe_0_0, 'strobe'), (self.ieee802_11_mac_0_0, 'app in'))
         self.msg_connect((self.ieee802_11_mac_0_0, 'phy out'), (self.ieee802_11_mapper_0, 'in'))
+        self.msg_connect((self.wireless_dump_generate_random_message_0, 'out'), (self.blocks_message_debug_0, 'print'))
+        self.msg_connect((self.wireless_dump_generate_random_message_0, 'out'), (self.ieee802_11_mac_0_0, 'app in'))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_ofdm_carrier_allocator_cvc_0_0_0, 0))
         self.connect((self.digital_chunks_to_symbols_xx_0, 0), (self.blocks_tagged_stream_mux_0, 0))
         self.connect((self.digital_ofdm_carrier_allocator_cvc_0_0_0, 0), (self.fft_vxx_0_0, 0))
@@ -226,7 +222,6 @@ class header_test(gr.top_block, Qt.QWidget):
 
     def set_pdu_length(self, pdu_length):
         self.pdu_length = pdu_length
-        self.blocks_message_strobe_0_0.set_msg(pmt.intern("".join("x" for i in range(self.pdu_length))))
 
     def get_max_symbols(self):
         return self.max_symbols
@@ -239,7 +234,6 @@ class header_test(gr.top_block, Qt.QWidget):
 
     def set_interval(self, interval):
         self.interval = interval
-        self.blocks_message_strobe_0_0.set_period(self.interval)
 
     def get_header_formatter(self):
         return self.header_formatter

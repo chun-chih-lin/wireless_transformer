@@ -142,24 +142,6 @@ blocks:
     coordinate: [184, 12]
     rotation: 0
     state: enabled
-- name: Message_Push_Button
-  id: variable_qtgui_msg_push_button
-  parameters:
-    comment: ''
-    gui_hint: ''
-    label: Message Push Button
-    msgName: pressed
-    relBackgroundColor: default
-    relFontColor: default
-    type: string
-    value: pmt.intern("".join("x" for i in range(pdu_length)))
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [240, 516.0]
-    rotation: 0
-    state: enabled
 - name: blocks_message_debug_0
   id: blocks_message_debug
   parameters:
@@ -172,7 +154,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [600, 512.0]
+    coordinate: [560, 528.0]
     rotation: 0
     state: enabled
 - name: blocks_message_strobe_0_0
@@ -191,7 +173,7 @@ blocks:
     bus_structure: null
     coordinate: [88, 164.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_tagged_stream_mux_0
   id: blocks_tagged_stream_mux
   parameters:
@@ -700,9 +682,28 @@ blocks:
     coordinate: [160, 412.0]
     rotation: 180
     state: enabled
+- name: wireless_dump_generate_random_message_0
+  id: wireless_dump_generate_random_message
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    interval: '100'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_msg: '10'
+    pattern: '"x"'
+    pdu_length: '10'
+    random: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [248, 524.0]
+    rotation: 0
+    state: enabled
 
 connections:
-- [Message_Push_Button, pressed, blocks_message_debug_0, print]
 - [blocks_message_strobe_0_0, strobe, ieee802_11_mac_0_0, app in]
 - [blocks_tagged_stream_mux_0, '0', digital_ofdm_carrier_allocator_cvc_0_0_0, '0']
 - [digital_chunks_to_symbols_xx_0, '0', blocks_tagged_stream_mux_0, '0']
@@ -716,6 +717,8 @@ connections:
 - [ieee802_11_mac_0_0, phy out, ieee802_11_mapper_0, in]
 - [ieee802_11_mapper_0, '0', digital_packet_headergenerator_bb_0, '0']
 - [ieee802_11_mapper_0, '0', ieee802_11_chunks_to_symbols_xx_0, '0']
+- [wireless_dump_generate_random_message_0, out, blocks_message_debug_0, print]
+- [wireless_dump_generate_random_message_0, out, ieee802_11_mac_0_0, app in]
 
 metadata:
   file_format: 1
