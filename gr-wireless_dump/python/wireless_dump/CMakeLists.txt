@@ -23,6 +23,7 @@ gr_python_install(
     FILES 
     __init__.py 
     wifi_dump.py
+    generate_random_message.py
     DESTINATION ${GR_PYTHON_DIR}/gnuradio/wireless_dump)
 
 ########################################################################
