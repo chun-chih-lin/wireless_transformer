@@ -102,6 +102,7 @@ class generate_random_message(gr.sync_block):
     def run_subscribe(self):
         self.pubsub = self.db.pubsub()
         self.pubsub.psubscribe(**{self.subprefix+":GENERATE_MSG:*": self.event_handler})
+        self.redis_thread = self.pubsub.run_in_thread(sleep_time=0.01)
 
     def set_pattern(self, pattern):
         self.pattern = pattern
@@ -121,6 +122,16 @@ class generate_random_message(gr.sync_block):
 
     def set_num_msg(self, num_msg):
         self.num_msg = num_msg
+
+    def start(self):
+        self.thread.start()
+        return True
+
+    def stop(self):
+        self.thread.join()
+        if self.redis_thread:
+            self.redis_thread.stop()
+        return True
 
     def work(self, input_items, output_items):
         return False
