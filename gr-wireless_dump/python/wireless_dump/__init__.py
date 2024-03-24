@@ -21,4 +21,5 @@ except ModuleNotFoundError:
 
 # import any pure python here
 from .wifi_dump import wifi_dump
+from .generate_random_message import generate_random_message
 #

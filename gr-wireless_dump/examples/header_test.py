@@ -7,7 +7,7 @@
 # GNU Radio Python Flow Graph
 # Title: Not titled yet
 # Author: root
-# GNU Radio version: v3.10.9.2-5-gdd01ef52
+# GNU Radio version: v3.10.9.2-39-gcf065ee5
 
 from PyQt5 import Qt
 from gnuradio import qtgui
@@ -15,6 +15,7 @@ from PyQt5 import QtCore
 from PyQt5.QtCore import QObject, pyqtSlot
 from gnuradio import blocks
 import pmt
+from gnuradio import blocks, gr
 from gnuradio import digital
 from gnuradio import fft
 from gnuradio.fft import window
@@ -181,11 +182,17 @@ class header_test(gr.top_block, Qt.QWidget):
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_gr_complex*1, "packet_len", 1)
         self.blocks_tagged_stream_mux_0.set_min_output_buffer((max_symbols * 48 * 8))
         self.blocks_message_strobe_0_0 = blocks.message_strobe(pmt.intern("".join("x" for i in range(pdu_length))), interval)
+        self.blocks_message_debug_0 = blocks.message_debug(True, gr.log_levels.info)
+        self.Message_Push_Button = _Message_Push_Button_toggle_button = qtgui.MsgPushButton('Message Push Button', 'pressed','pmt.intern("".join("x" for i in range(pdu_length)))',"default","default")
+        self.Message_Push_Button = _Message_Push_Button_toggle_button
+
+        self.top_layout.addWidget(_Message_Push_Button_toggle_button)
 
 
         ##################################################
         # Connections
         ##################################################
+        self.msg_connect((self.Message_Push_Button, 'pressed'), (self.blocks_message_debug_0, 'print'))
         self.msg_connect((self.blocks_message_strobe_0_0, 'strobe'), (self.ieee802_11_mac_0_0, 'app in'))
         self.msg_connect((self.ieee802_11_mac_0_0, 'phy out'), (self.ieee802_11_mapper_0, 'in'))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_ofdm_carrier_allocator_cvc_0_0_0, 0))

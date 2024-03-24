@@ -142,6 +142,39 @@ blocks:
     coordinate: [184, 12]
     rotation: 0
     state: enabled
+- name: Message_Push_Button
+  id: variable_qtgui_msg_push_button
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: Message Push Button
+    msgName: pressed
+    relBackgroundColor: default
+    relFontColor: default
+    type: string
+    value: pmt.intern("".join("x" for i in range(pdu_length)))
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [240, 516.0]
+    rotation: 0
+    state: enabled
+- name: blocks_message_debug_0
+  id: blocks_message_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    en_uvec: 'True'
+    log_level: info
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [600, 512.0]
+    rotation: 0
+    state: enabled
 - name: blocks_message_strobe_0_0
   id: blocks_message_strobe
   parameters:
@@ -669,6 +702,7 @@ blocks:
     state: enabled
 
 connections:
+- [Message_Push_Button, pressed, blocks_message_debug_0, print]
 - [blocks_message_strobe_0_0, strobe, ieee802_11_mac_0_0, app in]
 - [blocks_tagged_stream_mux_0, '0', digital_ofdm_carrier_allocator_cvc_0_0_0, '0']
 - [digital_chunks_to_symbols_xx_0, '0', blocks_tagged_stream_mux_0, '0']
@@ -685,4 +719,4 @@ connections:
 
 metadata:
   file_format: 1
-  grc_version: v3.10.9.2-5-gdd01ef52
+  grc_version: v3.10.9.2-39-gcf065ee5
