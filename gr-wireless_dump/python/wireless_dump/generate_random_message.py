@@ -63,6 +63,7 @@ class generate_random_message(gr.sync_block):
             print(f'[MSG Generator] Exception: {exp}, Line {e_tb.tb_lineno}')
 
     def event_handler(self, msg):
+        print(f"{msg = }")
         try:
             if msg["data"].decode("utf-8") == "del":
                 return
