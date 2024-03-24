@@ -169,11 +169,21 @@ class wifi_dump(gr.sync_block):
                         offset = tag.offset
                         # Store the wifi signal to self.wifi_signal
                         self.wifi_signal = in0[offset:]
+
+                        print(f"{len(in0) = } {offset = }")
+
+
             elif self.wifi_signal is not None:
                 # Already detected in the past.
                 # Concatenate self.wifi_signal
                 self.wifi_signal = np.concatenate((self.wifi_signal, in0))
                 self.d_msg(f"{self.wifi_signal.shape = }, {len(self.wifi_signal) = }")
+
+                for tag in tags:
+                    key = pmt.to_python(tag.key)
+                    offset = tag.offset
+                    print(f"{key = }, {len(in0) = }, {offset = }")
+
                 if len(self.wifi_signal) >= self.max_sample:
                     # The length is longer than the wifi signal.
                     # Return the cut-off sample array.
@@ -193,6 +203,8 @@ class wifi_dump(gr.sync_block):
                     pass
                 # # Value can be several things, it depends what PMT type it was.
                 # value = pmt.to_python(tag.value)
+            else:
+                print(f"{self.detect = }, {self.wifi_signal is not None}")
             self.consume(0, len(in0))
 
         except Exception as exp:
