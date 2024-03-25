@@ -180,7 +180,6 @@ class wifi_dump(gr.sync_block):
             # ------
             i = 0
             while i < len(in0):
-                print(f". {i = }")
                 if not self.detect:
                     # I have not detect anything yet.
                     # Check if there is any tag that I'm interested in.
@@ -215,6 +214,7 @@ class wifi_dump(gr.sync_block):
                             # Export the result
                             self.input_c += 1
                             print(f"Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
+                            print("................")
                             self.wifi_signal = None
                             # Reset to not detecting
                             self.detect = False
@@ -245,6 +245,7 @@ class wifi_dump(gr.sync_block):
                         # Export the result
                         self.input_c += 1
                         print(f"Fianlly Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
+                        print("................")
                         self.wifi_signal = None
                         # Reset to not detecting
                         self.detect = False
