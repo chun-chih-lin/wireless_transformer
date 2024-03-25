@@ -154,10 +154,17 @@ class wifi_dump(gr.sync_block):
         try:
             in0 = input_items[0]
             tags = self.get_tags_in_window(0, 0, len(input_items[0]), pmt.string_to_symbol("wifi_start"))
-            r_tags = self.get_tags_in_range(0, 0, len(input_items[0]), pmt.string_to_symbol("wifi_start"))
+            r_tags = self.get_tags_in_range(0, 0, len(input_items[0]))
 
             print("----------------------------------")
             print(f"{tags = }, {r_tags = }")
+            for r_tag in r_tags:
+                key = pmt.to_python(r_tag.key)
+                if key == "wifi_start":
+                    r_offset = r_tag.offset
+                    print(f"{r_offset = }")
+
+
             print(f"{self.input_c = }, {len(in0) = }")
             self.input_c += 1
             
