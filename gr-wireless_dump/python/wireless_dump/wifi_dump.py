@@ -153,8 +153,25 @@ class wifi_dump(gr.sync_block):
     def work(self, input_items, output_items):
         try:
             in0 = input_items[0]
-            tags = self.get_tags_in_window(0, 0, len(input_items[0]), pmt.string_to_symbol("wifi_start"))
+            tags = self.get_tags_in_window(0, 0, len(input_items[0]))
+                
+            self.input_c += 1
 
+            if len(tags) > 0:
+                for tag in tags:
+                    tag_key = pmt.to_python(tag.key)
+                    tag_len = pmt.to_python(tag.value)
+                    tag_pos = tag.offset - self.nitems_read(0)
+                    if tag_key == "wifi_start":
+                        print("----------------")
+                        print(f"{len(in0) = }, {tag_pos = }, {tag.offset = }, {self.nitems_read(0) = }")
+
+                
+
+            self.consume(0, len(in0))
+
+
+            """
             print("----------------------------------")
             print(f"{self.input_c = }, {len(in0) = }")
             self.input_c += 1
@@ -228,6 +245,7 @@ class wifi_dump(gr.sync_block):
             else:
                 print(f"{self.detect = }, self.wifi_signal is {self.wifi_signal}")
                 self.consume(0, len(in0))
+            """
 
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
