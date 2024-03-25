@@ -135,6 +135,7 @@ class wifi_dump(gr.sync_block):
             self.d_msg(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
     def save_to_db(self, save_ary):
+        print("save_to_db")
         try:
             pickled_obj = pickle.dumps(save_ary)
 
