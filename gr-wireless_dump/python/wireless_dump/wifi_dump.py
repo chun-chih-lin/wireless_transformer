@@ -181,7 +181,7 @@ class wifi_dump(gr.sync_block):
 
             # ------
             i = 0
-            while False:
+            while i < len(in0):
                 print('.')
                 if not self.detect:
                     # I have not detect anything yet.
@@ -198,6 +198,9 @@ class wifi_dump(gr.sync_block):
                         i += offset_sample
 
                         store_len = min(len(in0) - offset_sample, self.max_sample)
+                        if store_len < 0:
+                            print(f"Exception!!!!!!!!!!!! {len(in0) = }, {offset_sample = }")
+                            break
                         i += store_len
 
                         print(f"{offset_sample = }, {store_len = }")
@@ -206,7 +209,6 @@ class wifi_dump(gr.sync_block):
                         if len(self.wifi_signal) < self.max_sample:
                             # Not a complete packet.
                             print("Not a complete packet. Keep waiting for more samples.")
-                            pass
                         else:
                             # it is a complete packet already.
                             # Export the result
@@ -219,6 +221,10 @@ class wifi_dump(gr.sync_block):
                     # I have detected something already.
                     print("Detected something already.")
                     store_len = min(len(in0), self.max_sample - len(self.wifi_signal))
+                    if store_len < 0:
+                        print(f"Exception!!!!!!!!!!!! {self.max_sample = }, {len(self.wifi_signal) = }")
+                        break
+
                     i += store_len
 
                     self.wifi_signal = np.concatenate((self.wifi_signal, in0[:store_len]))
