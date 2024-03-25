@@ -81,7 +81,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         self.pdu_length = pdu_length = 10
         self.out_buf_size = out_buf_size = 96000
         self.max_symbols = max_symbols = int(5 + 1 + ((16 + 800 * 8 + 6) * 2) / 24)
-        self.interval = interval = 100
+        self.interval = interval = 200
         self.header_formatter = header_formatter = ieee802_11.signal_field()
         self.freq = freq = 5890000000
         self.epsilon = epsilon = 0
@@ -123,7 +123,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._interval_range = qtgui.Range(10, 10000, 1, 100, 200)
+        self._interval_range = qtgui.Range(10, 10000, 1, 200, 200)
         self._interval_win = qtgui.RangeWidget(self._interval_range, self.set_interval, "'interval'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._interval_win, 2, 1, 1, 1)
         for r in range(2, 3):
@@ -158,11 +158,11 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(0, pdu_length, 0)
-        self.wireless_dump_generate_random_message_0 = wireless_dump.generate_random_message("x", pdu_length, 0, interval, 1)
+        self.wireless_dump_generate_random_message_0 = wireless_dump.generate_random_message("x", pdu_length, 0, interval, 10)
         self.sync_short = ieee802_11.sync_short(sensitivity, 2, False, False)
         self.sync_long = ieee802_11.sync_long(sync_length, False, False)
         self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
-            1521, #size
+            11000, #size
             samp_rate, #samp_rate
             "", #name
             1, #number of inputs

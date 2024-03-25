@@ -230,7 +230,7 @@ blocks:
     start: '10'
     step: '1'
     stop: '10000'
-    value: '100'
+    value: '200'
     widget: counter_slider
   states:
     bus_sink: false
@@ -1108,7 +1108,7 @@ blocks:
     marker9: '-1'
     name: '""'
     nconnections: '1'
-    size: '1521'
+    size: '11000'
     srate: samp_rate
     stemplot: 'False'
     style1: '1'
@@ -1213,7 +1213,7 @@ blocks:
     interval: interval
     maxoutbuf: '0'
     minoutbuf: '0'
-    num_msg: '1'
+    num_msg: '10'
     pattern: '"x"'
     pdu_length: pdu_length
     random: '0'

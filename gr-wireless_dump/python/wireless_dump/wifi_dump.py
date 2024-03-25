@@ -181,6 +181,8 @@ class wifi_dump(gr.sync_block):
                 # Concatenate self.wifi_signal
                 self.wifi_signal = np.concatenate((self.wifi_signal, in0))
                 self.d_msg(f"{self.wifi_signal.shape = }, {len(self.wifi_signal) = }")
+                
+                offset = -1
 
                 for tag in tags:
                     key = pmt.to_python(tag.key)
@@ -192,7 +194,7 @@ class wifi_dump(gr.sync_block):
                     # The length is longer than the wifi signal.
                     # Return the cut-off sample array.
                     # This ttl_sample should be output to the database
-                    self.ttl_sample = self.wifi_signal[:num_last_sample]
+                    self.ttl_sample = self.wifi_signal[:self.max_sample]
                     self.d_msg(f"Complete packet with sample size: {self.ttl_sample.shape}")
                     print(f"save to db with sample: {len(self.ttl_sample) = }, {len(self.wifi_signal) = }")
                     self.save_to_db(self.ttl_sample)
@@ -204,8 +206,16 @@ class wifi_dump(gr.sync_block):
                     self.detect = False
                     # Clear the wifi_signal buffer
                     self.wifi_signal = None
-                    self.consume(0, num_last_sample)
-                    print(f"consume: {num_last_sample}")
+
+                    if offset >= 0:
+                        self.detect = True
+                        self.wifi_signal = in0[offset:]
+                        print(f"Acutally detect a concurrent packet. consume {len(in0)}")
+                        print(f"{len(self.wifi_signal) = }")
+                        self.consume(0, len(in0))
+                    else:
+                        self.consume(0, num_last_sample)
+                        print(f"consume: {num_last_sample}")
                     pass
                 else:
                     # It is not exceeding the max sample yet.
