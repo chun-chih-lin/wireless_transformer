@@ -46,7 +46,7 @@ class generate_random_message(gr.sync_block):
         try:
             msg_count = 0
             while msg_count < self.num_msg:
-                print(f"Sending #{msg_count} Message.")
+                # print(f"Sending #{msg_count} Message.")
                 if self.random:
                     # Generate random output message
                     msg = self.get_rand_message()
@@ -63,7 +63,6 @@ class generate_random_message(gr.sync_block):
             print(f'[MSG Generator] Exception: {exp}, Line {e_tb.tb_lineno}')
 
     def event_handler(self, msg):
-        print(f"{msg = }")
         try:
             if msg["data"].decode("utf-8") == "del":
                 return
