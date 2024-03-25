@@ -142,7 +142,7 @@ class WIFI_RX(gr.top_block, Qt.QWidget):
             lambda i: self.set_Debug(self._Debug_options[i]))
         # Create the radio buttons
         self.top_layout.addWidget(self._Debug_tool_bar)
-        self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(7, pdu_length, Debug)
+        self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(0, pdu_length, Debug)
         self.uhd_usrp_source_0 = uhd.usrp_source(
             ",".join(('', sdr_addr)),
             uhd.stream_args(

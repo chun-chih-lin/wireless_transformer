@@ -1239,7 +1239,7 @@ blocks:
     alias: ''
     comment: ''
     debug: Debug
-    mod: '7'
+    mod: '0'
     pdu_len: pdu_length
   states:
     bus_sink: false
