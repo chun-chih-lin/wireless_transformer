@@ -174,8 +174,8 @@ class wifi_dump(gr.sync_block):
                         print(f"{pmt.to_python(tag.value) = }")
                 self.tag_pos.sort()
 
-            print("===============================")
-            print(f"{len(in0) = } {self.input_c = }")
+            # print("===============================")
+            # print(f"{len(in0) = } {self.input_c = }")
 
             # ------
             i = 0
@@ -185,6 +185,7 @@ class wifi_dump(gr.sync_block):
                     # I have not detect anything yet.
                     # Check if there is any tag that I'm interested in.
                     if len(self.tag_pos) > 0:
+                        print(f"---------------------------------- {self.input_c = }")
                         print("Detected something.")
                         # Something interesting is in the list
                         # Set to detected
@@ -219,10 +220,11 @@ class wifi_dump(gr.sync_block):
                             self.detect = False
                     else:
                         # Detecting nothing.
-                        print("Doing Nothing....")
+                        # print("Doing Nothing....")
                         i += len(in0)
                 else:
                     # I have detected something already.
+                    print(f"---------------------------------- {self.input_c = }")
                     print("Detected something already.")
                     store_len = min(len(in0), self.max_sample - len(self.wifi_signal))
                     if store_len < 0:
