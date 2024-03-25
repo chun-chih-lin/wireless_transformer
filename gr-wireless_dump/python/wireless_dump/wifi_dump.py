@@ -171,18 +171,16 @@ class wifi_dump(gr.sync_block):
                 for tag in tags:
                     if pmt.to_python(tag.key) == 'wifi_start':
                         self.tag_pos.append(tag.offset - self.nitems_read(0))
+                        print(f"{pmt.to_python(tag.value) = }")
                 self.tag_pos.sort()
 
             print("===============================")
-            print(f"{len(in0) = }")
-            for n in range(len(self.tag_pos)):
-                print(self.tag_pos.pop())
-
+            print(f"{len(in0) = } {self.input_c = }")
 
             # ------
             i = 0
             while i < len(in0):
-                print('.')
+                print(f". {i = }")
                 if not self.detect:
                     # I have not detect anything yet.
                     # Check if there is any tag that I'm interested in.
@@ -199,7 +197,9 @@ class wifi_dump(gr.sync_block):
 
                         store_len = min(len(in0) - offset_sample, self.max_sample)
                         if store_len < 0:
-                            print(f"Exception!!!!!!!!!!!! {len(in0) = }, {offset_sample = }")
+                            # print(f"Exception!!!!!!!!!!!! {len(in0) = }, {offset_sample = }")
+                            self.detect = False
+                            self.wifi_signal = None
                             break
                         i += store_len
 
@@ -217,12 +217,18 @@ class wifi_dump(gr.sync_block):
                             self.wifi_signal = None
                             # Reset to not detecting
                             self.detect = False
+                    else:
+                        # Detecting nothing.
+                        print("Doing Nothing....")
+                        i += len(in0)
                 else:
                     # I have detected something already.
                     print("Detected something already.")
                     store_len = min(len(in0), self.max_sample - len(self.wifi_signal))
                     if store_len < 0:
                         print(f"Exception!!!!!!!!!!!! {self.max_sample = }, {len(self.wifi_signal) = }")
+                        self.detect = False
+                        self.wifi_signal = None
                         break
 
                     i += store_len
@@ -235,6 +241,7 @@ class wifi_dump(gr.sync_block):
                     else:
                         # it is a complete packet already.
                         # Export the result
+                        self.input_c += 1
                         print(f"Fianlly Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
                         self.wifi_signal = None
                         # Reset to not detecting
