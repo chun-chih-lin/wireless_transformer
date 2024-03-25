@@ -105,22 +105,27 @@ class generate_random_message(gr.sync_block):
         self.redis_thread = self.pubsub.run_in_thread(sleep_time=0.01)
 
     def set_pattern(self, pattern):
+        print(f"update pattern: {pattern}")
         self.pattern = pattern
         if hasattr(self, 'pdu_len'):
             self.set_pattern_message()
         
     def set_pdu_len(self, pdu_len):
+        print(f"update pdu_len: {pdu_len}")
         self.pdu_len = pdu_len
         if hasattr(self, 'pattern'):
             self.set_pattern_message()
         
     def set_random(self, random):
+        print(f"update random: {random}")
         self.random = random
         
     def set_interval(self, interval):
+        print(f"update interval: {interval}")
         self.interval = interval * 0.001
 
     def set_num_msg(self, num_msg):
+        print(f"update num_msg: {num_msg}")
         self.num_msg = num_msg
 
     def start(self):
