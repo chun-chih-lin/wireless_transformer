@@ -175,9 +175,13 @@ class wifi_dump(gr.sync_block):
 
             print("===============================")
             print(f"{len(in0) = }")
+            for n in range(len(self.tag_pos)):
+                print(self.tag_pos.pop())
+
+
             # ------
             i = 0
-            while i < len(in0):
+            while False:
                 print('.')
                 if not self.detect:
                     # I have not detect anything yet.
