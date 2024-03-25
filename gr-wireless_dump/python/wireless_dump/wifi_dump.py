@@ -81,6 +81,7 @@ class wifi_dump(gr.sync_block):
         self.system_prefix_key = "SYSTEM:COLLECT:WIFI"
 
         self.input_c = 0
+        self.tag_pos = []
 
         
 
@@ -163,22 +164,73 @@ class wifi_dump(gr.sync_block):
         try:
             in0 = input_items[0]
             tags = self.get_tags_in_window(0, 0, len(input_items[0]))
-                
-            self.input_c += 1
 
-        
-
+            # ------
+            # Get all the samples have wifi_start as tag name
             if len(tags) > 0:
-                tag_offset = self.get_tag_info(tags)
-                if tag_offset is not None:
-                    # Found the tag is wifi_start
-                    tag_pos = tag_offset - self.nitems_read(0)
-                    print(f"{len(in0) = }, {tag_pos = }, {tag.offset = }, {self.nitems_read(0) = }")
-                    self.detect = True
+                for tag in tags:
+                    if pmt.to_python(tag.key) == 'wifi_start':
+                        self.tag_pos.append(tag.offset - self.nitems_read(0))
+                self.tag_pos.sort()
 
+            print("===============================")
+            print(f"{len(in0) = }")
+            # ------
+            i = 0
+            while i < len(in0):
+                print('.')
+                if not self.detect:
+                    # I have not detect anything yet.
+                    # Check if there is any tag that I'm interested in.
+                    if len(self.tag_pos) > 0:
+                        print("Detected something.")
+                        # Something interesting is in the list
+                        # Set to detected
+                        self.detect = True
+
+                        # Store the interested wifi signal
+                        # Only store the predefined length
+                        offset_sample = self.tag_pos.pop(0)
+                        i += offset_sample
+
+                        store_len = min(len(in0) - offset_sample, self.max_sample)
+                        i += store_len
+
+                        print(f"{offset_sample = }, {store_len = }")
+
+                        self.wifi_signal = in0[offset_sample:offset_sample + store_len]
+                        if len(self.wifi_signal) < self.max_sample:
+                            # Not a complete packet.
+                            print("Not a complete packet. Keep waiting for more samples.")
+                            pass
+                        else:
+                            # it is a complete packet already.
+                            # Export the result
+                            self.input_c += 1
+                            print(f"Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
+                            self.wifi_signal = None
+                            # Reset to not detecting
+                            self.detect = False
+                else:
+                    # I have detected something already.
+                    print("Detected something already.")
+                    store_len = min(len(in0), self.max_sample - len(self.wifi_signal))
+                    i += store_len
+
+                    self.wifi_signal = np.concatenate((self.wifi_signal, in0[:store_len]))
+                    if len(self.wifi_signal) < self.max_sample:
+                        # Not a complete packet.
+                        print("Not a complete packet. Keep waiting for more samples.")
+                        pass
+                    else:
+                        # it is a complete packet already.
+                        # Export the result
+                        print(f"Fianlly Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
+                        self.wifi_signal = None
+                        # Reset to not detecting
+                        self.detect = False
 
             self.consume(0, len(in0))
-
 
             """
             print("----------------------------------")
