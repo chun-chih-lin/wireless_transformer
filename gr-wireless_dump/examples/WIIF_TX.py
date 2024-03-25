@@ -17,7 +17,6 @@ sys.path.append(os.environ.get('GRC_HIER_PATH', os.path.expanduser('~/.grc_gnura
 from PyQt5 import QtCore
 from PyQt5.QtCore import QObject, pyqtSlot
 from gnuradio import blocks
-import pmt
 from gnuradio import gr
 from gnuradio.filter import firdes
 from gnuradio.fft import window
@@ -26,9 +25,9 @@ from PyQt5 import Qt
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
-from gnuradio import network
 from gnuradio import uhd
 import time
+from gnuradio import wireless_dump
 from wifi_phy_hier import wifi_phy_hier  # grc-generated hier_block
 import foo
 import ieee802_11
@@ -75,6 +74,7 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate = 20e6
         self.pdu_length = pdu_length = 10
         self.out_buf_size = out_buf_size = 96000
+        self.num_message = num_message = 10
         self.lo_offset = lo_offset = 0
         self.interval = interval = 300
         self.freq = freq = 5170000000
@@ -107,6 +107,9 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
         self._pdu_length_range = qtgui.Range(0, 1500, 1, 10, 200)
         self._pdu_length_win = qtgui.RangeWidget(self._pdu_length_range, self.set_pdu_length, "'pdu_length'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._pdu_length_win)
+        self._num_message_range = qtgui.Range(1, 1000, 1, 10, 200)
+        self._num_message_win = qtgui.RangeWidget(self._num_message_range, self.set_num_message, "'num_message'", "counter_slider", int, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._num_message_win)
         # Create the options list
         self._lo_offset_options = [0, 6000000.0, 11000000.0]
         # Create the labels list
@@ -170,6 +173,7 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
         self._custom_freq_range = qtgui.Range(2412e6, 5920e6, 5e6, 2900e6, 200)
         self._custom_freq_win = qtgui.RangeWidget(self._custom_freq_range, self.set_custom_freq, "'custom_freq'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._custom_freq_win)
+        self.wireless_dump_generate_random_message_0 = wireless_dump.generate_random_message('', pdu_length, 0, interval, num_message)
         self.wifi_phy_hier_0 = wifi_phy_hier(
             bandwidth=samp_rate,
             chan_est=ieee802_11.LS,
@@ -191,22 +195,19 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
 
         self.uhd_usrp_sink_0.set_center_freq(uhd.tune_request(custom_freq, rf_freq = custom_freq - lo_offset, rf_freq_policy=uhd.tune_request.POLICY_MANUAL), 0)
         self.uhd_usrp_sink_0.set_normalized_gain(tx_gain, 0)
-        self.network_socket_pdu_0 = network.socket_pdu('TCP_SERVER', '', '52001', 10000, False)
         self.ieee802_11_mac_0 = ieee802_11.mac([0x23, 0x23, 0x23, 0x23, 0x23, 0x23], [0x42, 0x42, 0x42, 0x42, 0x42, 0x42], [0xff, 0xff, 0xff, 0xff, 0xff, 255])
         self.foo_packet_pad2_0 = foo.packet_pad2(False, False, 0.01, 100, 1000)
         self.foo_packet_pad2_0.set_min_output_buffer(out_buf_size)
         self.blocks_vector_source_x_0 = blocks.vector_source_c((0,), False, 1, [])
         self.blocks_multiply_const_vxx_0 = blocks.multiply_const_cc(0.6)
         self.blocks_multiply_const_vxx_0.set_min_output_buffer(100000)
-        self.blocks_message_strobe_0_0 = blocks.message_strobe(pmt.intern("".join("x" for i in range(pdu_length))), interval)
 
 
         ##################################################
         # Connections
         ##################################################
-        self.msg_connect((self.blocks_message_strobe_0_0, 'strobe'), (self.ieee802_11_mac_0, 'app in'))
         self.msg_connect((self.ieee802_11_mac_0, 'phy out'), (self.wifi_phy_hier_0, 'mac_in'))
-        self.msg_connect((self.network_socket_pdu_0, 'pdus'), (self.ieee802_11_mac_0, 'app in'))
+        self.msg_connect((self.wireless_dump_generate_random_message_0, 'out'), (self.ieee802_11_mac_0, 'app in'))
         self.connect((self.blocks_multiply_const_vxx_0, 0), (self.foo_packet_pad2_0, 0))
         self.connect((self.blocks_vector_source_x_0, 0), (self.wifi_phy_hier_0, 0))
         self.connect((self.foo_packet_pad2_0, 0), (self.uhd_usrp_sink_0, 0))
@@ -248,13 +249,20 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
 
     def set_pdu_length(self, pdu_length):
         self.pdu_length = pdu_length
-        self.blocks_message_strobe_0_0.set_msg(pmt.intern("".join("x" for i in range(self.pdu_length))))
+        self.wireless_dump_generate_random_message_0.set_pdu_len(self.pdu_length)
 
     def get_out_buf_size(self):
         return self.out_buf_size
 
     def set_out_buf_size(self, out_buf_size):
         self.out_buf_size = out_buf_size
+
+    def get_num_message(self):
+        return self.num_message
+
+    def set_num_message(self, num_message):
+        self.num_message = num_message
+        self.wireless_dump_generate_random_message_0.set_num_msg(self.num_message)
 
     def get_lo_offset(self):
         return self.lo_offset
@@ -269,7 +277,7 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
 
     def set_interval(self, interval):
         self.interval = interval
-        self.blocks_message_strobe_0_0.set_period(self.interval)
+        self.wireless_dump_generate_random_message_0.set_interval(self.interval)
 
     def get_freq(self):
         return self.freq

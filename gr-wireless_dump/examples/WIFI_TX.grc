@@ -197,6 +197,27 @@ blocks:
     coordinate: [808, 16]
     rotation: 0
     state: enabled
+- name: num_message
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: '1'
+    step: '1'
+    stop: '1000'
+    value: '10'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [144, 428.0]
+    rotation: 0
+    state: enabled
 - name: out_buf_size
   id: variable
   parameters:
@@ -309,7 +330,7 @@ blocks:
     bus_structure: null
     coordinate: [96, 156.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_multiply_const_vxx_0
   id: blocks_multiply_const_vxx
   parameters:
@@ -405,7 +426,7 @@ blocks:
     bus_structure: null
     coordinate: [152, 220.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: uhd_usrp_sink_0
   id: uhd_usrp_sink
   parameters:
@@ -704,6 +725,26 @@ blocks:
     coordinate: [680, 228.0]
     rotation: 0
     state: enabled
+- name: wireless_dump_generate_random_message_0
+  id: wireless_dump_generate_random_message
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    interval: interval
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_msg: num_message
+    pattern: ''
+    pdu_length: pdu_length
+    random: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [80, 316.0]
+    rotation: 0
+    state: enabled
 
 connections:
 - [blocks_message_strobe_0_0, strobe, ieee802_11_mac_0, app in]
@@ -713,6 +754,7 @@ connections:
 - [ieee802_11_mac_0, phy out, wifi_phy_hier_0, mac_in]
 - [network_socket_pdu_0, pdus, ieee802_11_mac_0, app in]
 - [wifi_phy_hier_0, '0', blocks_multiply_const_vxx_0, '0']
+- [wireless_dump_generate_random_message_0, out, ieee802_11_mac_0, app in]
 
 metadata:
   file_format: 1
