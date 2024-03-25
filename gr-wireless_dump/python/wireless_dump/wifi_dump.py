@@ -150,6 +150,15 @@ class wifi_dump(gr.sync_block):
             e_type, e_obj, e_tb = sys.exc_info()
             self.d_msg(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
+    def get_tag_info(self, tags, tgt_name="wifi_start"):
+        for tag in tags:
+            tag_key = pmt.to_python(tag.key)
+            if tag_key == tgt_name:
+                tag_offset = tag.offset
+                return tag_offset
+        return None
+
+
     def work(self, input_items, output_items):
         try:
             in0 = input_items[0]
@@ -157,16 +166,16 @@ class wifi_dump(gr.sync_block):
                 
             self.input_c += 1
 
-            if len(tags) > 0:
-                for tag in tags:
-                    tag_key = pmt.to_python(tag.key)
-                    tag_len = pmt.to_python(tag.value)
-                    tag_pos = tag.offset - self.nitems_read(0)
-                    if tag_key == "wifi_start":
-                        print("----------------")
-                        print(f"{len(in0) = }, {tag_pos = }, {tag.offset = }, {self.nitems_read(0) = }")
+        
 
-                
+            if len(tags) > 0:
+                tag_offset = self.get_tag_info(tags)
+                if tag_offset is not None:
+                    # Found the tag is wifi_start
+                    tag_pos = tag_offset - self.nitems_read(0)
+                    print(f"{len(in0) = }, {tag_pos = }, {tag.offset = }, {self.nitems_read(0) = }")
+                    self.detect = True
+
 
             self.consume(0, len(in0))
 
