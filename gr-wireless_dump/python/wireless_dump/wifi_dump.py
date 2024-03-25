@@ -58,6 +58,9 @@ SEARCH_TBL = {
 CURRENT_PATCH="CURRENT_PATCH"
 CURRENT_NUM_PATCH="CURRENT_NUM_PATCH"
 
+class MyException(Exception):
+    pass
+
 class wifi_dump(gr.sync_block):
     """
     docstring for block wifi_dump
@@ -200,10 +203,10 @@ class wifi_dump(gr.sync_block):
                             # print(f"Exception!!!!!!!!!!!! {len(in0) = }, {offset_sample = }")
                             self.detect = False
                             self.wifi_signal = None
-                            break
+                            i = len(in0)
+                            raise MyException({"message": f"{len(in0) = }, {offset_sample = }"})
+                            continue
                         i += store_len
-
-                        print(f"{offset_sample = }, {store_len = }")
 
                         self.wifi_signal = in0[offset_sample:offset_sample + store_len]
                         if len(self.wifi_signal) < self.max_sample:
@@ -214,6 +217,7 @@ class wifi_dump(gr.sync_block):
                             # Export the result
                             self.input_c += 1
                             print(f"Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
+                            self.save_to_db(self.wifi_signal)
                             print("................")
                             self.wifi_signal = None
                             # Reset to not detecting
@@ -228,7 +232,8 @@ class wifi_dump(gr.sync_block):
                     print("Detected something already.")
                     store_len = min(len(in0), self.max_sample - len(self.wifi_signal))
                     if store_len < 0:
-                        print(f"Exception!!!!!!!!!!!! {self.max_sample = }, {len(self.wifi_signal) = }")
+                        i = len(in0)
+                        raise MyException({"message": f"{self.max_sample = }, {len(self.wifi_signal) = }"})
                         self.detect = False
                         self.wifi_signal = None
                         break
@@ -245,88 +250,13 @@ class wifi_dump(gr.sync_block):
                         # Export the result
                         self.input_c += 1
                         print(f"Fianlly Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
+                        self.save_to_db(self.wifi_signal)
                         print("................")
                         self.wifi_signal = None
                         # Reset to not detecting
                         self.detect = False
 
             self.consume(0, len(in0))
-
-            """
-            print("----------------------------------")
-            print(f"{self.input_c = }, {len(in0) = }")
-            self.input_c += 1
-            
-            if not self.detect:
-                print(f"{self.detect = }")
-                for tag in tags:
-                    # Update to detected a wifi_start
-                    # Convert from PMT to python string
-                    key = pmt.to_python(tag.key)
-                    if key == "wifi_start":
-                        self.detect = True
-                        # Get the start signal offset
-                        offset = tag.offset
-                        # Store the wifi signal to self.wifi_signal
-                        self.wifi_signal = in0[offset:]
-
-                        print(f"{len(in0) = } {offset = }, {len(self.wifi_signal) = }")
-                # consume all the input
-                self.consume(0, len(in0))
-
-            elif self.wifi_signal is not None:
-                # Already detected in the past.
-                # Concatenate self.wifi_signal
-                self.wifi_signal = np.concatenate((self.wifi_signal, in0))
-                self.d_msg(f"{self.wifi_signal.shape = }, {len(self.wifi_signal) = }")
-                
-                offset = -1
-
-                for tag in tags:
-                    key = pmt.to_python(tag.key)
-                    offset = tag.offset
-                    print(f"{key = }, {len(in0) = }, {offset = }")
-
-                if len(self.wifi_signal) >= self.max_sample:
-                    num_last_sample = len(self.wifi_signal) - self.max_sample
-                    # The length is longer than the wifi signal.
-                    # Return the cut-off sample array.
-                    # This ttl_sample should be output to the database
-                    self.ttl_sample = self.wifi_signal[:self.max_sample]
-                    self.d_msg(f"Complete packet with sample size: {self.ttl_sample.shape}")
-                    print(f"save to db with sample: {len(self.ttl_sample) = }, {len(self.wifi_signal) = }")
-                    self.save_to_db(self.ttl_sample)
-                    # Erase the received packet
-                    self.ttl_sample = None
-
-                    # ---- Resetting
-                    # Reset the detect flag
-                    self.detect = False
-                    # Clear the wifi_signal buffer
-                    self.wifi_signal = None
-
-                    if offset >= 0:
-                        self.detect = True
-                        self.wifi_signal = in0[offset:]
-                        print(f"Acutally detect a concurrent packet. consume {len(in0)}")
-                        print(f"{len(self.wifi_signal) = }")
-                        self.consume(0, len(in0))
-                    else:
-                        self.consume(0, num_last_sample)
-                        print(f"consume: {num_last_sample}")
-                    pass
-                else:
-                    # It is not exceeding the max sample yet.
-                    # consume all the input
-                    print("Not exceeding. consume all and append self.wifi_signal")
-                    print(f"{len(self.wifi_signal) = }")
-                    self.consume(0, len(in0))
-                # # Value can be several things, it depends what PMT type it was.
-                # value = pmt.to_python(tag.value)
-            else:
-                print(f"{self.detect = }, self.wifi_signal is {self.wifi_signal}")
-                self.consume(0, len(in0))
-            """
 
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
