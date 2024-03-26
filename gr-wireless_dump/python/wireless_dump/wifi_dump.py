@@ -77,7 +77,7 @@ class wifi_dump(gr.sync_block):
 
         self.db = redis.Redis(host='localhost', port=6379, db=0)
 
-        set.set_threshold(threshold)
+        self.set_threshold(threshold)
         self.set_debug(debug)
         self.set_modulation(mod)
         self.set_pdu_len(pdu_len)
@@ -142,7 +142,7 @@ class wifi_dump(gr.sync_block):
         try:
             if not self.check_amp(save_ary[:500]):
                 return
-
+            self.input_c += 1
             pickled_obj = pickle.dumps(save_ary)
 
             set_key = f"{self.system_prefix_key}:TEST_KEY"
@@ -234,7 +234,6 @@ class wifi_dump(gr.sync_block):
                         else:
                             # it is a complete packet already.
                             # Export the result
-                            self.input_c += 1
                             print(f"Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
                             self.save_to_db(self.wifi_signal)
                             self.wifi_signal = None
@@ -266,7 +265,6 @@ class wifi_dump(gr.sync_block):
                     else:
                         # it is a complete packet already.
                         # Export the result
-                        self.input_c += 1
                         print(f"Fianlly Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
                         self.save_to_db(self.wifi_signal)
                         self.wifi_signal = None
