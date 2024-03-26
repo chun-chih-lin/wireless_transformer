@@ -65,7 +65,7 @@ class wifi_dump(gr.sync_block):
     """
     docstring for block wifi_dump
     """
-    def __init__(self, mod, pdu_len, debug):
+    def __init__(self, mod, pdu_len, threshold, debug):
         gr.sync_block.__init__(self,
             name="wifi_dump",
             in_sig=[np.complex64],
@@ -77,6 +77,7 @@ class wifi_dump(gr.sync_block):
 
         self.db = redis.Redis(host='localhost', port=6379, db=0)
 
+        set.set_threshold(threshold)
         self.set_debug(debug)
         self.set_modulation(mod)
         self.set_pdu_len(pdu_len)
@@ -102,6 +103,9 @@ class wifi_dump(gr.sync_block):
     def set_pdu_len(self, pdu_len):
         self.pdu_len = pdu_len
         self.update_ttl_sample()
+
+    def set_threshold(self, threshold):
+        self.threshold = threshold
 
     def set_debug(self, debug):
         self.debug = debug
@@ -135,8 +139,10 @@ class wifi_dump(gr.sync_block):
             self.d_msg(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
     def save_to_db(self, save_ary):
-        self.check_amp(save_ary[:500])
         try:
+            if not self.check_amp(save_ary[:500]):
+                return
+
             pickled_obj = pickle.dumps(save_ary)
 
             set_key = f"{self.system_prefix_key}:TEST_KEY"
@@ -164,8 +170,12 @@ class wifi_dump(gr.sync_block):
         return None
 
     def check_amp(self, ary):
-        print("Amplitude mean: ")
-        print(np.abs(ary).mean())
+        amp_mean = np.abs(ary).mean()
+        print(f"Amplitude mean: {np.abs(ary).mean()}")
+        if amp_mean < self.threshold:
+            print(f"Not exceeding the threshold. {amp_mean} < {self.threshold}. Abort saving.")
+            return False
+        return True
 
     def work(self, input_items, output_items):
         try:
