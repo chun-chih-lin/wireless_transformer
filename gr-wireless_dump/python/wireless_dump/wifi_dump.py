@@ -171,7 +171,6 @@ class wifi_dump(gr.sync_block):
 
     def check_amp(self, ary):
         amp_mean = np.abs(ary).mean()
-        print(f"Amplitude mean: {np.abs(ary).mean()}")
         if amp_mean < self.threshold:
             print(f"Not exceeding the threshold. {amp_mean} < {self.threshold}. Abort saving.")
             return False
@@ -188,15 +187,10 @@ class wifi_dump(gr.sync_block):
             
             pkt_value = -1
             if len(tags) > 0:
-                print("-----------------")
                 for tag_i, tag in enumerate(tags):
                     if pmt.to_python(tag.key) == 'wifi_start':
                         tag_pos = tag.offset - self.nitems_read(0)
-                        print(f"{tag_i = }, {tag.offset = }, {self.nitems_read(0) = }, {len(in0) = }, {tag_pos = }")
-
                         self.tag_pos.append(tag.offset - self.nitems_read(0))
-                        # print(f"{pmt.to_python(tag.value) = }, {in0[0] = }")
-                        # pkt_value = pmt.to_python(tag.value)
                 self.tag_pos.sort()
 
             # ------
@@ -206,8 +200,7 @@ class wifi_dump(gr.sync_block):
                     # I have not detect anything yet.
                     # Check if there is any tag that I'm interested in.
                     if len(self.tag_pos) > 0:
-                        print(f"---------------------------------- {self.input_c = }")
-                        print("Detected something.")
+                        self.d_msg("Detected something.")
                         # Something interesting is in the list
                         # Set to detected
                         self.detect = True
@@ -230,23 +223,21 @@ class wifi_dump(gr.sync_block):
                         self.wifi_signal = in0[offset_sample:offset_sample + store_len]
                         if len(self.wifi_signal) < self.max_sample:
                             # Not a complete packet.
-                            print("Not a complete packet. Keep waiting for more samples.")
+                            self.d_msg("Not a complete packet. Keep waiting for more samples.")
                         else:
                             # it is a complete packet already.
                             # Export the result
-                            print(f"Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
+                            self.d_msg(f"Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
                             self.save_to_db(self.wifi_signal)
                             self.wifi_signal = None
                             # Reset to not detecting
                             self.detect = False
                     else:
                         # Detecting nothing.
-                        # print("Doing Nothing....")
                         i += len(in0)
                 else:
                     # I have detected something already.
-                    print(f"---------------------------------- {self.input_c = }")
-                    print("Detected something already.")
+                    self.d_msg("Detected something already.")
                     store_len = min(len(in0), self.max_sample - len(self.wifi_signal))
                     if store_len < 0:
                         i = len(in0)
@@ -260,12 +251,12 @@ class wifi_dump(gr.sync_block):
                     self.wifi_signal = np.concatenate((self.wifi_signal, in0[:store_len]))
                     if len(self.wifi_signal) < self.max_sample:
                         # Not a complete packet.
-                        print("Not a complete packet. Keep waiting for more samples.")
+                        self.d_msg("Not a complete packet. Keep waiting for more samples.")
                         pass
                     else:
                         # it is a complete packet already.
                         # Export the result
-                        print(f"Fianlly Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
+                        self.d_msg(f"Fianlly Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
                         self.save_to_db(self.wifi_signal)
                         self.wifi_signal = None
                         # Reset to not detecting
