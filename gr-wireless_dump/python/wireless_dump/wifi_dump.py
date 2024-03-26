@@ -174,7 +174,6 @@ class wifi_dump(gr.sync_block):
                 for tag in tags:
                     if pmt.to_python(tag.key) == 'wifi_start':
                         self.tag_pos.append(tag.offset - self.nitems_read(0))
-                        print(f"{pmt.to_python(tag.value) = }")
                 self.tag_pos.sort()
 
             # print("===============================")
