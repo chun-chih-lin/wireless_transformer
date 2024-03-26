@@ -65,7 +65,7 @@ class wifi_dump(gr.sync_block):
     """
     docstring for block wifi_dump
     """
-    def __init__(self, mod, pdu_len, threshold, debug):
+    def __init__(self, mod, pdu_len, threshold=0.01, record=False, debug=False):
         gr.sync_block.__init__(self,
             name="wifi_dump",
             in_sig=[np.complex64],
@@ -81,13 +81,12 @@ class wifi_dump(gr.sync_block):
         self.set_debug(debug)
         self.set_modulation(mod)
         self.set_pdu_len(pdu_len)
+        self.set_record(record)
 
         self.system_prefix_key = "SYSTEM:COLLECT:WIFI"
 
         self.input_c = 0
         self.tag_pos = []
-
-        
 
     def d_msg(self, msg):
         if self.debug:
@@ -96,16 +95,30 @@ class wifi_dump(gr.sync_block):
     # ----------------------------------------------
     # Callback functions
     def set_modulation(self, mod):
+        print(f"Setting {self.mod: }")
         self.mod = mod
         if self.pdu_len is not None:
             self.update_ttl_sample()
         
     def set_pdu_len(self, pdu_len):
+        print(f"Setting {self.pdu_len: }")
         self.pdu_len = pdu_len
         self.update_ttl_sample()
 
     def set_threshold(self, threshold):
+        print(f"Setting {self.threshold: }")
         self.threshold = threshold
+
+    def set_record(self, record):
+        print(f"Setting {self.record: }")
+        try:
+            if int(record) == 1:
+                self.record = True
+            else:
+                self.record = False
+        except Exception as exp:
+            e_type, e_obj, e_tb = sys.exc_info()
+            print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
     def set_debug(self, debug):
         self.debug = debug
@@ -136,12 +149,16 @@ class wifi_dump(gr.sync_block):
 
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
-            self.d_msg(f'Exception: {exp}. At line {e_tb.tb_lineno}')
+            print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
     def save_to_db(self, save_ary):
         try:
+            if not self.record:
+                return
+
             if not self.check_amp(save_ary[:500]):
                 return
+
             self.input_c += 1
             pickled_obj = pickle.dumps(save_ary)
 
@@ -159,7 +176,7 @@ class wifi_dump(gr.sync_block):
 
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
-            self.d_msg(f'Exception: {exp}. At line {e_tb.tb_lineno}')
+            print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
     def get_tag_info(self, tags, tgt_name="wifi_start"):
         for tag in tags:
