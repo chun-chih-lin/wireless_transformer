@@ -135,7 +135,7 @@ class wifi_dump(gr.sync_block):
             self.d_msg(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
     def save_to_db(self, save_ary):
-        print("save_to_db")
+        self.check_amp(save_ary[:500])
         try:
             pickled_obj = pickle.dumps(save_ary)
 
@@ -163,6 +163,9 @@ class wifi_dump(gr.sync_block):
                 return tag_offset
         return None
 
+    def check_amp(self, ary):
+        print("Amplitude mean: ")
+        print(np.abs(ary).mean())
 
     def work(self, input_items, output_items):
         try:
@@ -179,16 +182,16 @@ class wifi_dump(gr.sync_block):
                 for tag_i, tag in enumerate(tags):
                     if pmt.to_python(tag.key) == 'wifi_start':
                         tag_pos = tag.offset - self.nitems_read(0)
-                        print(f"{tag_i = }, {tag.offset = }, {self.nitems_read(0) = }, {len(in0) = }, {tag_pos = }, {pmt.to_python(tag.value) = }")
+                        print(f"{tag_i = }, {tag.offset = }, {self.nitems_read(0) = }, {len(in0) = }, {tag_pos = }")
 
                         self.tag_pos.append(tag.offset - self.nitems_read(0))
                         # print(f"{pmt.to_python(tag.value) = }, {in0[0] = }")
-                        pkt_value = pmt.to_python(tag.value)
+                        # pkt_value = pmt.to_python(tag.value)
                 self.tag_pos.sort()
 
             # ------
             i = 0
-            while i < len(in0):
+            while len(self.tag_pos) > 0:
                 if not self.detect:
                     # I have not detect anything yet.
                     # Check if there is any tag that I'm interested in.
@@ -223,9 +226,7 @@ class wifi_dump(gr.sync_block):
                             # Export the result
                             self.input_c += 1
                             print(f"Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
-                            print(f"{in0[0] = }, {self.wifi_signal[0] = }")
                             self.save_to_db(self.wifi_signal)
-                            print("................")
                             self.wifi_signal = None
                             # Reset to not detecting
                             self.detect = False
@@ -257,9 +258,7 @@ class wifi_dump(gr.sync_block):
                         # Export the result
                         self.input_c += 1
                         print(f"Fianlly Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
-                        print(f"{in0[0] = }, {self.wifi_signal[0] = }")
                         self.save_to_db(self.wifi_signal)
-                        print("................")
                         self.wifi_signal = None
                         # Reset to not detecting
                         self.detect = False
