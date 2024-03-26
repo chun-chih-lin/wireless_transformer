@@ -95,27 +95,27 @@ class wifi_dump(gr.sync_block):
     # ----------------------------------------------
     # Callback functions
     def set_modulation(self, mod):
-        print(f"Setting {self.mod: }")
         self.mod = mod
+        print(f"Setting {self.mod: }")
         if self.pdu_len is not None:
             self.update_ttl_sample()
         
     def set_pdu_len(self, pdu_len):
-        print(f"Setting {self.pdu_len: }")
         self.pdu_len = pdu_len
+        print(f"Setting {self.pdu_len: }")
         self.update_ttl_sample()
 
     def set_threshold(self, threshold):
-        print(f"Setting {self.threshold: }")
         self.threshold = threshold
+        print(f"Setting {self.threshold: }")
 
     def set_record(self, record):
-        print(f"Setting {self.record: }")
         try:
             if int(record) == 1:
                 self.record = True
             else:
                 self.record = False
+            print(f"Setting {self.record: }")
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
             print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
