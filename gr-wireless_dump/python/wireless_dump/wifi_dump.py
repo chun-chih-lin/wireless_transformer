@@ -135,6 +135,7 @@ class wifi_dump(gr.sync_block):
             self.d_msg(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
     def save_to_db(self, save_ary):
+        print("save_to_db")
         try:
             pickled_obj = pickle.dumps(save_ary)
 
@@ -167,17 +168,21 @@ class wifi_dump(gr.sync_block):
         try:
             in0 = input_items[0]
             tags = self.get_tags_in_window(0, 0, len(input_items[0]))
+            r_tags = self.get_tags_in_range(0, self.nitems_read(0), self.nitems_read(0)+len(input_items[0]))
 
             # ------
             # Get all the samples have wifi_start as tag name
+            
+            pkt_value = -1
             if len(tags) > 0:
-                for tag in tags:
+                print("-----------------")
+                for tag_i, tag in enumerate(tags):
                     if pmt.to_python(tag.key) == 'wifi_start':
+                        # print(f"{tag_i = }, {tag.offset = }, {self.nitems_read(0) = }, {len(in0) = }")
                         self.tag_pos.append(tag.offset - self.nitems_read(0))
+                        # print(f"{pmt.to_python(tag.value) = }, {in0[0] = }")
+                        pkt_value = pmt.to_python(tag.value)
                 self.tag_pos.sort()
-
-            # print("===============================")
-            # print(f"{len(in0) = } {self.input_c = }")
 
             # ------
             i = 0
@@ -216,6 +221,7 @@ class wifi_dump(gr.sync_block):
                             # Export the result
                             self.input_c += 1
                             print(f"Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
+                            print(f"{in0[0] = }, {self.wifi_signal[0] = }")
                             self.save_to_db(self.wifi_signal)
                             print("................")
                             self.wifi_signal = None
@@ -249,6 +255,7 @@ class wifi_dump(gr.sync_block):
                         # Export the result
                         self.input_c += 1
                         print(f"Fianlly Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
+                        print(f"{in0[0] = }, {self.wifi_signal[0] = }")
                         self.save_to_db(self.wifi_signal)
                         print("................")
                         self.wifi_signal = None
@@ -259,7 +266,7 @@ class wifi_dump(gr.sync_block):
 
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
-            self.d_msg(f'Exception: {exp}. At line {e_tb.tb_lineno}')
+            print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
         return False
 
