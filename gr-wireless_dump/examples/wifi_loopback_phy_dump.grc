@@ -251,6 +251,27 @@ blocks:
     coordinate: [1000, 76.0]
     rotation: 0
     state: enabled
+- name: num_message
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: '1'
+    step: '1'
+    stop: '1000'
+    value: '10'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [40, 508.0]
+    rotation: 0
+    state: enabled
 - name: out_buf_size
   id: variable
   parameters:
@@ -425,7 +446,7 @@ blocks:
     bus_structure: null
     coordinate: [968, 596.0]
     rotation: 180
-    state: enabled
+    state: disabled
 - name: blocks_delay_0_0
   id: blocks_delay
   parameters:
@@ -1184,7 +1205,7 @@ blocks:
     bus_structure: null
     coordinate: [752, 564.0]
     rotation: 180
-    state: enabled
+    state: disabled
 - name: sync_short
   id: ieee802_11_sync_short
   parameters:
@@ -1213,7 +1234,7 @@ blocks:
     interval: interval
     maxoutbuf: '0'
     minoutbuf: '0'
-    num_msg: '10'
+    num_msg: num_message
     pattern: '"x"'
     pdu_length: pdu_length
     random: '0'
@@ -1278,12 +1299,12 @@ connections:
 - [pfb_arb_resampler_xxx_0, '0', blocks_delay_0_0, '0']
 - [pfb_arb_resampler_xxx_0, '0', blocks_multiply_xx_0, '0']
 - [sync_long, '0', blocks_stream_to_vector_0, '0']
-- [sync_long, '0', qtgui_time_sink_x_0, '0']
-- [sync_long, '0', wireless_dump_wifi_dump_0, '0']
 - [sync_short, '0', blocks_delay_0, '0']
+- [sync_short, '0', qtgui_time_sink_x_0, '0']
 - [sync_short, '0', sync_long, '0']
+- [sync_short, '0', wireless_dump_wifi_dump_0, '0']
 - [wireless_dump_generate_random_message_0, out, ieee802_11_mac_0_0, app in]
 
 metadata:
   file_format: 1
-  grc_version: v3.10.9.2-39-gcf065ee5
+  grc_version: v3.10.9.2-5-gdd01ef52

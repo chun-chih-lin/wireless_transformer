@@ -7,7 +7,7 @@
 # GNU Radio Python Flow Graph
 # Title: Not titled yet
 # Author: root
-# GNU Radio version: v3.10.9.2-39-gcf065ee5
+# GNU Radio version: v3.10.9.2-5-gdd01ef52
 
 from PyQt5 import Qt
 from gnuradio import qtgui
@@ -80,6 +80,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate = 20e6
         self.pdu_length = pdu_length = 10
         self.out_buf_size = out_buf_size = 96000
+        self.num_message = num_message = 10
         self.max_symbols = max_symbols = int(5 + 1 + ((16 + 800 * 8 + 6) * 2) / 24)
         self.interval = interval = 200
         self.header_formatter = header_formatter = ieee802_11.signal_field()
@@ -123,6 +124,9 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
+        self._num_message_range = qtgui.Range(1, 1000, 1, 10, 200)
+        self._num_message_win = qtgui.RangeWidget(self._num_message_range, self.set_num_message, "'num_message'", "counter_slider", int, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._num_message_win)
         self._interval_range = qtgui.Range(10, 10000, 1, 200, 200)
         self._interval_win = qtgui.RangeWidget(self._interval_range, self.set_interval, "'interval'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._interval_win, 2, 1, 1, 1)
@@ -158,9 +162,8 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(0, pdu_length, 0)
-        self.wireless_dump_generate_random_message_0 = wireless_dump.generate_random_message("x", pdu_length, 0, interval, 10)
+        self.wireless_dump_generate_random_message_0 = wireless_dump.generate_random_message("x", pdu_length, 0, interval, num_message)
         self.sync_short = ieee802_11.sync_short(sensitivity, 2, False, False)
-        self.sync_long = ieee802_11.sync_long(sync_length, False, False)
         self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
             11000, #size
             samp_rate, #samp_rate
@@ -293,7 +296,6 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         self.blocks_moving_average_xx_0 = blocks.moving_average_cc(window_size, 1, 4000, 1)
         self.blocks_divide_xx_0 = blocks.divide_ff(1)
         self.blocks_delay_0_0 = blocks.delay(gr.sizeof_gr_complex*1, 16)
-        self.blocks_delay_0 = blocks.delay(gr.sizeof_gr_complex*1, sync_length)
         self.blocks_conjugate_cc_0 = blocks.conjugate_cc()
         self.blocks_complex_to_mag_squared_0 = blocks.complex_to_mag_squared(1)
         self.blocks_complex_to_mag_0 = blocks.complex_to_mag(1)
@@ -323,7 +325,6 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_complex_to_mag_0, 0), (self.blocks_divide_xx_0, 0))
         self.connect((self.blocks_complex_to_mag_squared_0, 0), (self.blocks_moving_average_xx_1, 0))
         self.connect((self.blocks_conjugate_cc_0, 0), (self.blocks_multiply_xx_0, 1))
-        self.connect((self.blocks_delay_0, 0), (self.sync_long, 1))
         self.connect((self.blocks_delay_0_0, 0), (self.blocks_conjugate_cc_0, 0))
         self.connect((self.blocks_delay_0_0, 0), (self.sync_short, 0))
         self.connect((self.blocks_divide_xx_0, 0), (self.sync_short, 2))
@@ -346,10 +347,8 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_complex_to_mag_squared_0, 0))
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_delay_0_0, 0))
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_multiply_xx_0, 0))
-        self.connect((self.sync_long, 0), (self.qtgui_time_sink_x_0, 0))
-        self.connect((self.sync_long, 0), (self.wireless_dump_wifi_dump_0, 0))
-        self.connect((self.sync_short, 0), (self.blocks_delay_0, 0))
-        self.connect((self.sync_short, 0), (self.sync_long, 0))
+        self.connect((self.sync_short, 0), (self.qtgui_time_sink_x_0, 0))
+        self.connect((self.sync_short, 0), (self.wireless_dump_wifi_dump_0, 0))
 
 
     def closeEvent(self, event):
@@ -379,7 +378,6 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
 
     def set_sync_length(self, sync_length):
         self.sync_length = sync_length
-        self.blocks_delay_0.set_dly(int(self.sync_length))
 
     def get_snr(self):
         return self.snr
@@ -409,6 +407,13 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
 
     def set_out_buf_size(self, out_buf_size):
         self.out_buf_size = out_buf_size
+
+    def get_num_message(self):
+        return self.num_message
+
+    def set_num_message(self, num_message):
+        self.num_message = num_message
+        self.wireless_dump_generate_random_message_0.set_num_msg(self.num_message)
 
     def get_max_symbols(self):
         return self.max_symbols

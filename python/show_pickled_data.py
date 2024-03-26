@@ -13,7 +13,7 @@ if ret != 0:
 def main():
     db = redis.StrictRedis(host="localhost", port=6379, db=0)
 
-    keys = db.keys("*:WIFI:*:1")
+    keys = db.keys("*:WIFI:*:*")
     
 
 
@@ -21,7 +21,7 @@ def main():
         print(key.decode())
         unpacked_obj = pickle.loads(db.get(key))
         print(unpacked_obj[0])
-        unpacked_obj= unpacked_obj[:700]
+        unpacked_obj= unpacked_obj[:]
         plt.plot([i for i in range(unpacked_obj.shape[0])], unpacked_obj.real)
         plt.plot([i for i in range(unpacked_obj.shape[0])], unpacked_obj.imag)
         # break
