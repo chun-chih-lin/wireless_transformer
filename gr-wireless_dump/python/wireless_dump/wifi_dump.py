@@ -178,7 +178,9 @@ class wifi_dump(gr.sync_block):
                 print("-----------------")
                 for tag_i, tag in enumerate(tags):
                     if pmt.to_python(tag.key) == 'wifi_start':
-                        # print(f"{tag_i = }, {tag.offset = }, {self.nitems_read(0) = }, {len(in0) = }")
+                        tag_pos = tag.offset - self.nitems_read(0)
+                        print(f"{tag_i = }, {tag.offset = }, {self.nitems_read(0) = }, {len(in0) = }, {tag_pos = }, {pmt.to_python(tag.value) = }")
+
                         self.tag_pos.append(tag.offset - self.nitems_read(0))
                         # print(f"{pmt.to_python(tag.value) = }, {in0[0] = }")
                         pkt_value = pmt.to_python(tag.value)
