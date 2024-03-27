@@ -22,7 +22,7 @@ def conver_folder(dataset_folder, patch_info):
         filename = patch_info[key]["Filename"]
         mat_filename = f"{patch_info[key]['MOD']}.{patch_info[key]['MCS']}.{key}.mat"
         mat_full_filename = f"{dataset_folder}{mat_filename}"
-        print(f"{filename = }, {mat_full_filename = }")
+        print("----")
         dataset = load_pickle(f"{dataset_folder}{filename}")
 
         if dataset is not None:
@@ -32,7 +32,7 @@ def conver_folder(dataset_folder, patch_info):
                 "data": dataset_values
             }
             savemat(mat_full_filename, data_mat_dict)
-            break
+            print(f"Save to {mat_full_filename}")
 
 
     pass
