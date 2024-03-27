@@ -107,7 +107,7 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
         self._pdu_length_range = qtgui.Range(0, 1500, 1, 10, 200)
         self._pdu_length_win = qtgui.RangeWidget(self._pdu_length_range, self.set_pdu_length, "'pdu_length'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._pdu_length_win)
-        self._num_message_range = qtgui.Range(1, 1000, 1, 10, 200)
+        self._num_message_range = qtgui.Range(1, 2000, 1, 10, 200)
         self._num_message_win = qtgui.RangeWidget(self._num_message_range, self.set_num_message, "'num_message'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._num_message_win)
         # Create the options list

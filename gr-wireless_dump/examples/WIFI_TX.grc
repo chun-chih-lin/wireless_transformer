@@ -208,7 +208,7 @@ blocks:
     rangeType: int
     start: '1'
     step: '1'
-    stop: '1000'
+    stop: '2000'
     value: '10'
     widget: counter_slider
   states:
