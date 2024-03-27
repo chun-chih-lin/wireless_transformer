@@ -144,7 +144,7 @@ class wifi_dump(gr.sync_block):
                 if self.mod == 1:
                     r = int(((self.pdu_len - p)%sum(i))/i[0])
                     t += r
-            self.max_sample = t*80
+            self.max_sample = (t+2)*80
             self.d_msg(f"Update sample to {self.max_sample}")
 
         except Exception as exp:
@@ -189,7 +189,7 @@ class wifi_dump(gr.sync_block):
     def check_amp(self, ary):
         amp_mean = np.abs(ary).mean()
         if amp_mean < self.threshold:
-            print(f"Not exceeding the threshold. {amp_mean} < {self.threshold}. Abort saving.")
+            # print(f"Not exceeding the threshold. {amp_mean} < {self.threshold}. Abort saving.")
             return False
         return True
 

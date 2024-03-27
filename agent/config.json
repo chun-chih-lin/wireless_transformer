@@ -8,7 +8,7 @@
     "KEYWORD_QUEUE_LIST": "QUEUE:LIST:TRANS",
     "KEYWORD_SYSTEM_ACTION": "SYSTEM:ACTION:*",
 
-    "MAX_PATCH_NUM": 1000,
+    "MAX_PATCH_NUM": 1500,
     "SAVE_DIRECTORY": "./wireless_data/", 
     "PATCH_INFO_FILENAME": "patch_info.json",
 

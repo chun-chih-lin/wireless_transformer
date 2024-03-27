@@ -110,6 +110,13 @@ class WIFI_RX(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(3, 4):
             self.top_grid_layout.setColumnStretch(c, 1)
+        self._record_range = qtgui.Range(0, 1, 1, 0, 50)
+        self._record_win = qtgui.RangeWidget(self._record_range, self.set_record, "Record Packets", "slider", int, QtCore.Qt.Horizontal)
+        self.top_grid_layout.addWidget(self._record_win, 2, 3, 1, 1)
+        for r in range(2, 3):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(3, 4):
+            self.top_grid_layout.setColumnStretch(c, 1)
         self._pdu_length_range = qtgui.Range(0, 1500, 1, 10, 200)
         self._pdu_length_win = qtgui.RangeWidget(self._pdu_length_range, self.set_pdu_length, "'pdu_length'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._pdu_length_win, 3, 0, 1, 3)
@@ -179,7 +186,7 @@ class WIFI_RX(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(3, 4):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(mod, pdu_length, threshold, 0, Debug)
+        self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(mod, pdu_length, threshold, record, Debug)
         self.uhd_usrp_source_0 = uhd.usrp_source(
             ",".join(('', sdr_addr)),
             uhd.stream_args(
@@ -193,13 +200,6 @@ class WIFI_RX(gr.top_block, Qt.QWidget):
 
         self.uhd_usrp_source_0.set_center_freq(uhd.tune_request(custom_freq, rf_freq = custom_freq - lo_offset, rf_freq_policy=uhd.tune_request.POLICY_MANUAL), 0)
         self.uhd_usrp_source_0.set_normalized_gain(gain, 0)
-        self._record_range = qtgui.Range(0, 1, 1, 0, 50)
-        self._record_win = qtgui.RangeWidget(self._record_range, self.set_record, "Record Packets", "slider", int, QtCore.Qt.Horizontal)
-        self.top_grid_layout.addWidget(self._record_win, 2, 3, 1, 1)
-        for r in range(2, 3):
-            self.top_grid_layout.setRowStretch(r, 1)
-        for c in range(3, 4):
-            self.top_grid_layout.setColumnStretch(c, 1)
         self.qtgui_time_sink_x_0_0 = qtgui.time_sink_c(
             20480, #size
             samp_rate, #samp_rate
@@ -356,6 +356,7 @@ class WIFI_RX(gr.top_block, Qt.QWidget):
 
     def set_record(self, record):
         self.record = record
+        self.wireless_dump_wifi_dump_0.set_record(self.record)
 
     def get_pdu_length(self):
         return self.pdu_length

@@ -1401,7 +1401,7 @@ blocks:
     debug: Debug
     mod: mod
     pdu_len: pdu_length
-    record: '0'
+    record: record
     threshold: threshold
   states:
     bus_sink: false

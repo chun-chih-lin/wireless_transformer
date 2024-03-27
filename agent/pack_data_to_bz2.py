@@ -18,8 +18,11 @@ def main():
     
         for detail in all_file_details.keys():
             print(f"{detail = }")
-            filename = all_file_details[detail]["Filename"]
-            os.system(f"mv ./wireless_data/{filename} {folder_name}")
+            if detail == "Description":
+                pass
+            else:
+                filename = all_file_details[detail]["Filename"]
+                os.system(f"mv ./wireless_data/{filename} {folder_name}")
         os.system(f"mv ./wireless_data/patch_info.json {folder_name}")
     
         os.system(f"tar -cvjSf {folder_name}.tar.bz2 {folder_name}")
