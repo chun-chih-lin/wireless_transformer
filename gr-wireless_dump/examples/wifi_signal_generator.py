@@ -151,7 +151,7 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
         for c in range(3, 4):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.wireless_dump_generate_random_message_0 = wireless_dump.generate_random_message("x", pdu_length, 0, interval, num_message)
-        self.wireless_dump_capture_signal_on_tx_0 = wireless_dump.capture_signal_on_tx(encoding, record, pdu_length, Debug)
+        self.wireless_dump_capture_signal_on_tx_0 = wireless_dump.capture_signal_on_tx(record, Debug)
         self._threshold_range = qtgui.Range(0.0, 20, 0.01, 0.01, 200)
         self._threshold_win = qtgui.RangeWidget(self._threshold_range, self.set_threshold, "Threshold for Saving", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._threshold_win, 2, 0, 1, 2)
@@ -280,7 +280,6 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
 
     def set_pdu_length(self, pdu_length):
         self.pdu_length = pdu_length
-        self.wireless_dump_capture_signal_on_tx_0.set_pdu_len(self.pdu_length)
         self.wireless_dump_generate_random_message_0.set_pdu_len(self.pdu_length)
 
     def get_num_message(self):
@@ -316,7 +315,6 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
         self.encoding = encoding
         self._encoding_callback(self.encoding)
         self.ieee802_11_mapper_0.set_encoding(self.encoding)
-        self.wireless_dump_capture_signal_on_tx_0.set_modulation(self.encoding)
 
     def get_Debug(self):
         return self.Debug

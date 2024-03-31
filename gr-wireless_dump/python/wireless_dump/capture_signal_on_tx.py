@@ -149,9 +149,6 @@ class capture_signal_on_tx(gr.sync_block):
             if not self.record:
                 return
 
-            if not self.check_amp(save_ary[:500]):
-                return
-
             self.input_c += 1
             pickled_obj = pickle.dumps(save_ary)
 
@@ -187,26 +184,26 @@ class capture_signal_on_tx(gr.sync_block):
                 for tag_i, tag in enumerate(tags):
                     if pmt.to_python(tag.key) == 'encoding':
                         tag_pos = tag.offset - self.nitems_read(0)
-                        tag_info["encoding"] = pmt.to_python(tag.value),
+                        tag_info["encoding"] = pmt.to_python(tag.value)
                         tag_info["encoding_offset"] = tag.offset
                         
                     elif pmt.to_python(tag.key) == 'packet_len':
                         tag_pos = tag.offset - self.nitems_read(0)
-                        tag_info["packet_len"] = pmt.to_python(tag.value),
+                        tag_info["packet_len"] = pmt.to_python(tag.value)
                         tag_info["packet_len_offset"] = tag.offset
                         
                         self.max_sample = tag.offset
                     else:
                         print(f"{pmt.to_python(tag.key) = }")
                 
-                if tag_info.has_key('encoding') and tag_info.has_key('packet_len'):
+                if 'encoding' in tag_info and 'packet_len' in tag_info:
                     self.tag_pos.append(tag_info["encoding_offset"] - self.nitems_read(0))
+                    print(f"{tag_info = }")
                 self.tag_pos.sort()
 
             # ------
             i = 0
-            # while len(self.tag_pos) > 0:
-            while tag_info.has_key('encoding') and tag_info.has_key('packet_len'):
+            while len(self.tag_pos) > 0:
                 if not self.detect:
                     # I have not detect anything yet.
                     # Check if there is any tag that I'm interested in.
@@ -276,7 +273,7 @@ class capture_signal_on_tx(gr.sync_block):
             self.consume(0, len(in0))
 
 
-        except Exception as e:
+        except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
             print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 

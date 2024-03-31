@@ -235,6 +235,25 @@ blocks:
     coordinate: [472, 460.0]
     rotation: 0
     state: enabled
+- name: blocks_tag_debug_0
+  id: blocks_tag_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    display: 'True'
+    filter: '""'
+    name: ''
+    num_inputs: '1'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 276.0]
+    rotation: 180
+    state: disabled
 - name: blocks_tagged_stream_mux_0
   id: blocks_tagged_stream_mux
   parameters:
@@ -556,8 +575,6 @@ blocks:
     alias: ''
     comment: ''
     debug: Debug
-    mod: encoding
-    pdu_len: pdu_length
     record: record
   states:
     bus_sink: false
@@ -609,6 +626,7 @@ connections:
 - [blocks_tagged_stream_mux_0, '0', digital_ofdm_carrier_allocator_cvc_0_0_0, '0']
 - [digital_chunks_to_symbols_xx_0, '0', blocks_tagged_stream_mux_0, '0']
 - [digital_ofdm_carrier_allocator_cvc_0_0_0, '0', fft_vxx_0_0, '0']
+- [digital_ofdm_cyclic_prefixer_0_0, '0', blocks_tag_debug_0, '0']
 - [digital_ofdm_cyclic_prefixer_0_0, '0', qtgui_time_sink_x_0_0_0, '0']
 - [digital_ofdm_cyclic_prefixer_0_0, '0', wireless_dump_capture_signal_on_tx_0, '0']
 - [digital_ofdm_cyclic_prefixer_0_0, '0', wireless_dump_wifi_dump_0, '0']
