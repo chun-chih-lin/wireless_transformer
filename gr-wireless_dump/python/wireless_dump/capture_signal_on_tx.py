@@ -65,7 +65,7 @@ class capture_signal_on_tx(gr.sync_block):
     def __init__(self, mod, pdu_len, record=False, debug=False):
         gr.sync_block.__init__(self,
             name="capture_signal_on_tx",
-            in_sig=[np.complex],
+            in_sig=[np.complex64],
             out_sig=None)
         self.count = 0
         self.wifi_signal = None
@@ -196,7 +196,7 @@ class capture_signal_on_tx(gr.sync_block):
             # ------
             i = 0
             # while len(self.tag_pos) > 0:
-            while False
+            while False:
                 if not self.detect:
                     # I have not detect anything yet.
                     # Check if there is any tag that I'm interested in.

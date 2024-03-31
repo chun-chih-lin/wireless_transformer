@@ -81,13 +81,6 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
         # Blocks
         ##################################################
 
-        self._threshold_range = qtgui.Range(0.0, 20, 0.01, 0.01, 200)
-        self._threshold_win = qtgui.RangeWidget(self._threshold_range, self.set_threshold, "Threshold for Saving", "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_grid_layout.addWidget(self._threshold_win, 2, 0, 1, 2)
-        for r in range(2, 3):
-            self.top_grid_layout.setRowStretch(r, 1)
-        for c in range(0, 2):
-            self.top_grid_layout.setColumnStretch(c, 1)
         self._record_range = qtgui.Range(0, 1, 1, 0, 50)
         self._record_win = qtgui.RangeWidget(self._record_range, self.set_record, "Record Packets", "slider", int, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._record_win, 2, 2, 1, 2)
@@ -157,8 +150,15 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(3, 4):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(encoding, pdu_length, threshold, record, Debug)
         self.wireless_dump_generate_random_message_0 = wireless_dump.generate_random_message("x", pdu_length, 0, interval, num_message)
+        self.wireless_dump_capture_signal_on_tx_0 = wireless_dump.capture_signal_on_tx(encoding, record, pdu_length, Debug)
+        self._threshold_range = qtgui.Range(0.0, 20, 0.01, 0.01, 200)
+        self._threshold_win = qtgui.RangeWidget(self._threshold_range, self.set_threshold, "Threshold for Saving", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_grid_layout.addWidget(self._threshold_win, 2, 0, 1, 2)
+        for r in range(2, 3):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 2):
+            self.top_grid_layout.setColumnStretch(c, 1)
         self.qtgui_time_sink_x_0_0_0 = qtgui.time_sink_c(
             (672+48), #size
             samp_rate, #samp_rate
@@ -228,8 +228,6 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
         self.digital_chunks_to_symbols_xx_0 = digital.chunks_to_symbols_bc([-1, 1], 1)
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_gr_complex*1, "packet_len", 1)
         self.blocks_tagged_stream_mux_0.set_min_output_buffer((max_symbols * 48 * 8))
-        self.blocks_tag_debug_0 = blocks.tag_debug(gr.sizeof_gr_complex*1, '', "")
-        self.blocks_tag_debug_0.set_display(True)
 
 
         ##################################################
@@ -240,9 +238,8 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_ofdm_carrier_allocator_cvc_0_0_0, 0))
         self.connect((self.digital_chunks_to_symbols_xx_0, 0), (self.blocks_tagged_stream_mux_0, 0))
         self.connect((self.digital_ofdm_carrier_allocator_cvc_0_0_0, 0), (self.fft_vxx_0_0, 0))
-        self.connect((self.digital_ofdm_cyclic_prefixer_0_0, 0), (self.blocks_tag_debug_0, 0))
         self.connect((self.digital_ofdm_cyclic_prefixer_0_0, 0), (self.qtgui_time_sink_x_0_0_0, 0))
-        self.connect((self.digital_ofdm_cyclic_prefixer_0_0, 0), (self.wireless_dump_wifi_dump_0, 0))
+        self.connect((self.digital_ofdm_cyclic_prefixer_0_0, 0), (self.wireless_dump_capture_signal_on_tx_0, 0))
         self.connect((self.digital_packet_headergenerator_bb_0, 0), (self.digital_chunks_to_symbols_xx_0, 0))
         self.connect((self.fft_vxx_0_0, 0), (self.digital_ofdm_cyclic_prefixer_0_0, 0))
         self.connect((self.ieee802_11_chunks_to_symbols_xx_0, 0), (self.blocks_tagged_stream_mux_0, 1))
@@ -263,7 +260,6 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
 
     def set_threshold(self, threshold):
         self.threshold = threshold
-        self.wireless_dump_wifi_dump_0.set_threshold(self.threshold)
 
     def get_samp_rate(self):
         return self.samp_rate
@@ -277,15 +273,15 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
 
     def set_record(self, record):
         self.record = record
-        self.wireless_dump_wifi_dump_0.set_record(self.record)
+        self.wireless_dump_capture_signal_on_tx_0.set_record(self.record)
 
     def get_pdu_length(self):
         return self.pdu_length
 
     def set_pdu_length(self, pdu_length):
         self.pdu_length = pdu_length
+        self.wireless_dump_capture_signal_on_tx_0.set_pdu_len(self.pdu_length)
         self.wireless_dump_generate_random_message_0.set_pdu_len(self.pdu_length)
-        self.wireless_dump_wifi_dump_0.set_pdu_len(self.pdu_length)
 
     def get_num_message(self):
         return self.num_message
@@ -320,7 +316,7 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
         self.encoding = encoding
         self._encoding_callback(self.encoding)
         self.ieee802_11_mapper_0.set_encoding(self.encoding)
-        self.wireless_dump_wifi_dump_0.set_modulation(self.encoding)
+        self.wireless_dump_capture_signal_on_tx_0.set_modulation(self.encoding)
 
     def get_Debug(self):
         return self.Debug
@@ -328,7 +324,7 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
     def set_Debug(self, Debug):
         self.Debug = Debug
         self._Debug_callback(self.Debug)
-        self.wireless_dump_wifi_dump_0.set_debug(self.Debug)
+        self.wireless_dump_capture_signal_on_tx_0.set_debug(self.Debug)
 
 
 
