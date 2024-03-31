@@ -35,7 +35,7 @@ def main():
         print(f"{encoding = }")
         key = f"SYSTEM:SIMULATED:WIFI:{encoding}"
 
-        value = pickle.loads(self.db.get(key))
+        value = pickle.loads(db.get(key))
         r_part = np.expand_dims(np.real(value), axis=0)
         i_part = np.expand_dims(np.imag(value), axis=0)
 
