@@ -20,11 +20,11 @@ def save_as_mat(filename):
         data = pickle.load(f, encoding='latin1')
 
     dataset_values = list(data.values())[0]
-        print(f"{dataset_values.shape = }")
-        data_mat_dict = {
-            "data": dataset_values
-        }
-        savemat(f"./{filename}.mat", data_mat_dict)
+    print(f"{dataset_values.shape = }")
+    data_mat_dict = {
+        "data": dataset_values
+    }
+    savemat(f"./{filename}.mat", data_mat_dict)
     pass
 
 # ----------------------------------------------
