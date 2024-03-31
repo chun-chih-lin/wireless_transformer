@@ -4,10 +4,10 @@ category: '[Wireless Dump]'
 
 templates:
   imports: from gnuradio import wireless_dump
-  make: wireless_dump.capture_signal_on_tx(${mod}, ${record}, ${pdu_len}, ${debug})
+  make: wireless_dump.capture_signal_on_tx(${record}, ${debug})
   callbacks:
-  - set_modulation(${mod})
-  - set_pdu_len(${pdu_len})
+  # - set_modulation(${mod})
+  # - set_pdu_len(${pdu_len})
   - set_debug(${debug})
   - set_record(${record})
 #  Make one 'parameters' list entry for every parameter you want settable from the GUI.
@@ -17,19 +17,19 @@ templates:
 #     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
 #     * default
 parameters:
-- id: mod
-  label: Mod
-  dtype: int
-  default: '0'
+# - id: mod
+#   label: Mod
+#   dtype: int
+#   default: '0'
 
 - id: record
   label: Record Packets
   dtype: int
   default: '0'
 
-- id: pdu_len
-  label: Packet Length
-  dtype: int
+# - id: pdu_len
+#   label: Packet Length
+#   dtype: int
 
 - id: debug
   label: Debug

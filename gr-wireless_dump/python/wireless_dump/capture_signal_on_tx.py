@@ -62,7 +62,7 @@ class capture_signal_on_tx(gr.sync_block):
     """
     docstring for block capture_signal_on_tx
     """
-    def __init__(self, mod, pdu_len, record=False, debug=False):
+    def __init__(self, record=False, debug=False):
         gr.sync_block.__init__(self,
             name="capture_signal_on_tx",
             in_sig=[np.complex64],
@@ -70,13 +70,13 @@ class capture_signal_on_tx(gr.sync_block):
         self.count = 0
         self.wifi_signal = None
         self.detect = False
-        self.pdu_len = None
+        # self.pdu_len = None
 
         self.db = redis.Redis(host='localhost', port=6379, db=0)
 
         self.set_debug(debug)
-        self.set_modulation(mod)
-        self.set_pdu_len(pdu_len)
+        # self.set_modulation(mod)
+        # self.set_pdu_len(pdu_len)
         self.set_record(record)
 
         self.system_prefix_key = "SYSTEM:COLLECT:WIFI"
@@ -90,16 +90,16 @@ class capture_signal_on_tx(gr.sync_block):
 
     # ----------------------------------------------
     # Callback functions
-    def set_modulation(self, mod):
-        self.mod = mod
-        print(f"Setting {self.mod: }")
-        if self.pdu_len is not None:
-            self.update_ttl_sample()
+    # def set_modulation(self, mod):
+    #     self.mod = mod
+    #     print(f"Setting {self.mod: }")
+    #     if self.pdu_len is not None:
+    #         self.update_ttl_sample()
         
-    def set_pdu_len(self, pdu_len):
-        self.pdu_len = pdu_len
-        print(f"Setting {self.pdu_len: }")
-        self.update_ttl_sample()
+    # def set_pdu_len(self, pdu_len):
+    #     self.pdu_len = pdu_len
+    #     print(f"Setting {self.pdu_len: }")
+    #     self.update_ttl_sample()
 
     def set_record(self, record):
         try:
@@ -176,27 +176,39 @@ class capture_signal_on_tx(gr.sync_block):
     def work(self, input_items, output_items):
         try:
             in0 = input_items[0]
-
             tags = self.get_tags_in_window(0, 0, len(input_items[0]))
 
             # ------
             # Get all the samples have wifi_start as tag name
             
             pkt_value = -1
+            tag_info = {}
             if len(tags) > 0:
                 for tag_i, tag in enumerate(tags):
-                    if pmt.to_python(tag.key) == 'wifi_start':
+                    if pmt.to_python(tag.key) == 'encoding':
                         tag_pos = tag.offset - self.nitems_read(0)
-                        self.tag_pos.append(tag.offset - self.nitems_read(0))
+                        tag_info{
+                            "encoding": pmt.to_python(tag.value),
+                            "encoding_offset": tag.offset
+                        }
+                    elif pmt.to_python(tag.key) == 'packet_len':
+                        tag_pos = tag.offset - self.nitems_read(0)
+                        tag_info{
+                            "packet_len": pmt.to_python(tag.value),
+                            "packet_len_offset": tag.offset
+                        }
+                        self.max_sample = tag.offset
                     else:
                         print(f"{pmt.to_python(tag.key) = }")
-                        
+                
+                if tag_info.has_key('encoding') and tag_info.has_key('packet_len'):
+                    self.tag_pos.append(tag_info["encoding_offset"] - self.nitems_read(0))
                 self.tag_pos.sort()
 
             # ------
             i = 0
             # while len(self.tag_pos) > 0:
-            while False:
+            while tag_info.has_key('encoding') and tag_info.has_key('packet_len'):
                 if not self.detect:
                     # I have not detect anything yet.
                     # Check if there is any tag that I'm interested in.
