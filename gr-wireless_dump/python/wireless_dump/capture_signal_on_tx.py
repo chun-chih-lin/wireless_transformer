@@ -79,7 +79,7 @@ class capture_signal_on_tx(gr.sync_block):
         # self.set_pdu_len(pdu_len)
         self.set_record(record)
 
-        self.system_prefix_key = "SYSTEM:COLLECT:WIFI"
+        self.system_prefix_key = "SYSTEM:SIMULATED:WIFI"
 
         self.input_c = 0
         self.tag_pos = []
@@ -144,7 +144,7 @@ class capture_signal_on_tx(gr.sync_block):
             print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
     # ----------------------------------------------
-    def save_to_db(self, save_ary):
+    def save_to_db(self, save_ary, tag_info):
         try:
             if not self.record:
                 return
@@ -152,16 +152,10 @@ class capture_signal_on_tx(gr.sync_block):
             self.input_c += 1
             pickled_obj = pickle.dumps(save_ary)
 
-            set_key = f"{self.system_prefix_key}:TEST_KEY"
-            if self.db.exists(CURRENT_PATCH) and self.db.exists(CURRENT_NUM_PATCH):
-                patch_indicator = self.db.get(CURRENT_PATCH).decode()
-                number = self.db.get(CURRENT_NUM_PATCH).decode()
+            mod = tag_info['encoding']
 
-                set_key = f"{self.system_prefix_key}:{self.mod}:{self.pdu_len}:{patch_indicator}:{number}"
-                self.d_msg(f"Saving to Patch keys: {set_key}")
-            else:
-                self.d_msg(f"Patch keys do not exist. Using default key: {set_key}")
-
+            set_key = f"{self.system_prefix_key}:{mod}"
+            self.d_msg(f"Saving to Patch keys: {set_key}")
             self.db.set(set_key, pickled_obj)
 
         except Exception as exp:
@@ -236,7 +230,7 @@ class capture_signal_on_tx(gr.sync_block):
                             # it is a complete packet already.
                             # Export the result
                             self.d_msg(f"Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
-                            self.save_to_db(self.wifi_signal)
+                            self.save_to_db(self.wifi_signal, tag_info)
                             self.wifi_signal = None
                             # Reset to not detecting
                             self.detect = False
@@ -265,7 +259,7 @@ class capture_signal_on_tx(gr.sync_block):
                         # it is a complete packet already.
                         # Export the result
                         self.d_msg(f"Fianlly Complete! [#{self.input_c}] Save packet: {len(self.wifi_signal) = }")
-                        self.save_to_db(self.wifi_signal)
+                        self.save_to_db(self.wifi_signal, tag_info)
                         self.wifi_signal = None
                         # Reset to not detecting
                         self.detect = False
