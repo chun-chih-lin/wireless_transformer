@@ -1,11 +1,15 @@
 id: wireless_dump_capture_signal_on_tx
-label: capture_signal_on_tx
-category: '[wireless_dump]'
+label: Capture Signal
+category: '[Wireless Dump]'
 
 templates:
   imports: from gnuradio import wireless_dump
-  make: wireless_dump.capture_signal_on_tx()
-
+  make: wireless_dump.capture_signal_on_tx(${mod}, ${record}, ${pdu_len}, ${debug})
+  callbacks:
+  - set_modulation(${mod})
+  - set_pdu_len(${pdu_len})
+  - set_debug(${debug})
+  - set_record(${record})
 #  Make one 'parameters' list entry for every parameter you want settable from the GUI.
 #     Keys include:
 #     * id (makes the value accessible as keyname, e.g. in the make entry)
@@ -13,10 +17,26 @@ templates:
 #     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
 #     * default
 parameters:
-- id: parametername_replace_me
-  label: FIX ME:
-  dtype: string
-  default: You need to fill in your grc/wireless_dump_capture_signal_on_tx.block.yaml
+- id: mod
+  label: Mod
+  dtype: int
+  default: '0'
+
+- id: record
+  label: Record Packets
+  dtype: int
+  default: '0'
+
+- id: pdu_len
+  label: Packet Length
+  dtype: int
+
+- id: debug
+  label: Debug
+  dtype: int
+  default: 0
+  options: [1, 0]
+  option_labels: [Enable, Disable]
 #- id: ...
 #  label: ...
 #  dtype: ...
@@ -29,13 +49,13 @@ parameters:
 #      * vlen (optional - data stream vector length. Default is 1)
 #      * optional (optional - set to 1 for optional inputs. Default is 0)
 inputs:
-#- label: ...
-#  domain: ...
-#  dtype: ...
+- label: in
+  domain: stream
+  dtype: complex
 #  vlen: ...
 #  optional: ...
 
-outputs:
+# outputs:
 #- label: ...
 #  domain: ...
 #  dtype: ...

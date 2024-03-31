@@ -5,11 +5,12 @@ close all
 global root_folder_name dataset_folder
 
 root_folder_name = "./wireless_data/";
-dataset_folder = strcat("Dataset_", "2024_03_22_22_42_36", "/");
+dataset_folder = strcat("Dataset_", "2024_03_26_19_49_37", "/");
+dataset_folder = strcat("Dataset_", "2024_03_26_20_18_56", "/");
 
 json_info = read_patch_info(strcat(root_folder_name, dataset_folder));
 json_fieldnames = fieldnames(json_info);
-for item_i = 1:numel(json_fieldnames)
+for item_i = 7:numel(json_fieldnames)
     data_prefix = json_fieldnames{item_i};
     dataset = load_dataset(json_info, data_prefix);
     size(dataset)
@@ -17,13 +18,15 @@ for item_i = 1:numel(json_fieldnames)
     figure()
     plot(squeeze(dataset(1, 1, :)))
     hold on
+    plot(squeeze(dataset(1, 2, :)))
+    hold on
     plot(squeeze(dataset(2, 1, :)))
     hold on
-    plot(squeeze(dataset(3, 1, :)))
-    hold on
-    plot(squeeze(dataset(4, 1, :)))
-    hold on
-    plot(squeeze(dataset(5, 1, :)))
+    plot(squeeze(dataset(2, 2, :)))
+    % hold on
+    % plot(squeeze(dataset(4, 1, :)))
+    % hold on
+    % plot(squeeze(dataset(5, 1, :)))
 
 
 
