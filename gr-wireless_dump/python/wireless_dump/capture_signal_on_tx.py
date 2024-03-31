@@ -187,16 +187,14 @@ class capture_signal_on_tx(gr.sync_block):
                 for tag_i, tag in enumerate(tags):
                     if pmt.to_python(tag.key) == 'encoding':
                         tag_pos = tag.offset - self.nitems_read(0)
-                        tag_info{
-                            "encoding": pmt.to_python(tag.value),
-                            "encoding_offset": tag.offset
-                        }
+                        tag_info["encoding"] = pmt.to_python(tag.value),
+                        tag_info["encoding_offset"] = tag.offset
+                        
                     elif pmt.to_python(tag.key) == 'packet_len':
                         tag_pos = tag.offset - self.nitems_read(0)
-                        tag_info{
-                            "packet_len": pmt.to_python(tag.value),
-                            "packet_len_offset": tag.offset
-                        }
+                        tag_info["packet_len"] = pmt.to_python(tag.value),
+                        tag_info["packet_len_offset"] = tag.offset
+                        
                         self.max_sample = tag.offset
                     else:
                         print(f"{pmt.to_python(tag.key) = }")
