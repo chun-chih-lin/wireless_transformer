@@ -8,4 +8,5 @@
 
 install(FILES
     wireless_dump_wifi_dump.block.yml
-    wireless_dump_generate_random_message.block.yml DESTINATION share/gnuradio/grc/blocks)
+    wireless_dump_generate_random_message.block.yml
+    wireless_dump_capture_signal_on_tx.block.yml DESTINATION share/gnuradio/grc/blocks)
