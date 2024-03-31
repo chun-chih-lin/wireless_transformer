@@ -7,7 +7,7 @@
 # GNU Radio Python Flow Graph
 # Title: Not titled yet
 # Author: root
-# GNU Radio version: v3.10.9.2-5-gdd01ef52
+# GNU Radio version: v3.10.9.2-39-gcf065ee5
 
 from PyQt5 import Qt
 from gnuradio import qtgui
@@ -161,7 +161,6 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self.wireless_dump_wifi_dump_0 = wireless_dump.wifi_dump(0, pdu_length, 0)
         self.wireless_dump_generate_random_message_0 = wireless_dump.generate_random_message("x", pdu_length, 0, interval, num_message)
         self.sync_short = ieee802_11.sync_short(sensitivity, 2, False, False)
         self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
@@ -215,6 +214,48 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
 
         self._qtgui_time_sink_x_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_time_sink_x_0_win)
+        self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
+            1024, #size
+            window.WIN_BLACKMAN_hARRIS, #wintype
+            0, #fc
+            samp_rate, #bw
+            "", #name
+            1,
+            None # parent
+        )
+        self.qtgui_freq_sink_x_0.set_update_time(0.10)
+        self.qtgui_freq_sink_x_0.set_y_axis((-140), 10)
+        self.qtgui_freq_sink_x_0.set_y_label('Relative Gain', 'dB')
+        self.qtgui_freq_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
+        self.qtgui_freq_sink_x_0.enable_autoscale(False)
+        self.qtgui_freq_sink_x_0.enable_grid(False)
+        self.qtgui_freq_sink_x_0.set_fft_average(1.0)
+        self.qtgui_freq_sink_x_0.enable_axis_labels(True)
+        self.qtgui_freq_sink_x_0.enable_control_panel(False)
+        self.qtgui_freq_sink_x_0.set_fft_window_normalized(False)
+
+
+
+        labels = ['', '', '', '', '',
+            '', '', '', '', '']
+        widths = [1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1]
+        colors = ["blue", "red", "green", "black", "cyan",
+            "magenta", "yellow", "dark red", "dark green", "dark blue"]
+        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0, 1.0]
+
+        for i in range(1):
+            if len(labels[i]) == 0:
+                self.qtgui_freq_sink_x_0.set_line_label(i, "Data {0}".format(i))
+            else:
+                self.qtgui_freq_sink_x_0.set_line_label(i, labels[i])
+            self.qtgui_freq_sink_x_0.set_line_width(i, widths[i])
+            self.qtgui_freq_sink_x_0.set_line_color(i, colors[i])
+            self.qtgui_freq_sink_x_0.set_line_alpha(i, alphas[i])
+
+        self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.qwidget(), Qt.QWidget)
+        self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
         self.pfb_arb_resampler_xxx_0 = pfb.arb_resampler_ccf(
             (1+epsilon),
             taps=None,
@@ -347,8 +388,8 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_complex_to_mag_squared_0, 0))
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_delay_0_0, 0))
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_multiply_xx_0, 0))
+        self.connect((self.sync_short, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.sync_short, 0), (self.qtgui_time_sink_x_0, 0))
-        self.connect((self.sync_short, 0), (self.wireless_dump_wifi_dump_0, 0))
 
 
     def closeEvent(self, event):
@@ -393,6 +434,7 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate
         self._samp_rate_callback(self.samp_rate)
         self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
+        self.qtgui_freq_sink_x_0.set_frequency_range(0, self.samp_rate)
 
     def get_pdu_length(self):
         return self.pdu_length
@@ -400,7 +442,6 @@ class wifi_loopback_phy_dump(gr.top_block, Qt.QWidget):
     def set_pdu_length(self, pdu_length):
         self.pdu_length = pdu_length
         self.wireless_dump_generate_random_message_0.set_pdu_len(self.pdu_length)
-        self.wireless_dump_wifi_dump_0.set_pdu_len(self.pdu_length)
 
     def get_out_buf_size(self):
         return self.out_buf_size
