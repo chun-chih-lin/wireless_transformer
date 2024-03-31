@@ -31,7 +31,7 @@ def save_as_mat(filename):
 def main():
     db = redis.Redis(host='localhost', port=6379, db=0)
 
-    for encoding in range(7):
+    for encoding in range(8):
         print(f"{encoding = }")
         key = f"SYSTEM:SIMULATED:WIFI:{encoding}"
 
