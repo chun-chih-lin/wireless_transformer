@@ -5,6 +5,8 @@ close all
 %%
 dft_matrix = dftmtx(64);
 
+save_fig_folder = "./results/";
+
 for e = 0:7
     [dataset, len] = get_signal(e, 128);
 
@@ -75,24 +77,36 @@ for e = 0:7
         % fig.Position = [100, 0, 1200, 900];
         % sgtitle(strcat("Encoding: ", num2str(e)))
         
+
         % Show the signal
-        figure();
-        subplot(3, 1, 1)
+        show_cyclic = 1;
+        fig = figure();
+        subplot(2, 2, 2)
         plot(symbol_sample(1, :), 'b-')
         hold on
         plot(symbol_sample(2, :), 'r-')
+        title("Original Signal")
         xlim([1, 80])
 
-        subplot(3, 1, 2)
-        plot(real(dot_ret_cyclic(1, :)), imag(dot_ret_cyclic(1, :)), 'bo')
+        subplot(2, 2, 4)
+        plot(real(dot_ret_cyclic(show_cyclic, :)), 'b-')
         hold on
-        % xlim([1, 16])
-
-        subplot(3, 1, 3)
-        plot(real(dot_ret_cyclic(1, :)), 'b-')
-        hold on
-        plot(imag(dot_ret_cyclic(1, :)), 'r-')
+        title("DFT Result")
+        plot(imag(dot_ret_cyclic(show_cyclic, :)), 'r-')
         xlim([1, 64])
+
+        subplot(2, 2, [1, 3])
+        plot(real(dot_ret_cyclic(show_cyclic, :)), imag(dot_ret_cyclic(show_cyclic, :)), 'bo')
+        axis square
+        grid on
+        hold on
+        xlim([-15, 15])
+        ylim([-15, 15])
+
+        fig.Position = [0, 100, 1200, 500];
+
+        filename = strcat('E', num2str(e), '_Rand.png')
+        saveas(fig, strcat(save_fig_folder, filename))
         break
     end
     % break
@@ -121,7 +135,7 @@ function [d, len] = get_signal(e, pdu_len)
     end
 
     len = len_tbl(e+1);
-    filename = strcat("Simulated_signal_", num2str(e), "_", num2str(pdu_len), ".mat");
+    filename = strcat("Simulated_signal_", num2str(e), "_", num2str(pdu_len), "_rand.mat");
     d = squeeze(load(filename).data);
     d = d(:, 1:len);
 end
