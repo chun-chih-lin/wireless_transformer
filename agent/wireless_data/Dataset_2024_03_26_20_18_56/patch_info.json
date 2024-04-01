@@ -1,0 +1,51 @@
+{
+    "2024_03_26_20_02_39": {
+        "MCS": 7,
+        "CodingRate": "3/4",
+        "MOD": "64QAM",
+        "Filename": "64QAM.7.2024_03_26_20_02_39.pkl"
+    },
+    "2024_03_26_20_03_38": {
+        "MCS": 6,
+        "CodingRate": "2/3",
+        "MOD": "64QAM",
+        "Filename": "64QAM.6.2024_03_26_20_03_38.pkl"
+    },
+    "2024_03_26_20_04_34": {
+        "MCS": 5,
+        "CodingRate": "3/4",
+        "MOD": "16QAM",
+        "Filename": "16QAM.5.2024_03_26_20_04_34.pkl"
+    },
+    "2024_03_26_20_05_45": {
+        "MCS": 4,
+        "CodingRate": "1/2",
+        "MOD": "16QAM",
+        "Filename": "16QAM.4.2024_03_26_20_05_45.pkl"
+    },
+    "2024_03_26_20_14_03": {
+        "MCS": 3,
+        "CodingRate": "3/4",
+        "MOD": "QPSK",
+        "Filename": "QPSK.3.2024_03_26_20_14_03.pkl"
+    },
+    "2024_03_26_20_15_34": {
+        "MCS": 2,
+        "CodingRate": "1/2",
+        "MOD": "QPSK",
+        "Filename": "QPSK.2.2024_03_26_20_15_34.pkl"
+    },
+    "2024_03_26_20_16_23": {
+        "MCS": 1,
+        "CodingRate": "3/4",
+        "MOD": "BPSK",
+        "Filename": "BPSK.1.2024_03_26_20_16_23.pkl"
+    },
+    "2024_03_26_20_17_13": {
+        "MCS": 0,
+        "CodingRate": "1/2",
+        "MOD": "BPSK",
+        "Filename": "BPSK.0.2024_03_26_20_17_13.pkl"
+    },
+    "Description": "Room 325 Wired. 2900MHz. 0.75 to 0.75 gain."
+}
