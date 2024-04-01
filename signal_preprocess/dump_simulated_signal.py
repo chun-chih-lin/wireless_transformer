@@ -44,7 +44,7 @@ def main():
             (encoding): two_ch_value
         }
 
-        filename = f"Simulated_signal_{encoding}_128"
+        filename = f"Simulated_signal_{encoding}_128_rand"
         save_as_pkl(filename, dataset_dict)
         save_as_mat(filename)
 

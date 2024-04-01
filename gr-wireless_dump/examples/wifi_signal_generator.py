@@ -69,6 +69,7 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
         self.threshold = threshold = 0.01
         self.samp_rate = samp_rate = 32000
         self.record = record = 0
+        self.random = random = 0
         self.pdu_length = pdu_length = 10
         self.num_message = num_message = 1
         self.max_symbols = max_symbols = int(5 + 1 + ((16 + 800 * 8 + 6) * 2) / 24)
@@ -88,6 +89,22 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(2, 4):
             self.top_grid_layout.setColumnStretch(c, 1)
+        # Create the options list
+        self._random_options = [0, 1]
+        # Create the labels list
+        self._random_labels = ['Disable', 'Enable']
+        # Create the combo box
+        self._random_tool_bar = Qt.QToolBar(self)
+        self._random_tool_bar.addWidget(Qt.QLabel("Random Message" + ": "))
+        self._random_combo_box = Qt.QComboBox()
+        self._random_tool_bar.addWidget(self._random_combo_box)
+        for _label in self._random_labels: self._random_combo_box.addItem(_label)
+        self._random_callback = lambda i: Qt.QMetaObject.invokeMethod(self._random_combo_box, "setCurrentIndex", Qt.Q_ARG("int", self._random_options.index(i)))
+        self._random_callback(self.random)
+        self._random_combo_box.currentIndexChanged.connect(
+            lambda i: self.set_random(self._random_options[i]))
+        # Create the radio buttons
+        self.top_layout.addWidget(self._random_tool_bar)
         self._pdu_length_range = qtgui.Range(0, 1500, 1, 10, 200)
         self._pdu_length_win = qtgui.RangeWidget(self._pdu_length_range, self.set_pdu_length, "'pdu_length'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._pdu_length_win, 0, 0, 1, 2)
@@ -150,7 +167,7 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(3, 4):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self.wireless_dump_generate_random_message_0 = wireless_dump.generate_random_message("x", pdu_length, 0, interval, num_message)
+        self.wireless_dump_generate_random_message_0 = wireless_dump.generate_random_message("x", pdu_length, random, interval, num_message)
         self.wireless_dump_capture_signal_on_tx_0 = wireless_dump.capture_signal_on_tx(record, Debug)
         self._threshold_range = qtgui.Range(0.0, 20, 0.01, 0.01, 200)
         self._threshold_win = qtgui.RangeWidget(self._threshold_range, self.set_threshold, "Threshold for Saving", "counter_slider", float, QtCore.Qt.Horizontal)
@@ -277,6 +294,14 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
     def set_record(self, record):
         self.record = record
         self.wireless_dump_capture_signal_on_tx_0.set_record(self.record)
+
+    def get_random(self):
+        return self.random
+
+    def set_random(self, random):
+        self.random = random
+        self._random_callback(self.random)
+        self.wireless_dump_generate_random_message_0.set_random(self.random)
 
     def get_pdu_length(self):
         return self.pdu_length

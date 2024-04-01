@@ -37,7 +37,7 @@ class generate_random_message(gr.sync_block):
         self.thread = threading.Thread(target=self.run_subscribe)
 
     def get_rand_message(self):
-        return "".join(random.choices(string.ascii_uppercase + string.digits, k=self.pdu_len))
+        return "".join(random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits, k=self.pdu_len))
 
     def set_pattern_message(self):
         self.p_message = "".join([self.pattern for i in range(self.pdu_len)])
@@ -53,7 +53,7 @@ class generate_random_message(gr.sync_block):
                 else:
                     # Generate pattern output message
                     msg = self.p_message
-
+                print(f"Generated Messag: {msg}")
                 msg_count += 1
                 self.message_port_pub(pmt.string_to_symbol("out"), pmt.intern(msg))
                 sleep(self.interval)

@@ -181,6 +181,36 @@ blocks:
     coordinate: [280, 12.0]
     rotation: 0
     state: enabled
+- name: random
+  id: variable_qtgui_chooser
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: Random Message
+    label0: ''
+    label1: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    labels: '["Disable", "Enable"]'
+    num_opts: '0'
+    option0: '0'
+    option1: '1'
+    option2: '2'
+    option3: '3'
+    option4: '4'
+    options: '[0, 1]'
+    orient: Qt.QVBoxLayout
+    type: int
+    value: '0'
+    widget: combo_box
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [800, 444.0]
+    rotation: 0
+    state: enabled
 - name: record
   id: variable_qtgui_range
   parameters:
@@ -595,7 +625,7 @@ blocks:
     num_msg: num_message
     pattern: '"x"'
     pdu_length: pdu_length
-    random: '0'
+    random: random
   states:
     bus_sink: false
     bus_source: false
