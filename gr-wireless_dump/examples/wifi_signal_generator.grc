@@ -94,27 +94,6 @@ blocks:
     coordinate: [408, 12.0]
     rotation: 0
     state: enabled
-- name: epsilon
-  id: variable_qtgui_range
-  parameters:
-    comment: ''
-    gui_hint: 3,1,1,1
-    label: ''
-    min_len: '200'
-    orient: QtCore.Qt.Horizontal
-    rangeType: float
-    start: -20e-6
-    step: 1e-6
-    stop: 20e-6
-    value: '0'
-    widget: counter_slider
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1064, 500.0]
-    rotation: 0
-    state: enabled
 - name: header_formatter
   id: variable
   parameters:
@@ -181,18 +160,6 @@ blocks:
     coordinate: [1000, 12.0]
     rotation: 0
     state: enabled
-- name: out_buf_size
-  id: variable
-  parameters:
-    comment: ''
-    value: '96000'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [960, 548.0]
-    rotation: 0
-    state: enabled
 - name: pdu_length
   id: variable_qtgui_range
   parameters:
@@ -247,27 +214,6 @@ blocks:
     coordinate: [184, 12]
     rotation: 0
     state: enabled
-- name: snr
-  id: variable_qtgui_range
-  parameters:
-    comment: ''
-    gui_hint: ''
-    label: ''
-    min_len: '200'
-    orient: QtCore.Qt.Horizontal
-    rangeType: float
-    start: '-15'
-    step: '0.1'
-    stop: '30'
-    value: '15'
-    widget: counter_slider
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1176, 500.0]
-    rotation: 0
-    state: enabled
 - name: threshold
   id: variable_qtgui_range
   parameters:
@@ -289,24 +235,6 @@ blocks:
     coordinate: [480, 428.0]
     rotation: 0
     state: enabled
-- name: blocks_multiply_const_xx_0
-  id: blocks_multiply_const_xx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    const: (10**(snr/10.0))**.5
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: complex
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [144, 612.0]
-    rotation: 0
-    state: true
 - name: blocks_tag_debug_0
   id: blocks_tag_debug
   parameters:
@@ -323,8 +251,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 524.0]
-    rotation: 0
+    coordinate: [144, 332.0]
+    rotation: 180
     state: enabled
 - name: blocks_tagged_stream_mux_0
   id: blocks_tagged_stream_mux
@@ -345,27 +273,6 @@ blocks:
     bus_structure: null
     coordinate: [1056, 336.0]
     rotation: 180
-    state: enabled
-- name: channels_channel_model_0
-  id: channels_channel_model
-  parameters:
-    affinity: ''
-    alias: ''
-    block_tags: 'False'
-    comment: ''
-    epsilon: '1.0'
-    freq_offset: epsilon * 5.89e9 / 10e6
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    noise_voltage: '1'
-    seed: '0'
-    taps: '1.0'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [344, 572.0]
-    rotation: 0
     state: enabled
 - name: digital_chunks_to_symbols_xx_0
   id: digital_chunks_to_symbols_xx
@@ -514,26 +421,6 @@ blocks:
     coordinate: [616, 316.0]
     rotation: 180
     state: enabled
-- name: foo_packet_pad2_0
-  id: foo_packet_pad2
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    debug: 'False'
-    delay: 'False'
-    delay_sec: '0.001'
-    maxoutbuf: '0'
-    minoutbuf: out_buf_size * 10
-    pad_front: '500'
-    pad_tail: '0'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [136, 316.0]
-    rotation: 180
-    state: enabled
 - name: ieee802_11_chunks_to_symbols_xx_0
   id: ieee802_11_chunks_to_symbols_xx
   parameters:
@@ -582,27 +469,6 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [640, 188.0]
-    rotation: 0
-    state: enabled
-- name: pfb_arb_resampler_xxx_0
-  id: pfb_arb_resampler_xxx
-  parameters:
-    affinity: ''
-    alias: ''
-    atten: '100'
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    nfilts: '32'
-    rrate: 1+epsilon
-    samp_delay: '0'
-    taps: ''
-    type: ccf
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [576, 588.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0
@@ -699,8 +565,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 444.0]
-    rotation: 0
+    coordinate: [120, 412.0]
+    rotation: 180
     state: enabled
 - name: wireless_dump_capture_signal_on_tx_0
   id: wireless_dump_capture_signal_on_tx
@@ -714,8 +580,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 604.0]
-    rotation: 0
+    coordinate: [128, 268.0]
+    rotation: 180
     state: enabled
 - name: wireless_dump_generate_random_message_0
   id: wireless_dump_generate_random_message
@@ -739,22 +605,18 @@ blocks:
     state: enabled
 
 connections:
-- [blocks_multiply_const_xx_0, '0', channels_channel_model_0, '0']
 - [blocks_tagged_stream_mux_0, '0', digital_ofdm_carrier_allocator_cvc_0_0_0, '0']
-- [channels_channel_model_0, '0', pfb_arb_resampler_xxx_0, '0']
 - [digital_chunks_to_symbols_xx_0, '0', blocks_tagged_stream_mux_0, '0']
 - [digital_ofdm_carrier_allocator_cvc_0_0_0, '0', fft_vxx_0_0, '0']
-- [digital_ofdm_cyclic_prefixer_0_0, '0', foo_packet_pad2_0, '0']
+- [digital_ofdm_cyclic_prefixer_0_0, '0', blocks_tag_debug_0, '0']
+- [digital_ofdm_cyclic_prefixer_0_0, '0', qtgui_time_sink_x_0, '0']
+- [digital_ofdm_cyclic_prefixer_0_0, '0', wireless_dump_capture_signal_on_tx_0, '0']
 - [digital_packet_headergenerator_bb_0, '0', digital_chunks_to_symbols_xx_0, '0']
 - [fft_vxx_0_0, '0', digital_ofdm_cyclic_prefixer_0_0, '0']
-- [foo_packet_pad2_0, '0', blocks_multiply_const_xx_0, '0']
 - [ieee802_11_chunks_to_symbols_xx_0, '0', blocks_tagged_stream_mux_0, '1']
 - [ieee802_11_mac_0_0, phy out, ieee802_11_mapper_0, in]
 - [ieee802_11_mapper_0, '0', digital_packet_headergenerator_bb_0, '0']
 - [ieee802_11_mapper_0, '0', ieee802_11_chunks_to_symbols_xx_0, '0']
-- [pfb_arb_resampler_xxx_0, '0', blocks_tag_debug_0, '0']
-- [pfb_arb_resampler_xxx_0, '0', qtgui_time_sink_x_0, '0']
-- [pfb_arb_resampler_xxx_0, '0', wireless_dump_capture_signal_on_tx_0, '0']
 - [wireless_dump_generate_random_message_0, out, ieee802_11_mac_0_0, app in]
 
 metadata:
