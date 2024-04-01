@@ -153,8 +153,9 @@ class capture_signal_on_tx(gr.sync_block):
             pickled_obj = pickle.dumps(save_ary)
 
             mod = tag_info['encoding']
+            psdu_len = tag_info['psdu_len']
 
-            set_key = f"{self.system_prefix_key}:{mod}"
+            set_key = f"{self.system_prefix_key}:{mod}:{psdu_len}"
             self.d_msg(f"Saving to Patch keys: {set_key}")
             self.db.set(set_key, pickled_obj)
 
@@ -187,6 +188,9 @@ class capture_signal_on_tx(gr.sync_block):
                         tag_info["packet_len_offset"] = tag.offset
                         
                         self.max_sample = tag.offset
+                    elif pmt.to_python(tag.key) == 'psdu_len':
+                        tag_info["psdu_len"] = pmt.to_python(tag.value)
+                        tag_info["psdu_len_offset"] = tag.offset
                     else:
                         print(f"{pmt.to_python(tag.key) = }")
                 

@@ -14,11 +14,12 @@ from gnuradio import qtgui
 from PyQt5 import QtCore
 from PyQt5.QtCore import QObject, pyqtSlot
 from gnuradio import blocks
+from gnuradio import channels
+from gnuradio.filter import firdes
 from gnuradio import digital
 from gnuradio import fft
 from gnuradio.fft import window
 from gnuradio import gr
-from gnuradio.filter import firdes
 import sys
 import signal
 from PyQt5 import Qt
@@ -26,6 +27,8 @@ from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import wireless_dump
+from gnuradio.filter import pfb
+import foo
 import ieee802_11
 import sip
 
@@ -67,13 +70,16 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.threshold = threshold = 0.01
+        self.snr = snr = 15
         self.samp_rate = samp_rate = 32000
         self.record = record = 0
         self.pdu_length = pdu_length = 10
+        self.out_buf_size = out_buf_size = 96000
         self.num_message = num_message = 1
         self.max_symbols = max_symbols = int(5 + 1 + ((16 + 800 * 8 + 6) * 2) / 24)
         self.interval = interval = 100
         self.header_formatter = header_formatter = ieee802_11.signal_field()
+        self.epsilon = epsilon = 0
         self.encoding = encoding = 0
         self.Debug = Debug = 0
 
@@ -81,6 +87,9 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
         # Blocks
         ##################################################
 
+        self._snr_range = qtgui.Range(-15, 30, 0.1, 15, 200)
+        self._snr_win = qtgui.RangeWidget(self._snr_range, self.set_snr, "'snr'", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._snr_win)
         self._record_range = qtgui.Range(0, 1, 1, 0, 50)
         self._record_win = qtgui.RangeWidget(self._record_range, self.set_record, "Record Packets", "slider", int, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._record_win, 2, 2, 1, 2)
@@ -104,6 +113,13 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
         for r in range(0, 1):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(2, 4):
+            self.top_grid_layout.setColumnStretch(c, 1)
+        self._epsilon_range = qtgui.Range(-20e-6, 20e-6, 1e-6, 0, 200)
+        self._epsilon_win = qtgui.RangeWidget(self._epsilon_range, self.set_epsilon, "'epsilon'", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_grid_layout.addWidget(self._epsilon_win, 3, 1, 1, 1)
+        for r in range(3, 4):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
         # Create the options list
         self._encoding_options = [0, 1, 2, 3, 4, 5, 6, 7]
@@ -159,25 +175,25 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self.qtgui_time_sink_x_0_0_0 = qtgui.time_sink_c(
-            (672+48), #size
+        self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
+            1024, #size
             samp_rate, #samp_rate
-            "Combined", #name
+            "", #name
             1, #number of inputs
             None # parent
         )
-        self.qtgui_time_sink_x_0_0_0.set_update_time(0.10)
-        self.qtgui_time_sink_x_0_0_0.set_y_axis(-3, 3)
+        self.qtgui_time_sink_x_0.set_update_time(0.10)
+        self.qtgui_time_sink_x_0.set_y_axis(-1, 1)
 
-        self.qtgui_time_sink_x_0_0_0.set_y_label('Amplitude', "")
+        self.qtgui_time_sink_x_0.set_y_label('Amplitude', "")
 
-        self.qtgui_time_sink_x_0_0_0.enable_tags(True)
-        self.qtgui_time_sink_x_0_0_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, 0, "")
-        self.qtgui_time_sink_x_0_0_0.enable_autoscale(False)
-        self.qtgui_time_sink_x_0_0_0.enable_grid(False)
-        self.qtgui_time_sink_x_0_0_0.enable_axis_labels(True)
-        self.qtgui_time_sink_x_0_0_0.enable_control_panel(False)
-        self.qtgui_time_sink_x_0_0_0.enable_stem_plot(False)
+        self.qtgui_time_sink_x_0.enable_tags(True)
+        self.qtgui_time_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, 0, "")
+        self.qtgui_time_sink_x_0.enable_autoscale(False)
+        self.qtgui_time_sink_x_0.enable_grid(False)
+        self.qtgui_time_sink_x_0.enable_axis_labels(True)
+        self.qtgui_time_sink_x_0.enable_control_panel(False)
+        self.qtgui_time_sink_x_0.enable_stem_plot(False)
 
 
         labels = ['Signal 1', 'Signal 2', 'Signal 3', 'Signal 4', 'Signal 5',
@@ -197,23 +213,31 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
         for i in range(2):
             if len(labels[i]) == 0:
                 if (i % 2 == 0):
-                    self.qtgui_time_sink_x_0_0_0.set_line_label(i, "Re{{Data {0}}}".format(i/2))
+                    self.qtgui_time_sink_x_0.set_line_label(i, "Re{{Data {0}}}".format(i/2))
                 else:
-                    self.qtgui_time_sink_x_0_0_0.set_line_label(i, "Im{{Data {0}}}".format(i/2))
+                    self.qtgui_time_sink_x_0.set_line_label(i, "Im{{Data {0}}}".format(i/2))
             else:
-                self.qtgui_time_sink_x_0_0_0.set_line_label(i, labels[i])
-            self.qtgui_time_sink_x_0_0_0.set_line_width(i, widths[i])
-            self.qtgui_time_sink_x_0_0_0.set_line_color(i, colors[i])
-            self.qtgui_time_sink_x_0_0_0.set_line_style(i, styles[i])
-            self.qtgui_time_sink_x_0_0_0.set_line_marker(i, markers[i])
-            self.qtgui_time_sink_x_0_0_0.set_line_alpha(i, alphas[i])
+                self.qtgui_time_sink_x_0.set_line_label(i, labels[i])
+            self.qtgui_time_sink_x_0.set_line_width(i, widths[i])
+            self.qtgui_time_sink_x_0.set_line_color(i, colors[i])
+            self.qtgui_time_sink_x_0.set_line_style(i, styles[i])
+            self.qtgui_time_sink_x_0.set_line_marker(i, markers[i])
+            self.qtgui_time_sink_x_0.set_line_alpha(i, alphas[i])
 
-        self._qtgui_time_sink_x_0_0_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0_0_0.qwidget(), Qt.QWidget)
-        self.top_layout.addWidget(self._qtgui_time_sink_x_0_0_0_win)
+        self._qtgui_time_sink_x_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0.qwidget(), Qt.QWidget)
+        self.top_layout.addWidget(self._qtgui_time_sink_x_0_win)
+        self.pfb_arb_resampler_xxx_0 = pfb.arb_resampler_ccf(
+            (1+epsilon),
+            taps=None,
+            flt_size=32,
+            atten=100)
+        self.pfb_arb_resampler_xxx_0.declare_sample_delay(0)
         self.ieee802_11_mapper_0 = ieee802_11.mapper(encoding, False)
         self.ieee802_11_mac_0_0 = ieee802_11.mac([0x23, 0x23, 0x23, 0x23, 0x23, 0x23], [0x42, 0x42, 0x42, 0x42, 0x42, 0x42], [0xff, 0xff, 0xff, 0xff, 0xff, 0xff])
         self.ieee802_11_chunks_to_symbols_xx_0 = ieee802_11.chunks_to_symbols()
         self.ieee802_11_chunks_to_symbols_xx_0.set_min_output_buffer((max_symbols * 48 * 8))
+        self.foo_packet_pad2_0 = foo.packet_pad2(False, False, 0.001, 500, 0)
+        self.foo_packet_pad2_0.set_min_output_buffer((out_buf_size * 10))
         self.fft_vxx_0_0 = fft.fft_vcc(64, False, tuple([1/52**.5] * 64), True, 1)
         self.fft_vxx_0_0.set_min_output_buffer((max_symbols * 48 * 8 * 10))
         self.digital_packet_headergenerator_bb_0 = digital.packet_headergenerator_bb(header_formatter.formatter(), "packet_len")
@@ -226,8 +250,18 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
         self.digital_ofdm_carrier_allocator_cvc_0_0_0 = digital.ofdm_carrier_allocator_cvc( 64, (list(range(-26, -21)) + list(range(-20, -7)) + list(range(-6, 0)) + list(range(1, 7)) + list(range(8, 21)) +list( range(22, 27)),), ((-21, -7, 7, 21), ), ((1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (1, 1, 1, -1), (1, 1, 1, -1), (1, 1, 1, -1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1), (-1, -1, -1, 1)), ((0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, (1.4719601443879746+1.4719601443879746j), 0.0, 0.0, 0.0, (-1.4719601443879746-1.4719601443879746j), 0.0, 0.0, 0.0, (1.4719601443879746+1.4719601443879746j), 0.0, 0.0, 0.0, (-1.4719601443879746-1.4719601443879746j), 0.0, 0.0, 0.0, (-1.4719601443879746-1.4719601443879746j), 0.0, 0.0, 0.0, (1.4719601443879746+1.4719601443879746j), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, (-1.4719601443879746-1.4719601443879746j), 0.0, 0.0, 0.0, (-1.4719601443879746-1.4719601443879746j), 0.0, 0.0, 0.0, (1.4719601443879746+1.4719601443879746j), 0.0, 0.0, 0.0, (1.4719601443879746+1.4719601443879746j), 0.0, 0.0, 0.0, (1.4719601443879746+1.4719601443879746j), 0.0, 0.0, 0.0, (1.4719601443879746+1.4719601443879746j), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, (1.4719601443879746+1.4719601443879746j), 0.0, 0.0, 0.0, (-1.4719601443879746-1.4719601443879746j), 0.0, 0.0, 0.0, (1.4719601443879746+1.4719601443879746j), 0.0, 0.0, 0.0, (-1.4719601443879746-1.4719601443879746j), 0.0, 0.0, 0.0, (-1.4719601443879746-1.4719601443879746j), 0.0, 0.0, 0.0, (1.4719601443879746+1.4719601443879746j), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, (-1.4719601443879746-1.4719601443879746j), 0.0, 0.0, 0.0, (-1.4719601443879746-1.4719601443879746j), 0.0, 0.0, 0.0, (1.4719601443879746+1.4719601443879746j), 0.0, 0.0, 0.0, (1.4719601443879746+1.4719601443879746j), 0.0, 0.0, 0.0, (1.4719601443879746+1.4719601443879746j), 0.0, 0.0, 0.0, (1.4719601443879746+1.4719601443879746j), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), (0, 0j, 0, 0j, 0, 0j, -1, 1j, -1, 1j, -1, 1j, -1, -1j, 1, 1j, 1, -1j, -1, 1j, 1, 1j, 1, 1j, 1, 1j, -1, (-0-1j), 1, -1j, -1, 1j, 0, -1j, 1, (-0-1j), 1, -1j, 1, 1j, -1, -1j, 1, (-0-1j), -1, 1j, 1, 1j, 1, 1j, 1, 1j, -1, -1j, 1, 1j, 1, -1j, -1, 0j, 0, 0j, 0, 0j), (0, 0, 0, 0, 0, 0, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1, 1, 1, 1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1, 1, 1, 1, 0, 1, -1, -1, 1, 1, -1, 1, -1, 1, -1, -1, -1, -1, -1, 1, 1, -1, -1, 1, -1, 1, -1, 1, 1, 1, 1, 0, 0, 0, 0, 0)), "packet_len", True)
         self.digital_ofdm_carrier_allocator_cvc_0_0_0.set_min_output_buffer((max_symbols * 48 * 8))
         self.digital_chunks_to_symbols_xx_0 = digital.chunks_to_symbols_bc([-1, 1], 1)
+        self.channels_channel_model_0 = channels.channel_model(
+            noise_voltage=1,
+            frequency_offset=(epsilon * 5.89e9 / 10e6),
+            epsilon=1.0,
+            taps=[1.0],
+            noise_seed=0,
+            block_tags=False)
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_gr_complex*1, "packet_len", 1)
         self.blocks_tagged_stream_mux_0.set_min_output_buffer((max_symbols * 48 * 8))
+        self.blocks_tag_debug_0 = blocks.tag_debug(gr.sizeof_gr_complex*1, '', "")
+        self.blocks_tag_debug_0.set_display(True)
+        self.blocks_multiply_const_xx_0 = blocks.multiply_const_cc((10**(snr/10.0))**.5, 1)
 
 
         ##################################################
@@ -235,16 +269,21 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
         ##################################################
         self.msg_connect((self.ieee802_11_mac_0_0, 'phy out'), (self.ieee802_11_mapper_0, 'in'))
         self.msg_connect((self.wireless_dump_generate_random_message_0, 'out'), (self.ieee802_11_mac_0_0, 'app in'))
+        self.connect((self.blocks_multiply_const_xx_0, 0), (self.channels_channel_model_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_ofdm_carrier_allocator_cvc_0_0_0, 0))
+        self.connect((self.channels_channel_model_0, 0), (self.pfb_arb_resampler_xxx_0, 0))
         self.connect((self.digital_chunks_to_symbols_xx_0, 0), (self.blocks_tagged_stream_mux_0, 0))
         self.connect((self.digital_ofdm_carrier_allocator_cvc_0_0_0, 0), (self.fft_vxx_0_0, 0))
-        self.connect((self.digital_ofdm_cyclic_prefixer_0_0, 0), (self.qtgui_time_sink_x_0_0_0, 0))
-        self.connect((self.digital_ofdm_cyclic_prefixer_0_0, 0), (self.wireless_dump_capture_signal_on_tx_0, 0))
+        self.connect((self.digital_ofdm_cyclic_prefixer_0_0, 0), (self.foo_packet_pad2_0, 0))
         self.connect((self.digital_packet_headergenerator_bb_0, 0), (self.digital_chunks_to_symbols_xx_0, 0))
         self.connect((self.fft_vxx_0_0, 0), (self.digital_ofdm_cyclic_prefixer_0_0, 0))
+        self.connect((self.foo_packet_pad2_0, 0), (self.blocks_multiply_const_xx_0, 0))
         self.connect((self.ieee802_11_chunks_to_symbols_xx_0, 0), (self.blocks_tagged_stream_mux_0, 1))
         self.connect((self.ieee802_11_mapper_0, 0), (self.digital_packet_headergenerator_bb_0, 0))
         self.connect((self.ieee802_11_mapper_0, 0), (self.ieee802_11_chunks_to_symbols_xx_0, 0))
+        self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.blocks_tag_debug_0, 0))
+        self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.qtgui_time_sink_x_0, 0))
+        self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.wireless_dump_capture_signal_on_tx_0, 0))
 
 
     def closeEvent(self, event):
@@ -261,12 +300,19 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
     def set_threshold(self, threshold):
         self.threshold = threshold
 
+    def get_snr(self):
+        return self.snr
+
+    def set_snr(self, snr):
+        self.snr = snr
+        self.blocks_multiply_const_xx_0.set_k((10**(self.snr/10.0))**.5)
+
     def get_samp_rate(self):
         return self.samp_rate
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.qtgui_time_sink_x_0_0_0.set_samp_rate(self.samp_rate)
+        self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
 
     def get_record(self):
         return self.record
@@ -281,6 +327,12 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
     def set_pdu_length(self, pdu_length):
         self.pdu_length = pdu_length
         self.wireless_dump_generate_random_message_0.set_pdu_len(self.pdu_length)
+
+    def get_out_buf_size(self):
+        return self.out_buf_size
+
+    def set_out_buf_size(self, out_buf_size):
+        self.out_buf_size = out_buf_size
 
     def get_num_message(self):
         return self.num_message
@@ -307,6 +359,14 @@ class wifi_signal_generator(gr.top_block, Qt.QWidget):
 
     def set_header_formatter(self, header_formatter):
         self.header_formatter = header_formatter
+
+    def get_epsilon(self):
+        return self.epsilon
+
+    def set_epsilon(self, epsilon):
+        self.epsilon = epsilon
+        self.channels_channel_model_0.set_frequency_offset((self.epsilon * 5.89e9 / 10e6))
+        self.pfb_arb_resampler_xxx_0.set_rate((1+self.epsilon))
 
     def get_encoding(self):
         return self.encoding

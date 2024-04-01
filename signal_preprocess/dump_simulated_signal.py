@@ -33,7 +33,7 @@ def main():
 
     for encoding in range(8):
         print(f"{encoding = }")
-        key = f"SYSTEM:SIMULATED:WIFI:{encoding}"
+        key = f"SYSTEM:SIMULATED:WIFI:{encoding}:48"
 
         value = pickle.loads(db.get(key))
         r_part = np.expand_dims(np.real(value), axis=0)
@@ -44,7 +44,7 @@ def main():
             (encoding): two_ch_value
         }
 
-        filename = f"Simulated_signal_{encoding}"
+        filename = f"Simulated_signal_{encoding}_48"
         save_as_pkl(filename, dataset_dict)
         save_as_mat(filename)
 
