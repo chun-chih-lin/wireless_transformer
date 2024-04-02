@@ -7,95 +7,90 @@ close all
 % Continue sample:
 %   WBFM; AM-SSB; SM-DSB
 
-%% Wi-Fi
+addpath(genpath('./wireless_signal/'))
+
+ttl_waveform = get_all_signals();
 
 
-%% WBFM
-% http://hyperphysics.phy-astr.gsu.edu/hbase/Audio/radio.html
-fs = 1e3;           % Sample Frequency
-fc = 200;           % Carrier Frequency 88.1 MHz - 108.1 MHz
-fDev = 50;          % Frequency Deviation (Hz)/Modulation index
+%% 
+function ttl_wform = get_all_signals()
+    % BPSK; QPSK; 16QAM; 64QAM
 
-t = (0:1/fs:.1);
-continue_signal = sin(2*pi*30*t) + 2*sin(2*pi*60*t);
+    psdu_length = 10;
+    wifi_0_wform = generate_wifi(mod=0, symbol_len=psdu_length);
+    wifi_1_wform = generate_wifi(mod=1, symbol_len=psdu_length);
+    wifi_2_wform = generate_wifi(mod=2, symbol_len=psdu_length);
+    wifi_3_wform = generate_wifi(mod=3, symbol_len=psdu_length);
+    wifi_4_wform = generate_wifi(mod=4, symbol_len=psdu_length);
+    wifi_5_wform = generate_wifi(mod=5, symbol_len=psdu_length);
+    wifi_6_wform = generate_wifi(mod=6, symbol_len=psdu_length);
+    wifi_7_wform = generate_wifi(mod=7, symbol_len=psdu_length);
 
-fm_signal = fmmod(continue_signal, fc, fs, fDev);
-fm_fig = figure();
-plot(t, fm_signal)
-hold on
-plot(t, continue_signal)
-legend("Modulated Signal", "Original Signal")
+    % 4PAM
+    pam_mod = 4;
+    pam_num_symbol = 100;
+    pam_wform = generate_pam(mod=pam_mod, num_symbol=pam_num_symbol);
 
+    % CPFSK
+    cpfsk_mod = 8;
+    cpfsk_spf = 115;
+    cpfsk_wform = generate_cpfsk(spf=cpfsk_spf, mod=cpfsk_mod);
 
-%% 4PAM
-M = 4;          % Modulation order
-input_symbol = randi([0 M-1], 100, 1);
-pam_siangl = pammod(input_symbol, M);
-
-pam_fig = figure();
-plot(real(pam_siangl))
-hold on
-plot(imag(pam_siangl))
-
-%% CPFSK
-M = 8;          % Modulation order
-k = log2(M);    % Bits per Symbol
-spf = 115;      % Symbol per frame
-input_bits = randi([0 1], k*spf, 1);
-
-cpfskMod = comm.CPFSKModulator(M, "BitInput", true, "SymbolMapping", "Gray");
-cpfsk_signal = cpfskMod(input_bits);
-
-cpfsk_fig = figure();
-plot(real(cpfsk_signal))
-hold on
-plot(imag(cpfsk_signal))
+    % FSK
+    fsk_samp_rate = 32;
+    fm_sps = 8;
+    fm_mod = 4;
+    fm_freqsep = 8;
+    fm_data_length = 10;
+    fsk_wform = generate_fsk(fs=fsk_samp_rate, sps=fm_sps, mod=fm_mod, freqsep=fm_freqsep, data_length=fm_data_length);
 
 
-%% AM-SSB; AM-DSB
-% http://hyperphysics.phy-astr.gsu.edu/hbase/Audio/radio.html
-fs = 44.1e3;           % Sample Frequency
-fc = 550e3;           % Carrier Frequency 540k - 1600k Hz
-t = (0:1/fs:.01);
-continue_signal = sin(2*pi*30*t) + 2*sin(2*pi*60*t);
+    % AM-SSB; AM-DSB
+    am_fc = 550e3;
+    am_fs = 44.1e3;
 
-s_t = continue_signal;
-h_t = imag(hilbert(continue_signal));
-s_lsb = s_t.*cos(2*pi*fc*t) - h_t.*sin(2*pi*fc*t);
-s_usb = s_t.*cos(2*pi*fc*t) + h_t.*sin(2*pi*fc*t);
-s_dsb = s_lsb + s_usb;
+    am_t = (0:1/am_fs:.01);
+    continue_signal = sin(2*pi*30*am_t) + 2*sin(2*pi*60*am_t);
+    [am_l_wform, am_u_wform, am_d_wform] = generate_am(continue_signal, fc=am_fc, fs=am_fs);
 
-am_fig = figure();
-plot(real(s_lsb))
-hold on
-plot(real(s_usb))
-hold on
-plot(s_dsb)
-legend("AM-LowerSide", "AM-UpperSide", "AM-DSB")
+    % WBFM
+    fm_fs = 1e3;           % Sample Frequency
+    fm_fc = 200;           % Carrier Frequency 88.1 MHz - 108.1 MHz
+    fm_fDev = 50;          % Frequency Deviation (Hz)/Modulation index
+    fm_t = (0:1/fm_fs:.1);
+    continue_signal = sin(2*pi*30*fm_t) + 2*sin(2*pi*60*fm_t);
+    wbfm_wform = generate_wbfm(continue_signal, fc=fm_fc, fs=fm_fs, fDev=fm_fDev);
+
+    % Collect all the waveforms.
+    ttl_wform = {};
+    ttl_wform.wifi_0 = wifi_0_wform;
+    ttl_wform.wifi_1 = wifi_1_wform;
+    ttl_wform.wifi_2 = wifi_2_wform;
+    ttl_wform.wifi_3 = wifi_3_wform;
+    ttl_wform.wifi_4 = wifi_4_wform;
+    ttl_wform.wifi_5 = wifi_5_wform;
+    ttl_wform.wifi_6 = wifi_6_wform;
+    ttl_wform.wifi_7 = wifi_7_wform;
+    ttl_wform.pam = pam_wform;
+    ttl_wform.cpfsk = cpfsk_wform;
+    ttl_wform.fsk = fsk_wform;
+    ttl_wform.am_l = am_l_wform;
+    ttl_wform.am_u = am_u_wform;
+    ttl_wform.am_d = am_d_wform;
+    ttl_wform.wbfm = wbfm_wform;
+end
 
 
-% am_dsb = ammod(continue_signal, fc, fs);
-% am_ssb = ssbmod(continue_signal, fc, fs);
-% 
-% am_fig = figure();
-% plot(am_dsb)
-% hold on
-% plot(am_ssb)
-% legend("AM-DSB", "AM-SSB")
 
 
-%%
-M = 4;          % Modulation order
-freqsep = 8;    % Frequency Separation (Hz)
-sps = 8;        % Number of sample per symbol
-samp_rate = 32; % Sample rate (Hz)
 
-input_symbol = randi([0 M-1], 10, 1);
 
-y = fskmod(input_symbol, M, freqsep, sps, samp_rate);
 
-fsk_fig = figure();
-plot(real(y))
-hold on
-plot(imag(y))
-xlim([1, 80])
+
+
+
+
+
+
+
+
