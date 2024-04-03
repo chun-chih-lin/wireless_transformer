@@ -3,10 +3,11 @@ clear
 close all
 
 %%
+% https://en.wikipedia.org/wiki/DFT_matrix
+%%
 dft_matrix = dftmtx(64);
 
 save_fig_folder = "./results/";
-
 
 sync_long = get_sync_long();
 
