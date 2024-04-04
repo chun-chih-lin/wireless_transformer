@@ -4,7 +4,7 @@ close all
 %%
 addpath(genpath('./wireless_signal/'))
 
-set(0,'DefaultFigureVisible','off')
+set(0,'DefaultFigureVisible','on')
 
 ttl_waveform = get_all_signals();
 ttl_waveform_name = fieldnames(ttl_waveform);
@@ -16,16 +16,16 @@ for n_mod = 1:numel(ttl_waveform_name)
     % [apply_ret, r] = apply_autocorr(waveform(481:480+64), 63, 1);
     % show_autocorr(r, mod_name)
     
-    % fig = figure();
-    % ax1 = subplot(4, 2, 1);
-    % ax2 = subplot(4, 2, 3);
-    % ax3 = subplot(4, 2, 5);
-    % ax4 = subplot(4, 2, 7);
-    % ax5 = subplot(4, 2, [2, 4, 6, 8]);
+    fig = figure();
+    ax1 = subplot(4, 2, 1);
+    ax2 = subplot(4, 2, 3);
+    ax3 = subplot(4, 2, 5);
+    ax4 = subplot(4, 2, 7);
+    ax5 = subplot(4, 2, [2, 4, 6, 8]);
     
     start_sample = 481;
     step_size = 4;
-    steps = 4:step_size:16;
+    steps = 0:step_size:64;
 
     color_steps = jet(length(steps));
 
@@ -48,6 +48,8 @@ for n_mod = 1:numel(ttl_waveform_name)
             [apply_ret, r, method_name] = apply_autocorr(shift_waveform, 63, 5);
             save_filename = strcat(method_name, "_", mod_name, "_Shifted_", num2str(step), '.png');
             auto_corr_fig = show_autocorr(r, strcat(mod_name, "_Shifted_", num2str(step)));
+
+            % Save Figures
             % saveas(auto_corr_fig, strcat('./results/Correlation/', save_filename))
         end
 
@@ -100,11 +102,16 @@ for n_mod = 1:numel(ttl_waveform_name)
         ylim([-15, 15])
         grid on
         title("Constellation")
+
+        
         % break
     end
 
-    % sgtitle(mod_name, Interpreter="none")
-    % fig.Position = [100, 100, 1200, 500];
+    sgtitle(mod_name, Interpreter="none")
+    fig.Position = [100, 100, 1200, 500];
+
+    save_filename = strcat("DFT_", mod_name, "_Shifted_", num2str(step), '.png');
+    % saveas(fig, strcat('./results/DFT/', save_filename))
 
     % break
 end
