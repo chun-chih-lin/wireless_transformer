@@ -2,6 +2,8 @@ clc
 clear
 close all
 %%
+%  More transformation: https://en.wikipedia.org/wiki/DFT_matrix
+%%
 addpath(genpath('./wireless_signal/'))
 
 dft_matrix = dftmtx(64);
