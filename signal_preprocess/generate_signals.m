@@ -6,13 +6,17 @@ close all
 %%
 addpath(genpath('./wireless_signal/'))
 
-dft_matrix = dftmtx(64);
+set(0,'DefaultFigureVisible','on')
+
 ttl_waveform = get_all_signals();
 ttl_waveform_name = fieldnames(ttl_waveform);
 
-for n_mod = 9:numel(ttl_waveform_name)
+for n_mod = 1:numel(ttl_waveform_name)
     mod_name = ttl_waveform_name{n_mod};
     waveform = ttl_waveform.(mod_name);
+
+    % [apply_ret, r] = apply_autocorr(waveform(481:480+64), 63, 1);
+    % show_autocorr(r, mod_name)
     
     fig = figure();
     ax1 = subplot(4, 2, 1);
@@ -28,6 +32,7 @@ for n_mod = 9:numel(ttl_waveform_name)
     color_steps = jet(length(steps));
 
     for step_i = 1:length(steps)
+        
         step = steps(step_i);
 
         marker_size = 6;
@@ -39,8 +44,19 @@ for n_mod = 9:numel(ttl_waveform_name)
         s = start_sample + step;
         e = s + d_len - 1;
         shift_waveform = waveform(s:e);
-        dft_ret = row_x_matrix(shift_waveform, dft_matrix);
 
+        %% Correlation Section
+        if 0
+            [apply_ret, r, method_name] = apply_autocorr(shift_waveform, 63, 5);
+            save_filename = strcat(method_name, "_", mod_name, "_Shifted_", num2str(step), '.png');
+            auto_corr_fig = show_autocorr(r, strcat(mod_name, "_Shifted_", num2str(step)));
+
+            % Save Figures
+            % saveas(auto_corr_fig, strcat('./results/Correlation/', save_filename))
+        end
+
+        %% DFT Section
+        dft_ret = apply_dft(shift_waveform);
         correlation = frequency_correlation(abs(dft_ret));
 
         axes(ax1)
@@ -88,17 +104,79 @@ for n_mod = 9:numel(ttl_waveform_name)
         ylim([-15, 15])
         grid on
         title("Constellation")
+
+        
         % break
     end
 
     sgtitle(mod_name, Interpreter="none")
-    
     fig.Position = [100, 100, 1200, 500];
+
+    save_filename = strcat("DFT_", mod_name, "_Shifted_", num2str(step), '.png');
+    % saveas(fig, strcat('./results/DFT/', save_filename))
+
     % break
 end
 
 
-%% 
+%% Functions
+% ========== auto correlations ========================
+function fig = show_autocorr(r, title_name)
+    fig = figure();
+    subplot(2, 2, 1)
+    surf(real(r), 'EdgeColor', 'none')
+    axis square
+    title("Real")
+    colorbar
+    view(2)
+
+    subplot(2, 2, 2)
+    surf(imag(r), 'EdgeColor', 'none')
+    axis square
+    title("Imag")
+    colorbar
+    view(2)
+    
+    subplot(2, 2, 3)
+    surf(abs(r), 'EdgeColor', 'none')
+    axis square
+    title("Absolute")
+    colorbar
+    view(2)
+
+    subplot(2, 2, 4)
+    surf(angle(r), 'EdgeColor', 'none')
+    axis square
+    title("Phase")
+    colorbar
+    view(2)
+
+    fig.Position = [100, 200, 800, 600];
+    sgtitle(title_name, Interpreter="none")
+end
+
+function [y, r, method_name] = apply_autocorr(samples, m, method_index)
+    if method_index == 1
+        method_name = "autocorrelation";
+    elseif method_index == 2
+        method_name = "prewindowed";
+    elseif method_index == 3
+        method_name = "postwindowed";
+    elseif method_index == 4
+        method_name = "covariance";
+    else
+        method_name = "modified";
+    end
+    [y, r] = corrmtx(samples, m, method_name);
+end
+
+% =========== DFT =================================
+
+function y = apply_dft(samples)
+    dft_matrix = dftmtx(64);
+    y = row_x_matrix(samples, dft_matrix);
+end
+
 function y = frequency_correlation(f_ary)
     len_ary = length(f_ary);
     if mod(len_ary, 2) ~= 0
