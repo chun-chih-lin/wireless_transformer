@@ -11,7 +11,6 @@ if os.system("clear") != 0:
 
 import argparse
 parser = argparse.ArgumentParser(description='save torch experience file to npy.')
-parser.add_argument('-p', help='Parsing file Prefix. e.g., room_325_1m.')
 parser.add_argument('-s', help='source torch experience file directory.')
 parser.add_argument('-t', help='target npy file directory.')
 args = parser.parse_args()
@@ -25,9 +24,12 @@ def save_data_in_npy(src, tgt, filename):
     save_filename_pkl = filename + ".pkl"
     save_filename_mat = filename + ".mat"
 
+    if not os.path.exists(tgt):
+        os.mkdir(tgt)
+
     src_filename = f"{src}{filename}"
 
-    if os.path.isfile(src_filename):
+    if os.path.isfile(src + save_filename_mat):
         print("Already Exist")
         return
 
@@ -36,26 +38,30 @@ def save_data_in_npy(src, tgt, filename):
     dataset_dict = {
             "data": record_data
     }
-    with open(save_filename_pkl, "wb") as f:
+    
+    with open(tgt + save_filename_pkl, "wb") as f:
         pickle.dump(dataset_dict, f)
         pass
 
-    savemat(save_filename_mat, dataset_dict)
+    savemat(tgt + save_filename_mat, dataset_dict)
 
 
-def get_filenames_under_folder(src, prefix):
+def get_filenames_under_folder(src):
     mods = ["am_dsb", "am_ssb", "cpfsk", "fsk", "pam", "wbfm"]
     if os.path.isdir(src):
+        filename_list = []
         dir_list = os.listdir(src)
-        pattern = f"{prefix}.*"
-        filename_list = [f"{prefix}.{fn}" for fn in mods]
+        for filename in dir_list:
+            file_seq = filename.split(".")
+            if file_seq[-1] == "dat":
+                filename_list.append(filename)
 
         return filename_list
     else:
         return False
 
 def main(args):
-    file_list = get_filenames_under_folder(args.s, args.p)
+    file_list = get_filenames_under_folder(args.s)
     if file_list is False:
         print(f"Path: {args.s} is not a folder. Abort")
         exit()
@@ -66,10 +72,6 @@ def main(args):
 if __name__ == "__main__":
     if args.s is None:
         print("Need source directory")
-        exit()
-
-    if args.p is None:
-        print("Need parsing Prefix of files.")
         exit()
 
     if args.t is None:
