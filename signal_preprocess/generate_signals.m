@@ -11,9 +11,6 @@ set(0,'DefaultFigureVisible','on')
 ttl_waveform = get_all_signals();
 ttl_waveform_name = fieldnames(ttl_waveform);
 
-ammod()
-ssbmod()
-
 for n_mod = 1:numel(ttl_waveform_name)
     mod_name = ttl_waveform_name{n_mod};
     waveform = ttl_waveform.(mod_name);
