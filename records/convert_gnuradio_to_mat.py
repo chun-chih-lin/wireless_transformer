@@ -16,8 +16,7 @@ parser.add_argument('-t', help='target npy file directory.')
 args = parser.parse_args()
 
 
-
-def save_data_in_npy(src, tgt, filename):
+def save_data_in_mat(src, tgt, filename):
     print(f"Saving {filename} from folder: {src} to {tgt}")
     mod = filename.split(".")[-1]
     save_filename_npy = filename + ".npy"
@@ -39,10 +38,6 @@ def save_data_in_npy(src, tgt, filename):
             "data": record_data
     }
     
-    with open(tgt + save_filename_pkl, "wb") as f:
-        pickle.dump(dataset_dict, f)
-        pass
-
     savemat(tgt + save_filename_mat, dataset_dict)
 
 
@@ -67,7 +62,7 @@ def main(args):
         exit()
 
     for filename in file_list:
-        save_data_in_npy(args.s, args.t, filename)
+        save_data_in_mat(args.s, args.t, filename)
 
 if __name__ == "__main__":
     if args.s is None:
