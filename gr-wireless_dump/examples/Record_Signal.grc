@@ -66,7 +66,7 @@ blocks:
     start: '0'
     step: '0.01'
     stop: '1.0'
-    value: '.5'
+    value: '.65'
     widget: counter_slider
   states:
     bus_sink: false
@@ -91,7 +91,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: save_prefix + "." + save_mod + ".dat"
+    value: save_mod + ".dat"
   states:
     bus_sink: false
     bus_source: false
@@ -115,7 +115,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: save_folder + save_filename
+    value: save_folder + save_prefix + save_filename
   states:
     bus_sink: false
     bus_source: false
@@ -127,19 +127,139 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '"am_dsb"'
+    value: '"PAM4"'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1104, 60.0]
+    coordinate: [1304, 492.0]
     rotation: 0
     state: enabled
+- name: save_mod
+  id: variable
+  parameters:
+    comment: ''
+    value: '"BPSK"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1200, 172.0]
+    rotation: 0
+    state: disabled
+- name: save_mod
+  id: variable
+  parameters:
+    comment: ''
+    value: '"QPSK"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1200, 236.0]
+    rotation: 0
+    state: disabled
+- name: save_mod
+  id: variable
+  parameters:
+    comment: ''
+    value: '"8PSK"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1200, 300.0]
+    rotation: 0
+    state: disabled
+- name: save_mod
+  id: variable
+  parameters:
+    comment: ''
+    value: '"QAM16"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1200, 364.0]
+    rotation: 0
+    state: disabled
+- name: save_mod
+  id: variable
+  parameters:
+    comment: ''
+    value: '"QAM64"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1200, 428.0]
+    rotation: 0
+    state: disabled
+- name: save_mod
+  id: variable
+  parameters:
+    comment: ''
+    value: '"CPFSK"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1304, 172.0]
+    rotation: 0
+    state: disabled
+- name: save_mod
+  id: variable
+  parameters:
+    comment: ''
+    value: '"WBFM"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1304, 236.0]
+    rotation: 0
+    state: disabled
+- name: save_mod
+  id: variable
+  parameters:
+    comment: ''
+    value: '"AM-SSB"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1304, 300.0]
+    rotation: 0
+    state: disabled
+- name: save_mod
+  id: variable
+  parameters:
+    comment: ''
+    value: '"AM-DSB"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1304, 364.0]
+    rotation: 0
+    state: disabled
+- name: save_mod
+  id: variable
+  parameters:
+    comment: ''
+    value: '"GFSK"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1304, 428.0]
+    rotation: 0
+    state: disabled
 - name: save_prefix
   id: variable
   parameters:
     comment: ''
-    value: '"room_325_1m"'
+    value: '"RML2016.10a.Real/"'
   states:
     bus_sink: false
     bus_source: false
@@ -194,7 +314,7 @@ blocks:
     bus_structure: null
     coordinate: [760, 468.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_freq_sink_x_0
   id: qtgui_freq_sink_x
   parameters:
@@ -812,6 +932,7 @@ blocks:
 
 connections:
 - [blocks_head_0, '0', blocks_file_sink_0, '0']
+- [uhd_usrp_source_0, '0', blocks_file_sink_0, '0']
 - [uhd_usrp_source_0, '0', blocks_head_0, '0']
 - [uhd_usrp_source_0, '0', qtgui_freq_sink_x_0, '0']
 - [uhd_usrp_source_0, '0', qtgui_time_sink_x_0, '0']

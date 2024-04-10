@@ -63,21 +63,21 @@ class Record_Signal(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.save_prefix = save_prefix = "room_325_1m"
-        self.save_mod = save_mod = "am_dsb"
+        self.save_mod = save_mod = "PAM4"
+        self.save_prefix = save_prefix = "RML2016.10a.Real/"
         self.save_folder = save_folder = "/home/chunchi/Desktop/wireless_transformer/records/"
-        self.save_filename = save_filename = save_prefix + "." + save_mod
+        self.save_filename = save_filename = save_mod + ".dat"
         self.ttl_save_sample = ttl_save_sample = 10e4
-        self.save_full_filename = save_full_filename = save_folder + save_filename
+        self.save_full_filename = save_full_filename = save_folder + save_prefix + save_filename
         self.samp_rate = samp_rate = 400e3
-        self.gain = gain = .5
+        self.gain = gain = .65
         self.carrier_freq = carrier_freq = 2400e6
 
         ##################################################
         # Blocks
         ##################################################
 
-        self._gain_range = qtgui.Range(0, 1.0, 0.01, .5, 200)
+        self._gain_range = qtgui.Range(0, 1.0, 0.01, .65, 200)
         self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._gain_win)
         self._carrier_freq_range = qtgui.Range(2400e6, 3800e6, 5e6, 2400e6, 200)
@@ -190,7 +190,6 @@ class Record_Signal(gr.top_block, Qt.QWidget):
 
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
-        self.blocks_head_0 = blocks.head(gr.sizeof_gr_complex*1, int(ttl_save_sample))
         self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_gr_complex*1, save_full_filename, False)
         self.blocks_file_sink_0.set_unbuffered(False)
 
@@ -198,8 +197,7 @@ class Record_Signal(gr.top_block, Qt.QWidget):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.blocks_head_0, 0), (self.blocks_file_sink_0, 0))
-        self.connect((self.uhd_usrp_source_0, 0), (self.blocks_head_0, 0))
+        self.connect((self.uhd_usrp_source_0, 0), (self.blocks_file_sink_0, 0))
         self.connect((self.uhd_usrp_source_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.uhd_usrp_source_0, 0), (self.qtgui_time_sink_x_0, 0))
 
@@ -212,40 +210,39 @@ class Record_Signal(gr.top_block, Qt.QWidget):
 
         event.accept()
 
-    def get_save_prefix(self):
-        return self.save_prefix
-
-    def set_save_prefix(self, save_prefix):
-        self.save_prefix = save_prefix
-        self.set_save_filename(self.save_prefix + "." + self.save_mod)
-
     def get_save_mod(self):
         return self.save_mod
 
     def set_save_mod(self, save_mod):
         self.save_mod = save_mod
-        self.set_save_filename(self.save_prefix + "." + self.save_mod)
+        self.set_save_filename(self.save_mod + ".dat")
+
+    def get_save_prefix(self):
+        return self.save_prefix
+
+    def set_save_prefix(self, save_prefix):
+        self.save_prefix = save_prefix
+        self.set_save_full_filename(self.save_folder + self.save_prefix + self.save_filename)
 
     def get_save_folder(self):
         return self.save_folder
 
     def set_save_folder(self, save_folder):
         self.save_folder = save_folder
-        self.set_save_full_filename(self.save_folder + self.save_filename)
+        self.set_save_full_filename(self.save_folder + self.save_prefix + self.save_filename)
 
     def get_save_filename(self):
         return self.save_filename
 
     def set_save_filename(self, save_filename):
         self.save_filename = save_filename
-        self.set_save_full_filename(self.save_folder + self.save_filename)
+        self.set_save_full_filename(self.save_folder + self.save_prefix + self.save_filename)
 
     def get_ttl_save_sample(self):
         return self.ttl_save_sample
 
     def set_ttl_save_sample(self, ttl_save_sample):
         self.ttl_save_sample = ttl_save_sample
-        self.blocks_head_0.set_length(int(self.ttl_save_sample))
 
     def get_save_full_filename(self):
         return self.save_full_filename
