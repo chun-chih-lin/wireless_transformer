@@ -3,21 +3,27 @@ clear
 close all
 %%
 mod_list = ["BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "CPFSK", "WBFM", "AM-SSB", "AM-DSB", "GFSK", "PAM4"];
-mod_list = ["AM-SSB", "AM-DSB", "WBFM"];
+% mod_list = ["AM-SSB", "AM-DSB", "WBFM", "PAM4"];
 
-data_folder = "D:\sharefolder\wireless_transformer\records\RML2016.10a\";
+data_folder = "..\RML2016.10a\";
 % data_folder = ".\";
 
 snr_lvl = "18";
+
+M = 64;
+y = qammod((0:M-1), M)/7
+if 1
+    return
+end
 
 for mod = mod_list
     % filename = strcat('Trimmed.', mod, '.mat');
     filename = strcat(mod, '.', snr_lvl, '.mat');
     loaddata = load(strcat(data_folder, filename)).data;
 
-    figure()
+    time_fig = figure();
     subplot(2, 1, 1)
-    for p = 64:70
+    for p = 10:15
         plot(squeeze(loaddata(p, 1, :)), 'DisplayName', num2str(p))
         hold on
     end
@@ -25,18 +31,20 @@ for mod = mod_list
     ylim([-0.02, 0.02])
 
     subplot(2, 1, 2)
-    for p = 64:70
+    for p = 10:15
         plot(squeeze(loaddata(p, 2, :)), 'DisplayName', num2str(p))
         hold on
     end
     legend
     ylim([-0.02, 0.02])
+    sgtitle(filename, Interpreter="none")
+    time_fig.Position = [100, 100, 1000, 600];
 
-    if 0
+    if 1
         continue
     end
     % rand_i = randi([1, size(loaddata, 1)], 1, 1);
-    rand_i = 66;
+    rand_i = 30;
 
     len_sig = 128;
 
@@ -46,7 +54,7 @@ for mod = mod_list
 
     %% Time Correlation
     % for s_i = 1:len_sig/2
-    for s_i = 1:3
+    for s_i = 50:53
         s = s_i;
         e = s_i + len_sig/2 - 1;
         [apply_ret, r, method_name] = apply_autocorr(rx_sig(s:e), len_sig/2 - 1, 5);
