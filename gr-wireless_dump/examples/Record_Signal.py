@@ -63,15 +63,16 @@ class Record_Signal(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.save_mod = save_mod = "PAM4"
-        self.save_prefix = save_prefix = "RML2016.10a.Real/"
+        self.save_mod = save_mod = "BT-GFSK-S8Coding"
+        self.save_prefix = save_prefix = "RML2016.10a.ReGen/"
         self.save_folder = save_folder = "/home/chunchi/Desktop/wireless_transformer/records/"
         self.save_filename = save_filename = save_mod + ".dat"
-        self.ttl_save_sample = ttl_save_sample = 10e4
+        self.ttl_save_sample = ttl_save_sample = 20e3
         self.save_full_filename = save_full_filename = save_folder + save_prefix + save_filename
-        self.samp_rate = samp_rate = 400e3
+        self.sample_per_input = sample_per_input = 128
+        self.samp_rate = samp_rate = 20e6
         self.gain = gain = .65
-        self.carrier_freq = carrier_freq = 2400e6
+        self.carrier_freq = carrier_freq = 2405e6
 
         ##################################################
         # Blocks
@@ -80,7 +81,7 @@ class Record_Signal(gr.top_block, Qt.QWidget):
         self._gain_range = qtgui.Range(0, 1.0, 0.01, .65, 200)
         self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._gain_win)
-        self._carrier_freq_range = qtgui.Range(2400e6, 3800e6, 5e6, 2400e6, 200)
+        self._carrier_freq_range = qtgui.Range(2400e6, 3800e6, 5e6, 2405e6, 200)
         self._carrier_freq_win = qtgui.RangeWidget(self._carrier_freq_range, self.set_carrier_freq, "'carrier_freq'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._carrier_freq_win)
         self.uhd_usrp_source_0 = uhd.usrp_source(
@@ -98,7 +99,7 @@ class Record_Signal(gr.top_block, Qt.QWidget):
         self.uhd_usrp_source_0.set_antenna("RX2", 0)
         self.uhd_usrp_source_0.set_normalized_gain(gain, 0)
         self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
-            4096, #size
+            10240, #size
             samp_rate, #samp_rate
             "", #name
             1, #number of inputs
@@ -190,6 +191,7 @@ class Record_Signal(gr.top_block, Qt.QWidget):
 
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
+        self.blocks_head_0 = blocks.head(gr.sizeof_gr_complex*1, (int(ttl_save_sample*sample_per_input)))
         self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_gr_complex*1, save_full_filename, False)
         self.blocks_file_sink_0.set_unbuffered(False)
 
@@ -197,9 +199,10 @@ class Record_Signal(gr.top_block, Qt.QWidget):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.uhd_usrp_source_0, 0), (self.blocks_file_sink_0, 0))
-        self.connect((self.uhd_usrp_source_0, 0), (self.qtgui_freq_sink_x_0, 0))
-        self.connect((self.uhd_usrp_source_0, 0), (self.qtgui_time_sink_x_0, 0))
+        self.connect((self.blocks_head_0, 0), (self.blocks_file_sink_0, 0))
+        self.connect((self.blocks_head_0, 0), (self.qtgui_freq_sink_x_0, 0))
+        self.connect((self.blocks_head_0, 0), (self.qtgui_time_sink_x_0, 0))
+        self.connect((self.uhd_usrp_source_0, 0), (self.blocks_head_0, 0))
 
 
     def closeEvent(self, event):
@@ -243,6 +246,7 @@ class Record_Signal(gr.top_block, Qt.QWidget):
 
     def set_ttl_save_sample(self, ttl_save_sample):
         self.ttl_save_sample = ttl_save_sample
+        self.blocks_head_0.set_length((int(self.ttl_save_sample*self.sample_per_input)))
 
     def get_save_full_filename(self):
         return self.save_full_filename
@@ -250,6 +254,13 @@ class Record_Signal(gr.top_block, Qt.QWidget):
     def set_save_full_filename(self, save_full_filename):
         self.save_full_filename = save_full_filename
         self.blocks_file_sink_0.open(self.save_full_filename)
+
+    def get_sample_per_input(self):
+        return self.sample_per_input
+
+    def set_sample_per_input(self, sample_per_input):
+        self.sample_per_input = sample_per_input
+        self.blocks_head_0.set_length((int(self.ttl_save_sample*self.sample_per_input)))
 
     def get_samp_rate(self):
         return self.samp_rate

@@ -9,6 +9,8 @@ __pycache__/
 
 ~$*.pptx
 
+IgnoreMAT*/
+
 *.pkl
 
 *.tar

@@ -66,7 +66,7 @@ class WIFI_RX(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.window_size = window_size = 48
-        self.threshold = threshold = 0.01
+        self.threshold = threshold = 0.15
         self.sync_length = sync_length = 320
         self.sdr_addr = sdr_addr = "addr=192.168.40.2"
         self.samp_rate = samp_rate = 20e6
@@ -83,7 +83,7 @@ class WIFI_RX(gr.top_block, Qt.QWidget):
         # Blocks
         ##################################################
 
-        self._threshold_range = qtgui.Range(0.0, 20, 0.01, 0.01, 200)
+        self._threshold_range = qtgui.Range(0.0, 20, 0.01, 0.15, 200)
         self._threshold_win = qtgui.RangeWidget(self._threshold_range, self.set_threshold, "Threshold for Saving", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._threshold_win, 2, 1, 1, 2)
         for r in range(2, 3):

@@ -355,7 +355,7 @@ blocks:
     start: '0.0'
     step: '0.01'
     stop: '20'
-    value: '0.01'
+    value: '0.15'
     widget: counter_slider
   states:
     bus_sink: false
