@@ -6,7 +6,7 @@ set(0,'DefaultFigureVisible','on')
 
 root_folder_name = "./wireless_data/";
 dataset_folder = strcat("Dataset_", "2024_03_26_19_49_37", "/");
-dataset_folder = strcat("Dataset_", "2024_03_26_20_18_56", "/");
+% dataset_folder = strcat("Dataset_", "2024_03_26_20_18_56", "/");
 
 json_info = read_patch_info(strcat(root_folder_name, dataset_folder));
 json_fieldnames = fieldnames(json_info);
@@ -31,33 +31,41 @@ for item_i = 1:numel(json_fieldnames)
 
     for sample_i = 1:size(dataset, 1)
 
-        fig = figure();
         complex_data = dataset(sample_i, :);
-        
-        subplot(2, 2, [2, 4])
-        for step_i = 1:length(steps)
-            step = steps(step_i);
 
-            d_len = 64;
-            s = start_sample + step;
-            e = s + d_len - 1;
-
-            dft_ret = apply_dft(complex_data(s:e));
-            plot(real(dft_ret), imag(dft_ret), "o", 'Color', color_steps(step_i, :))
-            hold on
-        end
-        axis square
-
-        subplot(2, 2, 1)
-        plot(abs(dft_ret))
-        xlim([1, 64])
-
-        subplot(2, 2, 3)
-        plot(real(complex_data(4:67)))
+        figure();
+        plot(real(complex_data(1:128)))
         hold on
-        plot(imag(complex_data(4:67)))
+        plot(imag(complex_data(1:128)))
+        break
 
-        sgtitle(json_info.(data_prefix).MCS)
+
+        % fig = figure();
+        % subplot(2, 2, [2, 4])
+        % for step_i = 1:length(steps)
+        %     step = steps(step_i);
+        % 
+        %     d_len = 64;
+        %     s = start_sample + step;
+        %     e = s + d_len - 1;
+        % 
+        %     dft_ret = apply_dft(complex_data(s:e));
+        %     plot(real(dft_ret), imag(dft_ret), "o", 'Color', color_steps(step_i, :))
+        %     hold on
+        % end
+        % axis square
+        % 
+        % subplot(2, 2, 1)
+        % plot(abs(dft_ret))
+        % xlim([1, 64])
+        % 
+        % subplot(2, 2, 3)
+        % plot(real(complex_data(4:67)))
+        % hold on
+        % plot(imag(complex_data(4:67)))
+        % 
+        % sgtitle(json_info.(data_prefix).MCS)
+        
 
 
         %% 

@@ -2,7 +2,7 @@ clc
 clear
 close all
 %%
-mod_list = ["BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "CPFSK", "WBFM", "AM-SSB", "AM-DSB", "GFSK", "PAM4"];
+mod_list = ["PAM4", "BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "CPFSK", "GFSK", "AM-SSB", "AM-DSB", "WBFM"];
 % mod_list = ["AM-SSB", "AM-DSB", "WBFM", "PAM4"];
 
 data_folder = "..\RML2016.10a\";
@@ -10,68 +10,91 @@ data_folder = "..\RML2016.10a\";
 
 snr_lvl = "18";
 
-M = 64;
-y = qammod((0:M-1), M)/7
-if 1
-    return
-end
+Nsym = 10;           % Filter span in symbol durations
+beta = 0.35;         % Roll-off factor
+sps = 8;    % Upsampling factor
+
+rxfilter = comm.RaisedCosineReceiveFilter( ...
+    RolloffFactor=beta, ...
+    FilterSpanInSymbols=Nsym, ...
+    InputSamplesPerSymbol=sps, ...
+    DecimationFactor=sps);
 
 for mod = mod_list
     % filename = strcat('Trimmed.', mod, '.mat');
     filename = strcat(mod, '.', snr_lvl, '.mat');
     loaddata = load(strcat(data_folder, filename)).data;
 
-    time_fig = figure();
-    subplot(2, 1, 1)
-    for p = 10:15
-        plot(squeeze(loaddata(p, 1, :)), 'DisplayName', num2str(p))
-        hold on
-    end
-    legend
-    ylim([-0.02, 0.02])
+    % ori_raw_fig = figure();
+    % subplot(2, 1, 1)
+    % for p = 10:15
+    %     plot(squeeze(loaddata(p, 1, :)), 'DisplayName', num2str(p))
+    %     hold on
+    % end
+    % legend
+    % ylim([-0.02, 0.02])
+    % 
+    % subplot(2, 1, 2)
+    % for p = 10:15
+    %     plot(squeeze(loaddata(p, 2, :)), 'DisplayName', num2str(p))
+    %     hold on
+    % end
+    % legend
+    % ylim([-0.02, 0.02])
+    % sgtitle(filename, Interpreter="none")
+    % ori_raw_fig.Position = [100, 100, 1000, 600];
 
-    subplot(2, 1, 2)
-    for p = 10:15
-        plot(squeeze(loaddata(p, 2, :)), 'DisplayName', num2str(p))
-        hold on
-    end
-    legend
-    ylim([-0.02, 0.02])
-    sgtitle(filename, Interpreter="none")
-    time_fig.Position = [100, 100, 1000, 600];
-
-    if 1
-        continue
-    end
-    % rand_i = randi([1, size(loaddata, 1)], 1, 1);
-    rand_i = 30;
+    rand_i = randi([1, size(loaddata, 1)], 1, 1);
+    % rand_i = 30;
 
     len_sig = 128;
 
     rx_sig = loaddata(rand_i, 1, 1:len_sig) + 1j*loaddata(rand_i, 2, 1:len_sig);
     rx_sig = squeeze(rx_sig).';
+
+    
+
     
 
     %% Time Correlation
     % for s_i = 1:len_sig/2
-    for s_i = 50:53
-        s = s_i;
-        e = s_i + len_sig/2 - 1;
-        [apply_ret, r, method_name] = apply_autocorr(rx_sig(s:e), len_sig/2 - 1, 5);
-        auto_corr_fig = show_autocorr(r, strcat(filename, '.Shift.', num2str(s_i)));
-    end
+    % for s_i = 50:53
+    %     s = s_i;
+    %     e = s_i + len_sig/2 - 1;
+    %     [apply_ret, r, method_name] = apply_autocorr(rx_sig(s:e), len_sig/2 - 1, 5);
+    %     auto_corr_fig = show_autocorr(r, strcat("Time Correlation. ", filename, '.Shift.', num2str(s_i)));
+    % end
 
-    if 0
-        continue
-    end
+    
+
+    % filter_sig = rxfilter(real(rx_sig));
+    % filter_sig = rxfilter(imag(rx_sig));
+    % 
+    % filename
+    % size(rx_sig)
+    % size(filter_sig)
+    % rrc_fig = figure();
+    % for i = 1:size(filter_sig, 1)
+    %     plot(real(filter_sig(i, :)))
+    %     hold on
+    % end
+    % title(filename, Interpreter="none")
+    % 
+    % if 1
+    %     continue
+    % end
+
+
     %% DFT
     correlation = zeros(1, len_sig/2);
+    ttl_dft_ret = zeros(len_sig/2, len_sig/2);
     for s_i = 1:len_sig/2
         s = s_i;
         e = s_i + len_sig/2 - 1;
     
         [dft_ret, dft_r] = apply_dft(rx_sig(s:e));
         correlation(s_i) = frequency_correlation(abs(dft_ret));
+        ttl_dft_ret(s_i, :) = dft_ret;
     end
 
     fig = figure();
@@ -89,15 +112,24 @@ for mod = mod_list
     bar(correlation)
     ylim([0.5, 1.1])
 
-    max_amp = max(max(abs(real(rx_sig))), max(abs(imag(rx_sig))));
+    max_amp = max(max(abs(real(ttl_dft_ret)), [], 'all'), max(abs(imag(ttl_dft_ret)), [], 'all'));
     subplot(3, 2, [2, 4, 6])
-    plot(real(rx_sig), imag(rx_sig), '.')
+
+    step_size = 4;
+    color_steps = winter(len_sig/2/step_size);
+    
+    for s_i = 1:step_size:len_sig/2
+        plot(real(ttl_dft_ret(s_i, :)), imag(ttl_dft_ret(s_i, :)), '.', 'Color', color_steps((s_i+step_size-1)/step_size, :))
+        hold on
+    end
+    % plot(real(rx_sig), imag(rx_sig), '.')
     axis square
     xlim([-1.1*max_amp, 1.1*max_amp])
     ylim([-1.1*max_amp, 1.1*max_amp])
 
-    sgtitle(filename, Interpreter="none")
+    sgtitle(strcat("pkt: ", num2str(rand_i), '. ', filename), Interpreter="none")
     fig.Position = [100, 100, 800, 400];
+    % break
 
 end
 
