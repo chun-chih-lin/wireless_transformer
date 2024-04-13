@@ -76,7 +76,7 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
         self.out_buf_size = out_buf_size = 96000
         self.num_message = num_message = 10
         self.lo_offset = lo_offset = 0
-        self.interval = interval = 300
+        self.interval = interval = 10
         self.freq = freq = 5170000000
         self.encoding = encoding = 0
         self.custom_freq = custom_freq = 2900e6
@@ -107,7 +107,7 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
         self._pdu_length_range = qtgui.Range(0, 1500, 1, 10, 200)
         self._pdu_length_win = qtgui.RangeWidget(self._pdu_length_range, self.set_pdu_length, "'pdu_length'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._pdu_length_win)
-        self._num_message_range = qtgui.Range(1, 2000, 1, 10, 200)
+        self._num_message_range = qtgui.Range(1, 20000, 1, 10, 200)
         self._num_message_win = qtgui.RangeWidget(self._num_message_range, self.set_num_message, "'num_message'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._num_message_win)
         # Create the options list
@@ -126,7 +126,7 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
             lambda i: self.set_lo_offset(self._lo_offset_options[i]))
         # Create the radio buttons
         self.top_layout.addWidget(self._lo_offset_tool_bar)
-        self._interval_range = qtgui.Range(10, 1000, 1, 300, 200)
+        self._interval_range = qtgui.Range(10, 1000, 1, 10, 200)
         self._interval_win = qtgui.RangeWidget(self._interval_range, self.set_interval, "'interval'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._interval_win)
         # Create the options list

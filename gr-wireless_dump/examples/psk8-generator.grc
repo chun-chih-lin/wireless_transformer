@@ -11,7 +11,7 @@ options:
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: am_ssb_generator
+    id: psk8_generator
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -33,16 +33,123 @@ options:
     state: enabled
 
 blocks:
-- name: audio_source_sampling_rate
-  id: variable
+- name: BPSK
+  id: variable_constellation
   parameters:
     comment: ''
-    value: 44.1e3
+    const_points: '[-1-1j, -1+1j, 1+1j, 1-1j]'
+    dims: '1'
+    normalization: digital.constellation.AMPLITUDE_NORMALIZATION
+    npwr: '1.0'
+    precision: '8'
+    rot_sym: '4'
+    soft_dec_lut: None
+    sym_map: '[0, 1, 3, 2]'
+    type: bpsk
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 20.0]
+    coordinate: [152, 348.0]
+    rotation: 0
+    state: enabled
+- name: PSK8
+  id: variable_constellation
+  parameters:
+    comment: ''
+    const_points: '[-1-1j, -1+1j, 1+1j, 1-1j]'
+    dims: '1'
+    normalization: digital.constellation.AMPLITUDE_NORMALIZATION
+    npwr: '1.0'
+    precision: '8'
+    rot_sym: '4'
+    soft_dec_lut: None
+    sym_map: '[0, 1, 3, 2]'
+    type: 8psk
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [496, 348.0]
+    rotation: 0
+    state: enabled
+- name: QAM16
+  id: variable_constellation
+  parameters:
+    comment: ''
+    const_points: '[-1-1j, -1+1j, 1+1j, 1-1j]'
+    dims: '1'
+    normalization: digital.constellation.AMPLITUDE_NORMALIZATION
+    npwr: '1.0'
+    precision: '8'
+    rot_sym: '4'
+    soft_dec_lut: None
+    sym_map: '[0, 1, 3, 2]'
+    type: 16qam
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [152, 428.0]
+    rotation: 0
+    state: enabled
+- name: QAM64
+  id: variable_constellation
+  parameters:
+    comment: ''
+    const_points: '[-1.0000 + 1.0000j,  -1.0000 + 0.7143j,  -1.0000 + 0.1429j,  -1.0000
+      + 0.4286j,  -1.0000 - 1.0000j,  -1.0000 - 0.7143j,  -1.0000 - 0.1429j,  -1.0000
+      - 0.4286j,  -0.7143 + 1.0000j,  -0.7143 + 0.7143j,  -0.7143 + 0.1429j,  -0.7143
+      + 0.4286j,  -0.7143 - 1.0000j,  -0.7143 - 0.7143j,  -0.7143 - 0.1429j,  -0.7143
+      - 0.4286j,  -0.1429 + 1.0000j,  -0.1429 + 0.7143j,  -0.1429 + 0.1429j,  -0.1429
+      + 0.4286j,  -0.1429 - 1.0000j,  -0.1429 - 0.7143j,  -0.1429 - 0.1429j,  -0.1429
+      - 0.4286j,  -0.4286 + 1.0000j,  -0.4286 + 0.7143j,  -0.4286 + 0.1429j,  -0.4286
+      + 0.4286j,  -0.4286 - 1.0000j,  -0.4286 - 0.7143j,  -0.4286 - 0.1429j,  -0.4286
+      - 0.4286j,   1.0000 + 1.0000j,   1.0000 + 0.7143j,   1.0000 + 0.1429j,   1.0000
+      + 0.4286j,   1.0000 - 1.0000j,   1.0000 - 0.7143j,   1.0000 - 0.1429j,   1.0000
+      - 0.4286j,   0.7143 + 1.0000j,   0.7143 + 0.7143j,   0.7143 + 0.1429j,   0.7143
+      + 0.4286j,   0.7143 - 1.0000j,   0.7143 - 0.7143j,   0.7143 - 0.1429j,   0.7143
+      - 0.4286j,   0.1429 + 1.0000j,   0.1429 + 0.7143j,   0.1429 + 0.1429j,   0.1429
+      + 0.4286j,   0.1429 - 1.0000j,   0.1429 - 0.7143j,   0.1429 - 0.1429j,   0.1429
+      - 0.4286j,   0.4286 + 1.0000j,   0.4286 + 0.7143j,   0.4286 + 0.1429j,   0.4286
+      + 0.4286j,   0.4286 - 1.0000j,   0.4286 - 0.7143j,   0.4286 - 0.1429j,   0.4286
+      - 0.4286j]'
+    dims: '1'
+    normalization: digital.constellation.AMPLITUDE_NORMALIZATION
+    npwr: '1.0'
+    precision: '8'
+    rot_sym: '4'
+    soft_dec_lut: None
+    sym_map: '[0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16,
+      17,  18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,  36,
+      37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,  54, 55,
+      56, 57, 58, 59, 60, 61, 62, 63]'
+    type: calcdist
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 428.0]
+    rotation: 0
+    state: enabled
+- name: QPSK
+  id: variable_constellation
+  parameters:
+    comment: ''
+    const_points: '[-1-1j, -1+1j, 1+1j, 1-1j]'
+    dims: '1'
+    normalization: digital.constellation.AMPLITUDE_NORMALIZATION
+    npwr: '1.0'
+    precision: '8'
+    rot_sym: '4'
+    soft_dec_lut: None
+    sym_map: '[0, 1, 3, 2]'
+    type: qpsk
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [328, 348.0]
     rotation: 0
     state: enabled
 - name: carrier_freq
@@ -63,7 +170,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 652.0]
+    coordinate: [1240, 460.0]
     rotation: 0
     state: enabled
 - name: gain
@@ -84,200 +191,119 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [768, 652.0]
-    rotation: 0
-    state: enabled
-- name: input_gain
-  id: variable_qtgui_range
-  parameters:
-    comment: ''
-    gui_hint: ''
-    label: ''
-    min_len: '200'
-    orient: QtCore.Qt.Horizontal
-    rangeType: float
-    start: '0'
-    step: '0.1'
-    stop: '10'
-    value: '0.4'
-    widget: counter_slider
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [240, 12.0]
+    coordinate: [1368, 460.0]
     rotation: 0
     state: enabled
 - name: samp_rate
   id: variable
   parameters:
     comment: ''
-    value: 200e3
+    value: '32000'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [520, 652.0]
+    coordinate: [184, 12]
     rotation: 0
     state: enabled
-- name: analog_sig_source_x_0_0
-  id: analog_sig_source_x
+- name: sps
+  id: variable
+  parameters:
+    comment: ''
+    value: '8'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [664, 348.0]
+    rotation: 0
+    state: enabled
+- name: blocks_file_source_0
+  id: blocks_file_source
   parameters:
     affinity: ''
     alias: ''
-    amp: '1'
+    begin_tag: pmt.PMT_NIL
     comment: ''
-    freq: 10e3
+    file: /home/chunchi/Desktop/wireless_transformer/gr-wireless_dump/examples/you_are_very_on_time.txt
+    length: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
     offset: '0'
-    phase: '0'
-    samp_rate: 50e3
-    showports: 'False'
-    type: complex
-    waveform: analog.GR_COS_WAVE
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [872, 292.0]
-    rotation: 0
-    state: enabled
-- name: band_pass_filter_0_0
-  id: band_pass_filter
-  parameters:
-    affinity: ''
-    alias: ''
-    beta: '6.76'
-    comment: ''
-    decim: '1'
-    gain: '1'
-    high_cutoff_freq: '3000'
-    interp: '1'
-    low_cutoff_freq: '300'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    samp_rate: 50e3
-    type: fir_filter_ccf
-    width: '100'
-    win: window.WIN_HAMMING
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [896, 132.0]
-    rotation: 0
-    state: enabled
-- name: blocks_add_const_vxx_0_0
-  id: blocks_add_const_vxx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    const: '1'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: float
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [608, 188.0]
-    rotation: 0
-    state: enabled
-- name: blocks_multiply_const_vxx_0_0
-  id: blocks_multiply_const_vxx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    const: input_gain
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: float
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [264, 188.0]
-    rotation: 0
-    state: enabled
-- name: blocks_multiply_const_vxx_0_0_0
-  id: blocks_multiply_const_vxx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    const: '10'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: complex
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [416, 364.0]
-    rotation: 0
-    state: enabled
-- name: blocks_multiply_xx_0_0_0
-  id: blocks_multiply_xx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    num_inputs: '2'
-    type: complex
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1088, 192.0]
-    rotation: 0
-    state: enabled
-- name: blocks_wavfile_source_0
-  id: blocks_wavfile_source
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    file: /home/chunchi/Desktop/wireless_transformer/gr-wireless_dump/examples/Rick
-      Astley  Never Gonna Give You Up.wav
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    nchan: '1'
     repeat: 'True'
+    type: byte
+    vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [48, 180.0]
+    coordinate: [152, 236.0]
     rotation: 0
     state: enabled
-- name: hilbert_fc_0
-  id: hilbert_fc
+- name: blocks_vector_source_x_0
+  id: blocks_vector_source_x
   parameters:
     affinity: ''
     alias: ''
-    beta: '6.76'
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    num_taps: '401'
-    win: window.WIN_HAMMING
+    repeat: 'True'
+    tags: '[]'
+    type: byte
+    vector: (0, 0, 0, 0, 1, 1, 1, 1)
+    vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [744, 188.0]
+    coordinate: [160, 156.0]
+    rotation: 0
+    state: disabled
+- name: digital_constellation_modulator_0
+  id: digital_constellation_modulator
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: BPSK
+    differential: 'True'
+    excess_bw: '0.35'
+    log: 'False'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_symbol: sps
+    truncate: 'False'
+    verbose: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [424, 244.0]
     rotation: 0
     state: enabled
-- name: qtgui_freq_sink_x_0
+- name: pfb_arb_resampler_xxx_0
+  id: pfb_arb_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    atten: '100'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nfilts: '32'
+    rrate: sps
+    samp_delay: '0'
+    taps: firdes.root_raised_cosine(32, 32, 1.0, 0.35, 32*11*8)
+    type: ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [720, 244.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_freq_sink_x_0_0
   id: qtgui_freq_sink_x
   parameters:
     affinity: ''
@@ -355,10 +381,10 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 348.0]
+    coordinate: [1264, 252.0]
     rotation: 0
     state: enabled
-- name: qtgui_time_sink_x_0
+- name: qtgui_time_sink_x_0_0
   id: qtgui_time_sink_x
   parameters:
     affinity: ''
@@ -452,47 +478,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 436.0]
-    rotation: 0
-    state: enabled
-- name: rational_resampler_xxx_0
-  id: rational_resampler_xxx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    decim: '441'
-    fbw: '0'
-    interp: '500'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    taps: '[]'
-    type: fff
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [424, 164.0]
-    rotation: 0
-    state: enabled
-- name: rational_resampler_xxx_0_0_0
-  id: rational_resampler_xxx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    decim: '1'
-    fbw: '0'
-    interp: '4'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    taps: '[]'
-    type: ccf
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [232, 340.0]
+    coordinate: [1264, 164.0]
     rotation: 0
     state: enabled
 - name: uhd_usrp_sink_0
@@ -769,50 +755,17 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 516.0]
-    rotation: 0
-    state: enabled
-- name: virtual_sink_0
-  id: virtual_sink
-  parameters:
-    alias: ''
-    comment: ''
-    stream_id: out
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1224, 204.0]
-    rotation: 0
-    state: enabled
-- name: virtual_source_0
-  id: virtual_source
-  parameters:
-    alias: ''
-    comment: ''
-    stream_id: out
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [80, 364.0]
+    coordinate: [1264, 332.0]
     rotation: 0
     state: enabled
 
 connections:
-- [analog_sig_source_x_0_0, '0', blocks_multiply_xx_0_0_0, '1']
-- [band_pass_filter_0_0, '0', blocks_multiply_xx_0_0_0, '0']
-- [blocks_add_const_vxx_0_0, '0', hilbert_fc_0, '0']
-- [blocks_multiply_const_vxx_0_0, '0', rational_resampler_xxx_0, '0']
-- [blocks_multiply_const_vxx_0_0_0, '0', qtgui_freq_sink_x_0, '0']
-- [blocks_multiply_const_vxx_0_0_0, '0', qtgui_time_sink_x_0, '0']
-- [blocks_multiply_const_vxx_0_0_0, '0', uhd_usrp_sink_0, '0']
-- [blocks_multiply_xx_0_0_0, '0', virtual_sink_0, '0']
-- [blocks_wavfile_source_0, '0', blocks_multiply_const_vxx_0_0, '0']
-- [hilbert_fc_0, '0', band_pass_filter_0_0, '0']
-- [rational_resampler_xxx_0, '0', blocks_add_const_vxx_0_0, '0']
-- [rational_resampler_xxx_0_0_0, '0', blocks_multiply_const_vxx_0_0_0, '0']
-- [virtual_source_0, '0', rational_resampler_xxx_0_0_0, '0']
+- [blocks_file_source_0, '0', digital_constellation_modulator_0, '0']
+- [blocks_vector_source_x_0, '0', digital_constellation_modulator_0, '0']
+- [digital_constellation_modulator_0, '0', pfb_arb_resampler_xxx_0, '0']
+- [pfb_arb_resampler_xxx_0, '0', qtgui_freq_sink_x_0_0, '0']
+- [pfb_arb_resampler_xxx_0, '0', qtgui_time_sink_x_0_0, '0']
+- [pfb_arb_resampler_xxx_0, '0', uhd_usrp_sink_0, '0']
 
 metadata:
   file_format: 1
