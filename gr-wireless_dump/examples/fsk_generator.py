@@ -7,10 +7,11 @@
 # GNU Radio Python Flow Graph
 # Title: Not titled yet
 # Author: root
-# GNU Radio version: v3.10.9.2-39-gcf065ee5
+# GNU Radio version: v3.10.9.2-5-gdd01ef52
 
 from PyQt5 import Qt
 from gnuradio import qtgui
+from PyQt5 import QtCore
 from gnuradio import blocks
 import pmt
 from gnuradio import digital
@@ -23,6 +24,8 @@ from PyQt5 import Qt
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
+from gnuradio import uhd
+import time
 import sip
 
 
@@ -63,12 +66,35 @@ class fsk_generator(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.sps = sps = 8
-        self.samp_rate = samp_rate = 32000
+        self.samp_rate = samp_rate = 200e3
+        self.gain = gain = .5
+        self.carrier_freq = carrier_freq = 2400e6
 
         ##################################################
         # Blocks
         ##################################################
 
+        self._gain_range = qtgui.Range(0.0, 1.0, 0.05, .5, 200)
+        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._gain_win)
+        self._carrier_freq_range = qtgui.Range(2400e6, 3800e6, 5e6, 2400e6, 200)
+        self._carrier_freq_win = qtgui.RangeWidget(self._carrier_freq_range, self.set_carrier_freq, "'carrier_freq'", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._carrier_freq_win)
+        self.uhd_usrp_sink_0 = uhd.usrp_sink(
+            ",".join(("", '')),
+            uhd.stream_args(
+                cpu_format="fc32",
+                args='',
+                channels=list(range(0,1)),
+            ),
+            "",
+        )
+        self.uhd_usrp_sink_0.set_samp_rate(samp_rate)
+        self.uhd_usrp_sink_0.set_time_unknown_pps(uhd.time_spec(0))
+
+        self.uhd_usrp_sink_0.set_center_freq(carrier_freq, 0)
+        self.uhd_usrp_sink_0.set_antenna("TX/RX", 0)
+        self.uhd_usrp_sink_0.set_normalized_gain(gain, 0)
         self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
             1024, #size
             samp_rate, #samp_rate
@@ -169,7 +195,7 @@ class fsk_generator(gr.top_block, Qt.QWidget):
             verbose=False,
             log=False,
             do_unpack=True)
-        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_char*1, '/home/ubuntu2204/Desktop/wireless_transformer/gr-wireless_dump/examples/you_are_very_on_time.txt', True, 0, 0)
+        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_char*1, '/home/chunchi/Desktop/wireless_transformer/gr-wireless_dump/examples/you_are_very_on_time.txt', True, 0, 0)
         self.blocks_file_source_0.set_begin_tag(pmt.PMT_NIL)
 
 
@@ -179,6 +205,7 @@ class fsk_generator(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_file_source_0, 0), (self.digital_gfsk_mod_0, 0))
         self.connect((self.digital_gfsk_mod_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.digital_gfsk_mod_0, 0), (self.qtgui_time_sink_x_0, 0))
+        self.connect((self.digital_gfsk_mod_0, 0), (self.uhd_usrp_sink_0, 0))
 
 
     def closeEvent(self, event):
@@ -202,6 +229,21 @@ class fsk_generator(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate
         self.qtgui_freq_sink_x_0.set_frequency_range(0, self.samp_rate)
         self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
+        self.uhd_usrp_sink_0.set_samp_rate(self.samp_rate)
+
+    def get_gain(self):
+        return self.gain
+
+    def set_gain(self, gain):
+        self.gain = gain
+        self.uhd_usrp_sink_0.set_normalized_gain(self.gain, 0)
+
+    def get_carrier_freq(self):
+        return self.carrier_freq
+
+    def set_carrier_freq(self, carrier_freq):
+        self.carrier_freq = carrier_freq
+        self.uhd_usrp_sink_0.set_center_freq(self.carrier_freq, 0)
 
 
 
