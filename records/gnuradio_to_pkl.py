@@ -13,24 +13,19 @@ if os.system("clear") != 0:
     os.system("cls")
 
 # =====================================================
+mod_list = ["BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "AM-DSB", "AM-SSB", "PAM4", "CPFSK", "GFSK", "WBFM", "RAND"]
+mod_idx = [x for x in range(len(mod_list))]
 
 def get_filenames_under_folder(src, ptn):
-    if os.path.isdir(src):
-        filename_list = []
-        dir_list = os.listdir(src)
-        for filename in dir_list:
-            file_seq = filename.split(".")
-            
-            if file_seq[-1] == "dat" and filename.find(ptn) >= 0:
-                filename_list.append(filename)
-        
-        return filename_list
-    else:
-        return False
-
+    filename_list = []
+    for mod in mod_list:
+        full_filename = f"{src}{mod}{ptn}.dat"
+        if os.path.isfile(full_filename):
+            filename_list.append(full_filename)
+    return filename_list
 
 def convert_to_pkl(args, filename):
-    mod_list = ["BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "AM-DSB", "AM-SSB", "PAM4", "CPFSK", "GFSK", "WBFM", "RAND"]
+    
 
     src = args.s
     tgt = args.t
@@ -75,7 +70,8 @@ def convert_to_pkl(args, filename):
 def main(args):
     print(sys.argv)
     file_list = get_filenames_under_folder(args.s, args.p)
-    if file_list is False:
+    print(f"{file_list = }")
+    if len(file_list) == 0:
         print(f"Path: {args.s} is not a folder. Abort")
         exit()
 
