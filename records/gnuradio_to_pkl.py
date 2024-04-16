@@ -19,7 +19,7 @@ mod_idx = [x for x in range(len(mod_list))]
 def get_filenames_under_folder(src, ptn):
     filename_list = []
     for mod in mod_list:
-        full_filename = f"{src}{mod}{ptn}.dat"
+        full_filename = f"{src}{mod}{ptn}dat"
         print(f"{full_filename = }")
         if os.path.isfile(full_filename):
             filename_list.append(full_filename)
