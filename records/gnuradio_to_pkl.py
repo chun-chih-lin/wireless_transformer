@@ -36,7 +36,7 @@ def convert_to_pkl(args, file_list):
 
     for filename in file_list:
         full_filename = f"{src}{filename}"
-        record_data = np.fromfile(open(filename), dtype=np.complex64)
+        record_data = np.fromfile(open(full_filename), dtype=np.complex64)
         mod_name = filename.split('.')[0]
         mod_i = mod_list.index(mod_name)
         print(f"{full_filename = }, {filename = }, {mod_name = }, {mod_i = }")
