@@ -99,7 +99,7 @@ def main(args):
 
     input_cmd = input("Is it right? [Y/n]")
     print(input_cmd, type(input_cmd))
-    if input_cmd.upper() != "Y":
+    if input_cmd.upper() != "Y" and input_cmd != "":
         print('Abort.')
         exit()
 
