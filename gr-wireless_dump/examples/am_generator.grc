@@ -69,6 +69,69 @@ blocks:
     coordinate: [144, 172.0]
     rotation: 0
     state: enabled
+- name: carrier_freq
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: 2400e6
+    step: 5e6
+    stop: 3800e6
+    value: 2500e6
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [928, 76.0]
+    rotation: 0
+    state: enabled
+- name: gain
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0.0'
+    step: '0.05'
+    stop: '1.0'
+    value: '.5'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1064, 76.0]
+    rotation: 0
+    state: enabled
+- name: gain_db
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: '0'
+    step: '10'
+    stop: '70'
+    value: '50'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1216, 76.0]
+    rotation: 0
+    state: enabled
 - name: input_gain
   id: variable_qtgui_range
   parameters:
@@ -87,45 +150,21 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [560, 164.0]
-    rotation: 0
-    state: enabled
-- name: out_samp_rate
-  id: variable
-  parameters:
-    comment: ''
-    value: audio_source_sampling_rate*ratio
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1080, 388.0]
-    rotation: 0
-    state: enabled
-- name: ratio
-  id: variable
-  parameters:
-    comment: ''
-    value: '50'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1008, 388.0]
+    coordinate: [336, 100.0]
     rotation: 0
     state: enabled
 - name: samp_rate
   id: variable
   parameters:
     comment: ''
-    value: 48e3
+    value: 200e3
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [184, 12]
+    coordinate: [816, 76.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: analog_const_source_x_0
   id: analog_const_source_x
   parameters:
@@ -140,7 +179,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [576, 492.0]
+    coordinate: [464, 452.0]
     rotation: 0
     state: enabled
 - name: analog_sig_source_x_0
@@ -197,7 +236,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [752, 464.0]
+    coordinate: [680, 408.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_0_0
@@ -256,8 +295,8 @@ blocks:
     bus_structure: null
     coordinate: [1000, 260.0]
     rotation: 0
-    state: enabled
-- name: blocks_wavfile_source_0
+    state: disabled
+- name: blocks_wavfile_source_0_0
   id: blocks_wavfile_source
   parameters:
     affinity: ''
@@ -273,7 +312,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [112, 396.0]
+    coordinate: [96, 396.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -354,7 +393,88 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1216, 180.0]
+    coordinate: [1216, 188.0]
+    rotation: 0
+    state: disabled
+- name: qtgui_freq_sink_x_0_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    axislabels: 'True'
+    bw: samp_rate
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'False'
+    fc: '0'
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '""'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1112, 596.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0
@@ -453,7 +573,7 @@ blocks:
     bus_structure: null
     coordinate: [1216, 268.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_time_sink_x_1
   id: qtgui_time_sink_x
   parameters:
@@ -510,7 +630,7 @@ blocks:
     name: '""'
     nconnections: '1'
     size: '10240'
-    srate: out_samp_rate
+    srate: samp_rate
     stemplot: 'False'
     style1: '1'
     style10: '1'
@@ -548,7 +668,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1264, 548.0]
+    coordinate: [1112, 404.0]
     rotation: 0
     state: enabled
 - name: rational_resampler_xxx_0
@@ -557,9 +677,9 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    decim: '1'
+    decim: int(44.1e3)
     fbw: '0'
-    interp: ratio
+    interp: int(samp_rate)
     maxoutbuf: '0'
     minoutbuf: '0'
     taps: '[]'
@@ -568,7 +688,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 452.0]
+    coordinate: [856, 396.0]
     rotation: 0
     state: enabled
 - name: uhd_usrp_sink_0
@@ -640,7 +760,7 @@ blocks:
     bw7: '0'
     bw8: '0'
     bw9: '0'
-    center_freq0: 3800e6
+    center_freq0: carrier_freq
     center_freq1: '0'
     center_freq10: '0'
     center_freq11: '0'
@@ -684,7 +804,7 @@ blocks:
     comment: ''
     dev_addr: '""'
     dev_args: ''
-    gain0: '0'
+    gain0: gain_db
     gain1: '0'
     gain10: '0'
     gain11: '0'
@@ -818,7 +938,7 @@ blocks:
     nchan: '1'
     num_mboards: '1'
     otw: ''
-    samp_rate: out_samp_rate
+    samp_rate: samp_rate
     sd_spec0: ''
     sd_spec1: ''
     sd_spec2: ''
@@ -845,22 +965,23 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1264, 428.0]
+    coordinate: [1112, 484.0]
     rotation: 0
-    state: disabled
+    state: enabled
 
 connections:
 - [analog_const_source_x_0, '0', blocks_float_to_complex_0, '1']
 - [analog_sig_source_x_0, '0', blocks_multiply_xx_0, '0']
-- [blocks_add_const_vxx_0_0, '0', blocks_float_to_complex_0, '0']
 - [blocks_add_const_vxx_0_0, '0', blocks_multiply_xx_0, '1']
 - [blocks_add_const_vxx_0_0, '0', qtgui_time_sink_x_0, '1']
 - [blocks_float_to_complex_0, '0', rational_resampler_xxx_0, '0']
 - [blocks_multiply_const_vxx_0_0, '0', blocks_add_const_vxx_0_0, '0']
+- [blocks_multiply_xx_0, '0', blocks_float_to_complex_0, '0']
 - [blocks_multiply_xx_0, '0', blocks_throttle2_0, '0']
 - [blocks_throttle2_0, '0', qtgui_freq_sink_x_0, '0']
 - [blocks_throttle2_0, '0', qtgui_time_sink_x_0, '0']
-- [blocks_wavfile_source_0, '0', blocks_multiply_const_vxx_0_0, '0']
+- [blocks_wavfile_source_0_0, '0', blocks_multiply_const_vxx_0_0, '0']
+- [rational_resampler_xxx_0, '0', qtgui_freq_sink_x_0_0, '0']
 - [rational_resampler_xxx_0, '0', qtgui_time_sink_x_1, '0']
 - [rational_resampler_xxx_0, '0', uhd_usrp_sink_0, '0']
 

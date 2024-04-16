@@ -7,14 +7,16 @@
 # GNU Radio Python Flow Graph
 # Title: Not titled yet
 # Author: root
-# GNU Radio version: v3.10.9.2-39-gcf065ee5
+# GNU Radio version: v3.10.9.2-5-gdd01ef52
 
 from PyQt5 import Qt
 from gnuradio import qtgui
+from PyQt5 import QtCore
 from gnuradio import analog
 from gnuradio import blocks
-from gnuradio import gr
+from gnuradio import filter
 from gnuradio.filter import firdes
+from gnuradio import gr
 from gnuradio.fft import window
 import sys
 import signal
@@ -22,6 +24,8 @@ from PyQt5 import Qt
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
+from gnuradio import uhd
+import time
 import sip
 
 
@@ -61,14 +65,43 @@ class fm_generator(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.audio_rate = audio_rate = 44.1e3
-        self.samp_rate = samp_rate = audio_rate
+        self.samp_rate = samp_rate = 200e3
         self.quad_rate = quad_rate = 220.5e3
+        self.gain_db = gain_db = 50
+        self.gain = gain = .5
+        self.carrier_freq = carrier_freq = 2500e6
+        self.audio_rate = audio_rate = 44.1e3
 
         ##################################################
         # Blocks
         ##################################################
 
+        self._gain_db_range = qtgui.Range(0, 70, 10, 50, 200)
+        self._gain_db_win = qtgui.RangeWidget(self._gain_db_range, self.set_gain_db, "'gain_db'", "counter_slider", int, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._gain_db_win)
+        self._carrier_freq_range = qtgui.Range(2400e6, 3800e6, 5e6, 2500e6, 200)
+        self._carrier_freq_win = qtgui.RangeWidget(self._carrier_freq_range, self.set_carrier_freq, "'carrier_freq'", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._carrier_freq_win)
+        self.uhd_usrp_sink_0 = uhd.usrp_sink(
+            ",".join(("", '')),
+            uhd.stream_args(
+                cpu_format="fc32",
+                args='',
+                channels=list(range(0,1)),
+            ),
+            "",
+        )
+        self.uhd_usrp_sink_0.set_samp_rate(samp_rate)
+        self.uhd_usrp_sink_0.set_time_unknown_pps(uhd.time_spec(0))
+
+        self.uhd_usrp_sink_0.set_center_freq(carrier_freq, 0)
+        self.uhd_usrp_sink_0.set_antenna("TX/RX", 0)
+        self.uhd_usrp_sink_0.set_gain(gain_db, 0)
+        self.rational_resampler_xxx_0 = filter.rational_resampler_ccc(
+                interpolation=int(audio_rate),
+                decimation=int(samp_rate),
+                taps=[],
+                fractional_bw=0)
         self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
             1024, #size
             samp_rate, #samp_rate
@@ -162,7 +195,10 @@ class fm_generator(gr.top_block, Qt.QWidget):
 
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
-        self.blocks_wavfile_source_0 = blocks.wavfile_source('/home/ubuntu2204/Desktop/wireless_transformer/gr-wireless_dump/examples/Rick Astley  Never Gonna Give You Up.wav', True)
+        self._gain_range = qtgui.Range(0.0, 1.0, 0.05, .5, 200)
+        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._gain_win)
+        self.blocks_wavfile_source_0 = blocks.wavfile_source('/home/chunchi/Desktop/wireless_transformer/gr-wireless_dump/examples/Rick Astley  Never Gonna Give You Up.wav', True)
         self.analog_wfm_tx_0 = analog.wfm_tx(
         	audio_rate=int(audio_rate),
         	quad_rate=int(quad_rate),
@@ -175,9 +211,11 @@ class fm_generator(gr.top_block, Qt.QWidget):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.analog_wfm_tx_0, 0), (self.qtgui_freq_sink_x_0, 0))
-        self.connect((self.analog_wfm_tx_0, 0), (self.qtgui_time_sink_x_0, 0))
+        self.connect((self.analog_wfm_tx_0, 0), (self.rational_resampler_xxx_0, 0))
         self.connect((self.blocks_wavfile_source_0, 0), (self.analog_wfm_tx_0, 0))
+        self.connect((self.rational_resampler_xxx_0, 0), (self.qtgui_freq_sink_x_0, 0))
+        self.connect((self.rational_resampler_xxx_0, 0), (self.qtgui_time_sink_x_0, 0))
+        self.connect((self.rational_resampler_xxx_0, 0), (self.uhd_usrp_sink_0, 0))
 
 
     def closeEvent(self, event):
@@ -188,13 +226,6 @@ class fm_generator(gr.top_block, Qt.QWidget):
 
         event.accept()
 
-    def get_audio_rate(self):
-        return self.audio_rate
-
-    def set_audio_rate(self, audio_rate):
-        self.audio_rate = audio_rate
-        self.set_samp_rate(self.audio_rate)
-
     def get_samp_rate(self):
         return self.samp_rate
 
@@ -202,12 +233,39 @@ class fm_generator(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate
         self.qtgui_freq_sink_x_0.set_frequency_range(0, self.samp_rate)
         self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
+        self.uhd_usrp_sink_0.set_samp_rate(self.samp_rate)
 
     def get_quad_rate(self):
         return self.quad_rate
 
     def set_quad_rate(self, quad_rate):
         self.quad_rate = quad_rate
+
+    def get_gain_db(self):
+        return self.gain_db
+
+    def set_gain_db(self, gain_db):
+        self.gain_db = gain_db
+        self.uhd_usrp_sink_0.set_gain(self.gain_db, 0)
+
+    def get_gain(self):
+        return self.gain
+
+    def set_gain(self, gain):
+        self.gain = gain
+
+    def get_carrier_freq(self):
+        return self.carrier_freq
+
+    def set_carrier_freq(self, carrier_freq):
+        self.carrier_freq = carrier_freq
+        self.uhd_usrp_sink_0.set_center_freq(self.carrier_freq, 0)
+
+    def get_audio_rate(self):
+        return self.audio_rate
+
+    def set_audio_rate(self, audio_rate):
+        self.audio_rate = audio_rate
 
 
 

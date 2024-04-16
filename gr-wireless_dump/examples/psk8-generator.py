@@ -11,11 +11,12 @@
 
 from PyQt5 import Qt
 from gnuradio import qtgui
-from PyQt5 import QtCore
 from gnuradio import blocks
 import pmt
-from gnuradio import gr
+from gnuradio import digital
+from gnuradio import filter
 from gnuradio.filter import firdes
+from gnuradio import gr
 from gnuradio.fft import window
 import sys
 import signal
@@ -23,14 +24,11 @@ from PyQt5 import Qt
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
-from gnuradio import gr, digital, analog
-from gnuradio import uhd
-import time
 import sip
 
 
 
-class cpfsk_generator(gr.top_block, Qt.QWidget):
+class psk8-generator(gr.top_block, Qt.QWidget):
 
     def __init__(self):
         gr.top_block.__init__(self, "Not titled yet", catch_exceptions=True)
@@ -53,7 +51,7 @@ class cpfsk_generator(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("GNU Radio", "cpfsk_generator")
+        self.settings = Qt.QSettings("GNU Radio", "psk8-generator")
 
         try:
             geometry = self.settings.value("geometry")
@@ -66,36 +64,23 @@ class cpfsk_generator(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.sps = sps = 8
-        self.samp_rate = samp_rate = 200e3
-        self.gain_db = gain_db = 50
-        self.gain = gain = .5
-        self.carrier_freq = carrier_freq = 2500e6
+        self.samp_rate = samp_rate = 32000
+        self.PSK8 = PSK8 = digital.constellation_calcdist([-1-1j, -1+1j, 1+1j, 1-1j], [0, 1, 3, 2],
+        4, 1, digital.constellation.AMPLITUDE_NORMALIZATION).base()
+        self.PSK8.set_npwr(1.0)
 
         ##################################################
         # Blocks
         ##################################################
 
-        self._gain_db_range = qtgui.Range(0, 70, 10, 50, 200)
-        self._gain_db_win = qtgui.RangeWidget(self._gain_db_range, self.set_gain_db, "'gain_db'", "counter_slider", int, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._gain_db_win)
-        self._carrier_freq_range = qtgui.Range(2400e6, 3800e6, 5e6, 2500e6, 200)
-        self._carrier_freq_win = qtgui.RangeWidget(self._carrier_freq_range, self.set_carrier_freq, "'carrier_freq'", "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._carrier_freq_win)
-        self.uhd_usrp_sink_0 = uhd.usrp_sink(
-            ",".join(("", '')),
-            uhd.stream_args(
-                cpu_format="fc32",
-                args='',
-                channels=list(range(0,1)),
-            ),
-            "",
-        )
-        self.uhd_usrp_sink_0.set_samp_rate(samp_rate)
-        self.uhd_usrp_sink_0.set_time_unknown_pps(uhd.time_spec(0))
-
-        self.uhd_usrp_sink_0.set_center_freq(carrier_freq, 0)
-        self.uhd_usrp_sink_0.set_antenna("TX/RX", 0)
-        self.uhd_usrp_sink_0.set_gain(gain_db, 0)
+        self.root_raised_cosine_filter_0 = filter.fir_filter_ccf(
+            1,
+            firdes.root_raised_cosine(
+                1,
+                samp_rate,
+                1.0,
+                0.35,
+                (11*sps)))
         self.qtgui_time_sink_x_0_0 = qtgui.time_sink_c(
             1024, #size
             samp_rate, #samp_rate
@@ -189,10 +174,15 @@ class cpfsk_generator(gr.top_block, Qt.QWidget):
 
         self._qtgui_freq_sink_x_0_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_0_win)
-        self._gain_range = qtgui.Range(0.0, 1.0, 0.05, .5, 200)
-        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._gain_win)
-        self.digital_cpmmod_bc_0 = digital.cpmmod_bc(analog.cpm.TFM, 0.5, sps, 1, 0.35)
+        self.digital_constellation_modulator_0 = digital.generic_mod(
+            constellation=PSK8,
+            differential=True,
+            samples_per_symbol=2,
+            pre_diff_code=True,
+            excess_bw=0.35,
+            verbose=False,
+            log=False,
+            truncate=False)
         self.blocks_file_source_0 = blocks.file_source(gr.sizeof_char*1, '/home/chunchi/Desktop/wireless_transformer/gr-wireless_dump/examples/you_are_very_on_time.txt', True, 0, 0)
         self.blocks_file_source_0.set_begin_tag(pmt.PMT_NIL)
 
@@ -200,14 +190,14 @@ class cpfsk_generator(gr.top_block, Qt.QWidget):
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.blocks_file_source_0, 0), (self.digital_cpmmod_bc_0, 0))
-        self.connect((self.digital_cpmmod_bc_0, 0), (self.qtgui_freq_sink_x_0_0, 0))
-        self.connect((self.digital_cpmmod_bc_0, 0), (self.qtgui_time_sink_x_0_0, 0))
-        self.connect((self.digital_cpmmod_bc_0, 0), (self.uhd_usrp_sink_0, 0))
+        self.connect((self.blocks_file_source_0, 0), (self.digital_constellation_modulator_0, 0))
+        self.connect((self.digital_constellation_modulator_0, 0), (self.root_raised_cosine_filter_0, 0))
+        self.connect((self.root_raised_cosine_filter_0, 0), (self.qtgui_freq_sink_x_0_0, 0))
+        self.connect((self.root_raised_cosine_filter_0, 0), (self.qtgui_time_sink_x_0_0, 0))
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("GNU Radio", "cpfsk_generator")
+        self.settings = Qt.QSettings("GNU Radio", "psk8-generator")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -219,6 +209,7 @@ class cpfsk_generator(gr.top_block, Qt.QWidget):
 
     def set_sps(self, sps):
         self.sps = sps
+        self.root_raised_cosine_filter_0.set_taps(firdes.root_raised_cosine(1, self.samp_rate, 1.0, 0.35, (11*self.sps)))
 
     def get_samp_rate(self):
         return self.samp_rate
@@ -227,32 +218,18 @@ class cpfsk_generator(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate
         self.qtgui_freq_sink_x_0_0.set_frequency_range(0, self.samp_rate)
         self.qtgui_time_sink_x_0_0.set_samp_rate(self.samp_rate)
-        self.uhd_usrp_sink_0.set_samp_rate(self.samp_rate)
+        self.root_raised_cosine_filter_0.set_taps(firdes.root_raised_cosine(1, self.samp_rate, 1.0, 0.35, (11*self.sps)))
 
-    def get_gain_db(self):
-        return self.gain_db
+    def get_PSK8(self):
+        return self.PSK8
 
-    def set_gain_db(self, gain_db):
-        self.gain_db = gain_db
-        self.uhd_usrp_sink_0.set_gain(self.gain_db, 0)
-
-    def get_gain(self):
-        return self.gain
-
-    def set_gain(self, gain):
-        self.gain = gain
-
-    def get_carrier_freq(self):
-        return self.carrier_freq
-
-    def set_carrier_freq(self, carrier_freq):
-        self.carrier_freq = carrier_freq
-        self.uhd_usrp_sink_0.set_center_freq(self.carrier_freq, 0)
+    def set_PSK8(self, PSK8):
+        self.PSK8 = PSK8
 
 
 
 
-def main(top_block_cls=cpfsk_generator, options=None):
+def main(top_block_cls=psk8-generator, options=None):
 
     qapp = Qt.QApplication(sys.argv)
 

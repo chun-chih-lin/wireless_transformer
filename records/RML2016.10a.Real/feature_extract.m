@@ -102,20 +102,26 @@ for mod = mod_list
     plot(real(rx_sig))
     hold on
     plot(imag(rx_sig))
+    title('Total Time domain waveform')
     xlim([1, len_sig])
 
     subplot(3, 2, 3)
+    yyaxis right
     plot(abs(fftshift(dft_ret)))
+    yyaxis left
+    plot(unwrap(angle(fftshift(dft_ret))))
     xlim([1, length(dft_ret)])
+    title('FFT')
 
     subplot(3, 2, 5)
     bar(correlation)
+    title('Half spectrum correlation')
     ylim([0.5, 1.1])
 
     max_amp = max(max(abs(real(ttl_dft_ret)), [], 'all'), max(abs(imag(ttl_dft_ret)), [], 'all'));
     subplot(3, 2, [2, 4, 6])
 
-    step_size = 4;
+    step_size = 1;
     color_steps = winter(len_sig/2/step_size);
     
     for s_i = 1:step_size:len_sig/2

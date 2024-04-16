@@ -108,8 +108,8 @@ for mod_i = 1:length(simu_mod_list)
     legend("I", "Q", "NumColumns", 2)
     real_samp_fig.Position = r_curve_position;
 
-    save_figure(simu_samp_fig, s_sample_title)
-    save_figure(real_samp_fig, r_sample_title)
+    % save_figure(simu_samp_fig, s_sample_title)
+    % save_figure(real_samp_fig, r_sample_title)
 
     if 1
         continue
