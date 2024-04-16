@@ -70,6 +70,13 @@ def convert_to_pkl(args, file_list):
 
     save_pkl_name = f"{save_prefix}{pattern}pkl"
     save_filename = f"{tgt}{save_pkl_name}"
+
+    if os.path.exists(save_filename):
+        ow = input(f"Save file {save_filename} exists. Overwrite it? [y/N]")
+        if not ow:
+            print("Abort.")
+            exit()
+
     confirm_cmd = input(f"Check and confirm to save to file: {save_filename} [y/N]")
     if confirm_cmd.upper() == 'Y':
         # with open(save_filename, 'wb') as f:
