@@ -61,6 +61,16 @@ def convert_to_pkl(args, file_list):
     }
     print(dataset_dict['X'].shape)
     print(dataset_dict['Y'].shape)
+
+    save_pkl_name = f"{ptn}.pkl"
+    save_filename = f"{tgt}{save_pkl_name}"
+    confirm_cmd = input(f"Check and confirm to save to file: {save_filename}. [y/N]")
+    if confirm_cmd.upper() == 'Y':
+        # with open(save_filename, 'wb') as f:
+        #     pickle.dump(dataset_dict, f)
+        pass
+    else:
+        print("Abort saving.")
         
 
 
