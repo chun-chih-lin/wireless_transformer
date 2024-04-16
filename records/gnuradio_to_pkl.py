@@ -19,30 +19,27 @@ mod_idx = [x for x in range(len(mod_list))]
 def get_filenames_under_folder(src, ptn):
     filename_list = []
     for mod in mod_list:
-        full_filename = f"{src}{mod}{ptn}dat"
-        print(f"{full_filename = }")
+        filename = f"{mod}{ptn}dat"
+        full_filename = f"{src}{filename}"
         if os.path.isfile(full_filename):
-            filename_list.append(full_filename)
+            filename_list.append(filename)
     return filename_list
 
-def convert_to_pkl(args, filename):
-    
-
+def convert_to_pkl(args, file_list):
     src = args.s
     tgt = args.t
-    filepath = f"{src}{filename}"
-    print(" ")
+
     pkl_dict = {}
 
     X, Y = None, None
     len_per_sample = 128
 
-    if not os.path.isfile(filepath):
-        print(f"{filepath} is not a file.")
-    else:
-        print(filepath)
-        record_data = np.fromfile(open(filepath), dtype=np.complex64)
-
+    for filename in file_list:
+        full_filename = f"{src}{filename}"
+        record_data = np.fromfile(open(filename), dtype=np.complex64)
+        mod_name = filename.split('.')[0]
+        mod_i = mod_list.index(mod_name)
+        print(f"{full_filename = }, {filename = }, {mod_name = }, {mod_i = }")
 
         _X_c = record_data.reshape((20_000, 128))
         _Y = np.array([mod_i for x in range(_X_c.shape[0])])
@@ -83,11 +80,10 @@ def main(args):
     print(input_cmd)
     if input_cmd.upper() != "Y":
         print('Abort.')
+        exit()
 
-    
     #save_filename = None
-    for filename in file_list:
-        convert_to_pkl(args, filename)
+    convert_to_pkl(args, file_list)
 
     # save_to_pkl_file(args, pkl_dict, save_filename)
     pass
