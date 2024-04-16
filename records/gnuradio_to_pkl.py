@@ -68,7 +68,7 @@ def convert_to_pkl(args, file_list):
     pattern = ".".join(ptn_seg)
     print(f"{ptn_seg = }, {pattern = }")
 
-    save_pkl_name = f"{save_prefix}{ptn}.pkl"
+    save_pkl_name = f"{save_prefix}{pattern}pkl"
     save_filename = f"{tgt}{save_pkl_name}"
     confirm_cmd = input(f"Check and confirm to save to file: {save_filename} [y/N]")
     if confirm_cmd.upper() == 'Y':
