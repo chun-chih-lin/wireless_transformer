@@ -66,15 +66,17 @@ class psk8_generator(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.sps = sps = 8
-        self.samp_rate = samp_rate = 32000
-        self.gain = gain = .5
-        self.carrier_freq = carrier_freq = 2400e6
-        self.QPSK = QPSK = digital.constellation_qpsk().base()
-        self.QPSK.set_npwr(1.0)
         self.QAM64 = QAM64 = digital.constellation_calcdist([-1.0000 + 1.0000j,  -1.0000 + 0.7143j,  -1.0000 + 0.1429j,  -1.0000 + 0.4286j,  -1.0000 - 1.0000j,  -1.0000 - 0.7143j,  -1.0000 - 0.1429j,  -1.0000 - 0.4286j,  -0.7143 + 1.0000j,  -0.7143 + 0.7143j,  -0.7143 + 0.1429j,  -0.7143 + 0.4286j,  -0.7143 - 1.0000j,  -0.7143 - 0.7143j,  -0.7143 - 0.1429j,  -0.7143 - 0.4286j,  -0.1429 + 1.0000j,  -0.1429 + 0.7143j,  -0.1429 + 0.1429j,  -0.1429 + 0.4286j,  -0.1429 - 1.0000j,  -0.1429 - 0.7143j,  -0.1429 - 0.1429j,  -0.1429 - 0.4286j,  -0.4286 + 1.0000j,  -0.4286 + 0.7143j,  -0.4286 + 0.1429j,  -0.4286 + 0.4286j,  -0.4286 - 1.0000j,  -0.4286 - 0.7143j,  -0.4286 - 0.1429j,  -0.4286 - 0.4286j,   1.0000 + 1.0000j,   1.0000 + 0.7143j,   1.0000 + 0.1429j,   1.0000 + 0.4286j,   1.0000 - 1.0000j,   1.0000 - 0.7143j,   1.0000 - 0.1429j,   1.0000 - 0.4286j,   0.7143 + 1.0000j,   0.7143 + 0.7143j,   0.7143 + 0.1429j,   0.7143 + 0.4286j,   0.7143 - 1.0000j,   0.7143 - 0.7143j,   0.7143 - 0.1429j,   0.7143 - 0.4286j,   0.1429 + 1.0000j,   0.1429 + 0.7143j,   0.1429 + 0.1429j,   0.1429 + 0.4286j,   0.1429 - 1.0000j,   0.1429 - 0.7143j,   0.1429 - 0.1429j,   0.1429 - 0.4286j,   0.4286 + 1.0000j,   0.4286 + 0.7143j,   0.4286 + 0.1429j,   0.4286 + 0.4286j,   0.4286 - 1.0000j,   0.4286 - 0.7143j,   0.4286 - 0.1429j,   0.4286 - 0.4286j], [0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17,  18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,  36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,  54, 55, 56, 57, 58, 59, 60, 61, 62, 63],
         4, 1, digital.constellation.AMPLITUDE_NORMALIZATION).base()
         self.QAM64.set_npwr(1.0)
+        self.sps = sps = 8
+        self.samp_rate = samp_rate = 32000
+        self.mod = mod = QAM64
+        self.gain_db = gain_db = 50
+        self.gain = gain = .5
+        self.carrier_freq = carrier_freq = 2500e6
+        self.QPSK = QPSK = digital.constellation_qpsk().base()
+        self.QPSK.set_npwr(1.0)
         self.QAM16 = QAM16 = digital.constellation_16qam().base()
         self.QAM16.set_npwr(1.0)
         self.PSK8 = PSK8 = digital.constellation_8psk().base()
@@ -86,10 +88,10 @@ class psk8_generator(gr.top_block, Qt.QWidget):
         # Blocks
         ##################################################
 
-        self._gain_range = qtgui.Range(0.0, 1.0, 0.05, .5, 200)
-        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._gain_win)
-        self._carrier_freq_range = qtgui.Range(2400e6, 3800e6, 5e6, 2400e6, 200)
+        self._gain_db_range = qtgui.Range(0, 70, 10, 50, 200)
+        self._gain_db_win = qtgui.RangeWidget(self._gain_db_range, self.set_gain_db, "'gain_db'", "counter_slider", int, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._gain_db_win)
+        self._carrier_freq_range = qtgui.Range(2400e6, 3800e6, 5e6, 2500e6, 200)
         self._carrier_freq_win = qtgui.RangeWidget(self._carrier_freq_range, self.set_carrier_freq, "'carrier_freq'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._carrier_freq_win)
         self.uhd_usrp_sink_0 = uhd.usrp_sink(
@@ -106,7 +108,7 @@ class psk8_generator(gr.top_block, Qt.QWidget):
 
         self.uhd_usrp_sink_0.set_center_freq(carrier_freq, 0)
         self.uhd_usrp_sink_0.set_antenna("TX/RX", 0)
-        self.uhd_usrp_sink_0.set_normalized_gain(gain, 0)
+        self.uhd_usrp_sink_0.set_gain(gain_db, 0)
         self.qtgui_time_sink_x_0_0 = qtgui.time_sink_c(
             1024, #size
             samp_rate, #samp_rate
@@ -206,8 +208,11 @@ class psk8_generator(gr.top_block, Qt.QWidget):
             flt_size=32,
             atten=100)
         self.pfb_arb_resampler_xxx_0.declare_sample_delay(0)
+        self._gain_range = qtgui.Range(0.0, 1.0, 0.05, .5, 200)
+        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._gain_win)
         self.digital_constellation_modulator_0 = digital.generic_mod(
-            constellation=BPSK,
+            constellation=mod,
             differential=True,
             samples_per_symbol=sps,
             pre_diff_code=True,
@@ -237,6 +242,13 @@ class psk8_generator(gr.top_block, Qt.QWidget):
 
         event.accept()
 
+    def get_QAM64(self):
+        return self.QAM64
+
+    def set_QAM64(self, QAM64):
+        self.QAM64 = QAM64
+        self.set_mod(self.QAM64)
+
     def get_sps(self):
         return self.sps
 
@@ -253,12 +265,24 @@ class psk8_generator(gr.top_block, Qt.QWidget):
         self.qtgui_time_sink_x_0_0.set_samp_rate(self.samp_rate)
         self.uhd_usrp_sink_0.set_samp_rate(self.samp_rate)
 
+    def get_mod(self):
+        return self.mod
+
+    def set_mod(self, mod):
+        self.mod = mod
+
+    def get_gain_db(self):
+        return self.gain_db
+
+    def set_gain_db(self, gain_db):
+        self.gain_db = gain_db
+        self.uhd_usrp_sink_0.set_gain(self.gain_db, 0)
+
     def get_gain(self):
         return self.gain
 
     def set_gain(self, gain):
         self.gain = gain
-        self.uhd_usrp_sink_0.set_normalized_gain(self.gain, 0)
 
     def get_carrier_freq(self):
         return self.carrier_freq
@@ -272,12 +296,6 @@ class psk8_generator(gr.top_block, Qt.QWidget):
 
     def set_QPSK(self, QPSK):
         self.QPSK = QPSK
-
-    def get_QAM64(self):
-        return self.QAM64
-
-    def set_QAM64(self, QAM64):
-        self.QAM64 = QAM64
 
     def get_QAM16(self):
         return self.QAM16

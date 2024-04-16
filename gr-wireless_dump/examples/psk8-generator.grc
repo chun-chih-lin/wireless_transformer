@@ -50,7 +50,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [152, 348.0]
+    coordinate: [56, 348.0]
     rotation: 0
     state: enabled
 - name: PSK8
@@ -70,7 +70,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [496, 348.0]
+    coordinate: [416, 348.0]
     rotation: 0
     state: enabled
 - name: QAM16
@@ -90,7 +90,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [152, 428.0]
+    coordinate: [600, 348.0]
     rotation: 0
     state: enabled
 - name: QAM64
@@ -129,7 +129,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 428.0]
+    coordinate: [776, 428.0]
     rotation: 0
     state: enabled
 - name: QPSK
@@ -149,7 +149,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 348.0]
+    coordinate: [232, 348.0]
     rotation: 0
     state: enabled
 - name: carrier_freq
@@ -164,13 +164,13 @@ blocks:
     start: 2400e6
     step: 5e6
     stop: 3800e6
-    value: 2400e6
+    value: 2500e6
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1240, 460.0]
+    coordinate: [1272, 268.0]
     rotation: 0
     state: enabled
 - name: gain
@@ -191,7 +191,88 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1368, 460.0]
+    coordinate: [1192, 444.0]
+    rotation: 0
+    state: enabled
+- name: gain_db
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: '0'
+    step: '10'
+    stop: '70'
+    value: '50'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1064, 444.0]
+    rotation: 0
+    state: enabled
+- name: mod
+  id: variable
+  parameters:
+    comment: ''
+    value: BPSK
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [40, 428.0]
+    rotation: 0
+    state: disabled
+- name: mod
+  id: variable
+  parameters:
+    comment: ''
+    value: QPSK
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [224, 428.0]
+    rotation: 0
+    state: disabled
+- name: mod
+  id: variable
+  parameters:
+    comment: ''
+    value: PSK8
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [400, 428.0]
+    rotation: 0
+    state: disabled
+- name: mod
+  id: variable
+  parameters:
+    comment: ''
+    value: QAM16
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [584, 428.0]
+    rotation: 0
+    state: disabled
+- name: mod
+  id: variable
+  parameters:
+    comment: ''
+    value: QAM64
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [776, 364.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -215,7 +296,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [664, 348.0]
+    coordinate: [424, 180.0]
     rotation: 0
     state: enabled
 - name: blocks_file_source_0
@@ -266,7 +347,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    constellation: BPSK
+    constellation: mod
     differential: 'True'
     excess_bw: '0.35'
     log: 'False'
@@ -381,7 +462,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1264, 252.0]
+    coordinate: [1096, 252.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0_0
@@ -478,7 +559,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1264, 164.0]
+    coordinate: [1096, 164.0]
     rotation: 0
     state: enabled
 - name: uhd_usrp_sink_0
@@ -594,7 +675,7 @@ blocks:
     comment: ''
     dev_addr: '""'
     dev_args: ''
-    gain0: gain
+    gain0: gain_db
     gain1: '0'
     gain10: '0'
     gain11: '0'
@@ -626,7 +707,7 @@ blocks:
     gain7: '0'
     gain8: '0'
     gain9: '0'
-    gain_type0: normalized
+    gain_type0: default
     gain_type1: default
     gain_type10: default
     gain_type11: default
@@ -755,7 +836,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1264, 332.0]
+    coordinate: [1096, 332.0]
     rotation: 0
     state: enabled
 

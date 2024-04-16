@@ -67,8 +67,9 @@ class am_ssb_generator(gr.top_block, Qt.QWidget):
         ##################################################
         self.samp_rate = samp_rate = 200e3
         self.input_gain = input_gain = 0.4
+        self.gain_db = gain_db = 50
         self.gain = gain = .5
-        self.carrier_freq = carrier_freq = 2400e6
+        self.carrier_freq = carrier_freq = 2500e6
         self.audio_source_sampling_rate = audio_source_sampling_rate = 44.1e3
 
         ##################################################
@@ -78,10 +79,10 @@ class am_ssb_generator(gr.top_block, Qt.QWidget):
         self._input_gain_range = qtgui.Range(0, 10, 0.1, 0.4, 200)
         self._input_gain_win = qtgui.RangeWidget(self._input_gain_range, self.set_input_gain, "'input_gain'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._input_gain_win)
-        self._gain_range = qtgui.Range(0.0, 1.0, 0.05, .5, 200)
-        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._gain_win)
-        self._carrier_freq_range = qtgui.Range(2400e6, 3800e6, 5e6, 2400e6, 200)
+        self._gain_db_range = qtgui.Range(0, 70, 10, 50, 200)
+        self._gain_db_win = qtgui.RangeWidget(self._gain_db_range, self.set_gain_db, "'gain_db'", "counter_slider", int, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._gain_db_win)
+        self._carrier_freq_range = qtgui.Range(2400e6, 3800e6, 5e6, 2500e6, 200)
         self._carrier_freq_win = qtgui.RangeWidget(self._carrier_freq_range, self.set_carrier_freq, "'carrier_freq'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._carrier_freq_win)
         self.uhd_usrp_sink_0 = uhd.usrp_sink(
@@ -98,7 +99,7 @@ class am_ssb_generator(gr.top_block, Qt.QWidget):
 
         self.uhd_usrp_sink_0.set_center_freq(carrier_freq, 0)
         self.uhd_usrp_sink_0.set_antenna("TX/RX", 0)
-        self.uhd_usrp_sink_0.set_normalized_gain(gain, 0)
+        self.uhd_usrp_sink_0.set_gain(gain_db, 0)
         self.rational_resampler_xxx_0_0_0 = filter.rational_resampler_ccf(
                 interpolation=4,
                 decimation=1,
@@ -203,6 +204,9 @@ class am_ssb_generator(gr.top_block, Qt.QWidget):
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
         self.hilbert_fc_0 = filter.hilbert_fc(401, window.WIN_HAMMING, 6.76)
+        self._gain_range = qtgui.Range(0.0, 1.0, 0.05, .5, 200)
+        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._gain_win)
         self.blocks_wavfile_source_0 = blocks.wavfile_source('/home/chunchi/Desktop/wireless_transformer/gr-wireless_dump/examples/Rick Astley  Never Gonna Give You Up.wav', True)
         self.blocks_multiply_xx_0_0_0 = blocks.multiply_vcc(1)
         self.blocks_multiply_const_vxx_0_0_0 = blocks.multiply_const_cc(10)
@@ -262,12 +266,18 @@ class am_ssb_generator(gr.top_block, Qt.QWidget):
         self.input_gain = input_gain
         self.blocks_multiply_const_vxx_0_0.set_k(self.input_gain)
 
+    def get_gain_db(self):
+        return self.gain_db
+
+    def set_gain_db(self, gain_db):
+        self.gain_db = gain_db
+        self.uhd_usrp_sink_0.set_gain(self.gain_db, 0)
+
     def get_gain(self):
         return self.gain
 
     def set_gain(self, gain):
         self.gain = gain
-        self.uhd_usrp_sink_0.set_normalized_gain(self.gain, 0)
 
     def get_carrier_freq(self):
         return self.carrier_freq

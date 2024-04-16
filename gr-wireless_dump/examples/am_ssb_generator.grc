@@ -57,13 +57,13 @@ blocks:
     start: 2400e6
     step: 5e6
     stop: 3800e6
-    value: 2400e6
+    value: 2500e6
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 652.0]
+    coordinate: [632, 652.0]
     rotation: 0
     state: enabled
 - name: gain
@@ -85,6 +85,27 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [768, 652.0]
+    rotation: 0
+    state: enabled
+- name: gain_db
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: '0'
+    step: '10'
+    stop: '70'
+    value: '50'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [912, 652.0]
     rotation: 0
     state: enabled
 - name: input_gain
@@ -117,7 +138,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [520, 652.0]
+    coordinate: [536, 652.0]
     rotation: 0
     state: enabled
 - name: analog_sig_source_x_0_0
@@ -608,7 +629,7 @@ blocks:
     comment: ''
     dev_addr: '""'
     dev_args: ''
-    gain0: gain
+    gain0: gain_db
     gain1: '0'
     gain10: '0'
     gain11: '0'
@@ -640,7 +661,7 @@ blocks:
     gain7: '0'
     gain8: '0'
     gain9: '0'
-    gain_type0: normalized
+    gain_type0: default
     gain_type1: default
     gain_type10: default
     gain_type11: default
