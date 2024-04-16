@@ -28,6 +28,7 @@ def get_filenames_under_folder(src, ptn):
 def convert_to_pkl(args, file_list):
     src = args.s
     tgt = args.t
+    ptn = args.p
 
     pkl_dict = {}
 
@@ -72,8 +73,6 @@ def convert_to_pkl(args, file_list):
     else:
         print("Abort saving.")
         
-
-
 # =====================================================
 def main(args):
     print(sys.argv)
