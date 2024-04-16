@@ -79,8 +79,8 @@ def convert_to_pkl(args, file_list):
 
     confirm_cmd = input(f"Check and confirm to save to file: {save_filename} [y/N]")
     if confirm_cmd.upper() == 'Y':
-        # with open(save_filename, 'wb') as f:
-        #     pickle.dump(dataset_dict, f)
+        with open(save_filename, 'wb') as f:
+            pickle.dump(dataset_dict, f)
         pass
     else:
         print("Abort saving.")
