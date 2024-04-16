@@ -64,6 +64,9 @@ def convert_to_pkl(args, file_list):
     print(dataset_dict['Y'].shape)
 
     save_prefix = src.split('/')[1]
+    ptn_seg = ptn.split('.')
+    pattern = ".".join(ptn_seg)
+    print(f"{ptn_seg = }, {pattern = }")
 
     save_pkl_name = f"{save_prefix}{ptn}.pkl"
     save_filename = f"{tgt}{save_pkl_name}"
