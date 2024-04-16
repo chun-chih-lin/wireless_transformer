@@ -73,12 +73,12 @@ def convert_to_pkl(args, file_list):
 
     if os.path.exists(save_filename):
         ow = input(f"Save file {save_filename} exists. Overwrite it? [y/N]")
-        if not ow:
+        if ow.upper() == "N" or ow == "":
             print("Abort.")
             exit()
 
     confirm_cmd = input(f"Check and confirm to save to file: {save_filename} [Y/n]")
-    if confirm_cmd.upper() == 'Y':
+    if confirm_cmd.upper() == 'Y' or confirm_cmd == "":
         with open(save_filename, 'wb') as f:
             pickle.dump(dataset_dict, f)
         pass
