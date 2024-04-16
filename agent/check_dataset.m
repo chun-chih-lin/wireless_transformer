@@ -121,6 +121,8 @@ function [y, t, packets] = windowed_energy(samples, win_size, threshold)
 
     energy_index = -1;
 
+    least_dis_from_start_to_end = 30;
+
     packets = [];
 
     pkt_start = -1;
@@ -131,13 +133,18 @@ function [y, t, packets] = windowed_energy(samples, win_size, threshold)
         
         if e > threshold
             distance = i - energy_index;
+            % disp(strcat(num2str(e), ' > ', num2str(threshold)))
 
-            if distance > 5
+            if pkt_start == -1 && distance > 5
                 pkt_start = i;
+                % disp(strcat("!!!!!!!!!!!!! Packet start: ", num2str(i)))
+            else
+                % disp(strcat(num2str(i), " Enough Energy but distance is too short: ", num2str(distance)))
             end
             
             energy_index = i;
-        elseif pkt_start ~= -1 && i - energy_index > 5
+        elseif pkt_start ~= -1 && i - energy_index > least_dis_from_start_to_end
+            % disp(strcat("################### Packet Ends: ", num2str(i), " Length: ", num2str(i-pkt_start)))
             pkt_end = energy_index;
         end
 
@@ -145,6 +152,7 @@ function [y, t, packets] = windowed_energy(samples, win_size, threshold)
             packets = cat(1, packets, [pkt_start, pkt_end]);
             pkt_start = -1;
             pkt_end = -1;
+            % disp(strcat(num2str(i), "Reset packet detections, pkt_start: ", num2str(pkt_start), " pkt_end: ", num2str(pkt_end)))
         end
         y(i) = e;
     end
