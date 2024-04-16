@@ -45,13 +45,25 @@ blocks:
     start: 2400e6
     step: 5e6
     stop: 3800e6
-    value: 2405e6
+    value: 2400e6
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
     coordinate: [472, 132.0]
+    rotation: 0
+    state: disabled
+- name: carrier_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: 2500e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 116.0]
     rotation: 0
     state: enabled
 - name: gain
@@ -75,6 +87,27 @@ blocks:
     coordinate: [336, 132.0]
     rotation: 0
     state: enabled
+- name: gain_db
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '1'
+    stop: '70'
+    value: '30'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [216, 132.0]
+    rotation: 0
+    state: enabled
 - name: samp_rate
   id: variable
   parameters:
@@ -86,7 +119,7 @@ blocks:
     bus_structure: null
     coordinate: [608, 180.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: samp_rate
   id: variable
   parameters:
@@ -98,7 +131,7 @@ blocks:
     bus_structure: null
     coordinate: [712, 180.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: sample_per_input
   id: variable
   parameters:
@@ -108,19 +141,19 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [744, 580.0]
+    coordinate: [920, 596.0]
     rotation: 0
     state: enabled
 - name: save_filename
   id: variable
   parameters:
     comment: ''
-    value: save_mod + ".dat"
+    value: save_mod + "." + tx_power + "." + str(int(carrier_freq/1e8)) + ".dat"
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [928, 124.0]
+    coordinate: [920, 124.0]
     rotation: 0
     state: enabled
 - name: save_folder
@@ -132,7 +165,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [928, 60.0]
+    coordinate: [920, 60.0]
     rotation: 0
     state: enabled
 - name: save_full_filename
@@ -144,7 +177,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [928, 188.0]
+    coordinate: [920, 188.0]
     rotation: 0
     state: enabled
 - name: save_mod
@@ -156,7 +189,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1216, 492.0]
+    coordinate: [1208, 428.0]
     rotation: 0
     state: disabled
 - name: save_mod
@@ -228,7 +261,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1216, 172.0]
+    coordinate: [1208, 492.0]
     rotation: 0
     state: disabled
 - name: save_mod
@@ -240,7 +273,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1216, 236.0]
+    coordinate: [1208, 300.0]
     rotation: 0
     state: disabled
 - name: save_mod
@@ -252,7 +285,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1216, 300.0]
+    coordinate: [1208, 236.0]
     rotation: 0
     state: disabled
 - name: save_mod
@@ -264,7 +297,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1216, 364.0]
+    coordinate: [1208, 172.0]
     rotation: 0
     state: disabled
 - name: save_mod
@@ -276,55 +309,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1216, 428.0]
-    rotation: 0
-    state: disabled
-- name: save_mod
-  id: variable
-  parameters:
-    comment: ''
-    value: '"WIFI-QPSK"'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1320, 236.0]
-    rotation: 0
-    state: disabled
-- name: save_mod
-  id: variable
-  parameters:
-    comment: ''
-    value: '"WIFI-QAM64"'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1320, 364.0]
-    rotation: 0
-    state: disabled
-- name: save_mod
-  id: variable
-  parameters:
-    comment: ''
-    value: '"WIFI-QAM16"'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1320, 300.0]
-    rotation: 0
-    state: disabled
-- name: save_mod
-  id: variable
-  parameters:
-    comment: ''
-    value: '"WIFI-BPSK"'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1320, 172.0]
+    coordinate: [1208, 364.0]
     rotation: 0
     state: disabled
 - name: save_mod
@@ -336,7 +321,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [320, 412.0]
+    coordinate: [320, 476.0]
     rotation: 0
     state: disabled
 - name: save_mod
@@ -348,7 +333,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [320, 476.0]
+    coordinate: [464, 476.0]
     rotation: 0
     state: disabled
 - name: save_mod
@@ -398,29 +383,77 @@ blocks:
     bus_structure: null
     coordinate: [464, 604.0]
     rotation: 0
-    state: enabled
-- name: save_mod_0
+    state: disabled
+- name: save_mod
   id: variable
   parameters:
     comment: ''
-    value: '"BT-GFSK-LE1M"'
+    value: '"WIFI-BPSK"'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [392, 272.0]
+    coordinate: [624, 540.0]
     rotation: 0
     state: disabled
+- name: save_mod
+  id: variable
+  parameters:
+    comment: ''
+    value: '"WIFI-QPSK"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [624, 604.0]
+    rotation: 0
+    state: disabled
+- name: save_mod
+  id: variable
+  parameters:
+    comment: ''
+    value: '"WIFI-16QAM"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 540.0]
+    rotation: 0
+    state: disabled
+- name: save_mod
+  id: variable
+  parameters:
+    comment: ''
+    value: '"WIFI-64QAM"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 604.0]
+    rotation: 0
+    state: disabled
+- name: save_mod
+  id: variable
+  parameters:
+    comment: ''
+    value: '"RAND"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1320, 172.0]
+    rotation: 0
+    state: enabled
 - name: save_prefix
   id: variable
   parameters:
     comment: ''
-    value: '"RML2016.10a.ReGen/"'
+    value: '"EIB_3F_hallway/"'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1112, 60.0]
+    coordinate: [1096, 60.0]
     rotation: 0
     state: enabled
 - name: ttl_save_sample
@@ -432,7 +465,163 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [744, 516.0]
+    coordinate: [920, 532.0]
+    rotation: 0
+    state: enabled
+- name: ttl_save_sample
+  id: variable
+  parameters:
+    comment: ''
+    value: 20e5
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1040, 532.0]
+    rotation: 0
+    state: disabled
+- name: tx_power
+  id: variable
+  parameters:
+    comment: ''
+    value: '"40"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1112, 724.0]
+    rotation: 0
+    state: disabled
+- name: tx_power
+  id: variable
+  parameters:
+    comment: ''
+    value: '"50"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1200, 724.0]
+    rotation: 0
+    state: disabled
+- name: tx_power
+  id: variable
+  parameters:
+    comment: ''
+    value: '"30"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1200, 660.0]
+    rotation: 0
+    state: disabled
+- name: tx_power
+  id: variable
+  parameters:
+    comment: ''
+    value: '"20"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1112, 660.0]
+    rotation: 0
+    state: disabled
+- name: tx_power
+  id: variable
+  parameters:
+    comment: ''
+    value: '"-5"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1416, 612.0]
+    rotation: 0
+    state: disabled
+- name: tx_power
+  id: variable
+  parameters:
+    comment: ''
+    value: '"0"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1328, 676.0]
+    rotation: 0
+    state: disabled
+- name: tx_power
+  id: variable
+  parameters:
+    comment: ''
+    value: '"5"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1416, 676.0]
+    rotation: 0
+    state: disabled
+- name: tx_power
+  id: variable
+  parameters:
+    comment: ''
+    value: '"-10"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1328, 612.0]
+    rotation: 0
+    state: disabled
+- name: tx_power
+  id: variable
+  parameters:
+    comment: ''
+    value: '"-20"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1328, 548.0]
+    rotation: 0
+    state: disabled
+- name: tx_power
+  id: variable
+  parameters:
+    comment: ''
+    value: '"-15"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1416, 548.0]
+    rotation: 0
+    state: disabled
+- name: tx_power
+  id: variable
+  parameters:
+    comment: ''
+    value: '"10"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1200, 596.0]
+    rotation: 0
+    state: disabled
+- name: tx_power
+  id: variable
+  parameters:
+    comment: ''
+    value: '"0"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1112, 596.0]
     rotation: 0
     state: enabled
 - name: blocks_file_sink_0
@@ -468,7 +657,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [704, 284.0]
+    coordinate: [712, 340.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -551,7 +740,7 @@ blocks:
     bus_structure: null
     coordinate: [920, 364.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_time_sink_x_0
   id: qtgui_time_sink_x
   parameters:
@@ -826,7 +1015,7 @@ blocks:
     dc_offs_enb9: default
     dev_addr: '""'
     dev_args: ''
-    gain0: gain
+    gain0: gain_db
     gain1: '0'
     gain10: '0'
     gain11: '0'
@@ -858,7 +1047,7 @@ blocks:
     gain7: '0'
     gain8: '0'
     gain9: '0'
-    gain_type0: normalized
+    gain_type0: default
     gain_type1: default
     gain_type10: default
     gain_type11: default
@@ -1082,7 +1271,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 252.0]
+    coordinate: [400, 316.0]
     rotation: 0
     state: enabled
 
