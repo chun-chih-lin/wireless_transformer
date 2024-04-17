@@ -73,7 +73,7 @@ def trim(data, pkt_len):
 
     plt.plot(data.real, alpha=.2)
     plt.plot(data.imag, alpha=.2)
-    plt.axvline(pkt_e_idx_data)
+    [plt.axvline(x) for x in pkt_e_idx_data]
     plt.show()
 
     if True:
