@@ -53,6 +53,7 @@ def trim(data, pkt_len):
     # check_plot(data, e_data)
 
     above_t_data = np.where(e_data >= e_threshold)[0]
+    print(f"{above_t_data = }")
     under_t_data = np.where(e_data < e_threshold)[0]
 
     e_data[above_t_data] = 0.25
