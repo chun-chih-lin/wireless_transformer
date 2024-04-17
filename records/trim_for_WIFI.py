@@ -117,7 +117,7 @@ def trim(data, pkt_len, mod):
     print(f"{pkt_s_list = }")
     plt.plot(data.real, alpha=.2)
     plt.plot(data.imag, alpha=.2)
-    plt.plot(raw_e_data)
+    plt.plot(np.abs(data))
     [plt.axvline(x, color='r') for x in pkt_s_list]
     plt.axhline(e_threshold, color='r')
     plt.show()
