@@ -99,8 +99,8 @@ def main(args):
         s = None
         e = None
 
-        s = 0
-        e = 100_000
+        s = 40_000
+        e = 600_000
 
         if os.path.isfile(dat_filename):
             print("is file")
