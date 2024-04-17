@@ -116,7 +116,7 @@ def main(args):
         s = None
         e = None
 
-        s = 25_000
+        s = 28_000
         e = 31_000
 
         if os.path.isfile(dat_filename):
