@@ -86,7 +86,7 @@ def trim(data, pkt_len):
 
     last_pkt_end = None
     for pkt_s in above_t_data:
-        print(f"{pkt_s = }")
+        # print(f"{pkt_s = }")
 
         if last_pkt_end is not None and pkt_s <= last_pkt_end:
             continue
@@ -95,17 +95,18 @@ def trim(data, pkt_len):
         if is_long_enough(detect_pkt, pkt_energy_threshold=pkt_energy_threshold):
             last_pkt_end = pkt_s+pkt_len
 
-            pkt_s_list = pkt_s_list.append(pkt_s)
+            pkt_s_list.append(pkt_s)
 
             if ttl_pkt is None:
                 ttl_pkt = np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)
             else:
                 ttl_pkt = np.concatenate((ttl_pkt, np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)))
 
-            plt.plot(data[pkt_s:pkt_s+pkt_len].real)
-            plt.plot(data[pkt_s:pkt_s+pkt_len].imag)
-            plt.show()
+            # plt.plot(data[pkt_s:pkt_s+pkt_len].real)
+            # plt.plot(data[pkt_s:pkt_s+pkt_len].imag)
+            # plt.show()
 
+    print(f"{pkt_s_list = }")
     plt.plot(data.real, alpha=.2)
     plt.plot(data.imag, alpha=.2)
     [plt.axvline(x, color='r') for x in pkt_s_list]
