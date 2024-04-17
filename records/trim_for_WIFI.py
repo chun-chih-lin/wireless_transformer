@@ -52,8 +52,8 @@ def trim(data, pkt_len, mod):
     pkt_e_threshold_list = {
         "BPSK": 0.00038,
         "QPSK": 0.00015,
-        "16QAM": 640,
-        "64QAM": 560
+        "16QAM": 0.00015,
+        "64QAM": 0.00015
     }
     pkt_energy_threshold = pkt_e_threshold_list[mod]
 
