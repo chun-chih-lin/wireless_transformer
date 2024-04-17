@@ -34,7 +34,10 @@ def check_plot(data, e_data):
 def trim(data, pkt_len):
     print(f"{data.shape = }")
 
-    e_threshold = 0.01
+    # e_threshold = 0.01
+    # sec_threshold = 0.0008
+
+    e_threshold = 0.0001
     sec_threshold = 0.0008
 
     e_data = energy(data)
