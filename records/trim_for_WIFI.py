@@ -196,8 +196,8 @@ def main(args):
         else:
             print("not a file")
 
-        if True:
-            break
+        # if True:
+        #     break
 
 if __name__ == "__main__":
     invalid_input = False
