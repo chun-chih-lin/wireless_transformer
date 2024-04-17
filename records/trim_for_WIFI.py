@@ -25,17 +25,19 @@ def energy(ary):
 
 def trim(data, pkt_len):
     print(f"{data.shape = }")
-    threshold = 0.01
+
+    e_threshold = 0.01
+    sec_threshold = 0.0008
 
     e_data = energy(data)
 
-    above_t_data = np.where(e_data >= threshold)[0]
-    under_t_data = np.where(e_data < threshold)[0]
+    above_t_data = np.where(e_data >= e_threshold)[0]
+    under_t_data = np.where(e_data < e_threshold)[0]
 
     e_data[above_t_data] = 0.25
     e_data[under_t_data] = e_data[under_t_data] + 0.2*e_data[under_t_data-1]
 
-    idx_data = np.where(e_data > 0.0008)[0]
+    idx_data = np.where(e_data > sec_threshold)[0]
 
     # print(f"{idx_data = }")
 
@@ -92,6 +94,7 @@ def main(args):
                 e = data.shape[0]
 
             plot_data = data[s:e]
+            print(plot_data.shape)
             trimmed_pkt = trim(plot_data, pkt_len)
 
             print(f"{trimmed_pkt.shape = }")
