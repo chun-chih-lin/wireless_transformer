@@ -166,8 +166,8 @@ def main(args):
         s = None
         e = None
 
-        s = 30_000_000
-        e = 40_000_000
+        # s = 30_000_000
+        # e = 40_000_000
 
         if os.path.isfile(dat_filename):
             print("is file")
@@ -184,7 +184,7 @@ def main(args):
 
             save_dat_name = f"{src}Trimmed-WIFI-{mod}{ptn}dat"
             print(f"{save_dat_name = }")
-            # trimmed_pkt.tofile(save_dat_name)
+            trimmed_pkt.tofile(save_dat_name)
         else:
             print("not a file")
 
