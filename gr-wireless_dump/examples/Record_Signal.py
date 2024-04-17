@@ -63,16 +63,16 @@ class Record_Signal(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.tx_power = tx_power = "0"
-        self.save_mod = save_mod = "RAND"
-        self.carrier_freq = carrier_freq = 2500e6
-        self.save_prefix = save_prefix = "EIB_3F_hallway/"
+        self.tx_power = tx_power = "-20"
+        self.save_mod = save_mod = "BT-GFSK-S8Coding"
+        self.carrier_freq = carrier_freq = 2360e6
+        self.save_prefix = save_prefix = "Dataset_EIB_outdoor/"
         self.save_folder = save_folder = "/home/chunchi/Desktop/wireless_transformer/records/"
         self.save_filename = save_filename = save_mod + "." + tx_power + "." + str(int(carrier_freq/1e8)) + ".dat"
-        self.ttl_save_sample = ttl_save_sample = 20e3
+        self.ttl_save_sample = ttl_save_sample = 20e5
         self.save_full_filename = save_full_filename = save_folder + save_prefix + save_filename
         self.sample_per_input = sample_per_input = 128
-        self.samp_rate = samp_rate = 200e3
+        self.samp_rate = samp_rate = 20e6
         self.gain_db = gain_db = 30
         self.gain = gain = .65
 

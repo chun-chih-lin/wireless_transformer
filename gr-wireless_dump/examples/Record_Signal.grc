@@ -58,12 +58,36 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: 2500e6
+    value: 2400e6
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
     coordinate: [608, 116.0]
+    rotation: 0
+    state: disabled
+- name: carrier_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: 2500e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [712, 116.0]
+    rotation: 0
+    state: disabled
+- name: carrier_freq
+  id: variable
+  parameters:
+    comment: ''
+    value: 2360e6
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 52.0]
     rotation: 0
     state: enabled
 - name: gain
@@ -119,7 +143,7 @@ blocks:
     bus_structure: null
     coordinate: [608, 180.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: samp_rate
   id: variable
   parameters:
@@ -131,7 +155,7 @@ blocks:
     bus_structure: null
     coordinate: [712, 180.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: sample_per_input
   id: variable
   parameters:
@@ -383,7 +407,7 @@ blocks:
     bus_structure: null
     coordinate: [464, 604.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: save_mod
   id: variable
   parameters:
@@ -443,12 +467,12 @@ blocks:
     bus_structure: null
     coordinate: [1320, 172.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: save_prefix
   id: variable
   parameters:
     comment: ''
-    value: '"EIB_3F_hallway/"'
+    value: '"Dataset_EIB_outdoor/"'
   states:
     bus_sink: false
     bus_source: false
@@ -467,7 +491,7 @@ blocks:
     bus_structure: null
     coordinate: [920, 532.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: ttl_save_sample
   id: variable
   parameters:
@@ -479,7 +503,7 @@ blocks:
     bus_structure: null
     coordinate: [1040, 532.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: tx_power
   id: variable
   parameters:
@@ -587,7 +611,7 @@ blocks:
     bus_structure: null
     coordinate: [1328, 548.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: tx_power
   id: variable
   parameters:
@@ -623,7 +647,7 @@ blocks:
     bus_structure: null
     coordinate: [1112, 596.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_file_sink_0
   id: blocks_file_sink
   parameters:
