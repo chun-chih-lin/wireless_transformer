@@ -27,7 +27,12 @@ def check_plot(data, e_data):
     plt.plot(data.imag)
     plt.plot(e_data)
     plt.show()
+    pass
 
+def is_long_enough(ary):
+    e_ary = energy(ary)
+    e_ary_mean = e_ary.mean()
+    print(f"{e_ary_mean = }")
     pass
 
 
@@ -66,12 +71,22 @@ def trim(data, pkt_len):
     ttl_pkt = None
     for idx in pkt_e_idx_data:
         pkt_s = idx_data[idx] - pkt_len
+
+
+
+
         plt.axvline(idx_data[idx], color='k')
         plt.axvline(pkt_s, color='r')
         plt.plot(data.real, alpha=.2)
         plt.plot(data.imag, alpha=.2)
         plt.plot(e_data)
         # print(f"{pkt_s = }")
+
+
+        detect_pkt = data[pkt_s:pkt_s+pkt_len]
+        is_long_enough(detect_pkt)
+
+
         if ttl_pkt is None:
             ttl_pkt = np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)
         else:
