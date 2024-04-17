@@ -29,10 +29,11 @@ def check_plot(data, e_data):
     plt.show()
     pass
 
-def is_long_enough(ary):
+def is_long_enough(ary, pkt_energy_threshold=0.2):
     e_ary = energy(ary)
-    e_ary_mean = e_ary.mean()
+    e_ary_mean = np.abs(e_ary.mean())
     print(f"{e_ary_mean = }")
+
     pass
 
 
@@ -114,7 +115,7 @@ def main(args):
         s = None
         e = None
 
-        s = 40_000
+        s = 10_000
         e = 60_000
 
         if os.path.isfile(dat_filename):
