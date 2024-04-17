@@ -70,6 +70,7 @@ def trim(data, pkt_len):
         plt.axvline(pkt_s, color='r')
         plt.plot(data.real)
         plt.plot(data.imag)
+        plt.plot(e_data)
         # print(f"{pkt_s = }")
         if ttl_pkt is None:
             ttl_pkt = np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)
