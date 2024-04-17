@@ -73,55 +73,51 @@ def main(args):
     for mod in pkt_len_list.keys():
         dat_filename = f"{src}WIFI-{mod}{ptn}dat"
         print(f"{dat_filename = }")
+
+        pkt_len = pkt_len_list[sys.argv[1]]
+
+        s = None
+        e = None
+
+        s = 0
+        e = 100_000
+
         if os.path.isfile(dat_filename):
-            print('True')
+            print("is file")
+            data = np.fromfile(dat_filename, dtype=np.complex64)
+            print(data.shape)
+
+            if s is None or e is None:
+                s = 0
+                e = data.shape[0]
+
+            plot_data = data[s:e]
+            trimmed_pkt = trim(plot_data, pkt_len)
+
+            print(f"{trimmed_pkt.shape = }")
+
+            # mean_e = np.zeros((trimmed_pkt.shape[0], ))
+            # for pkt_i in range(trimmed_pkt.shape[0]):
+            #     mean_e[pkt_i] = np.mean(energy(trimmed_pkt[pkt_i, :]))
+
+            # for i in range(trimmed_pkt.shape[0]):
+            #     plt.plot(trimmed_pkt[i, :].real)
+            #     plt.plot(trimmed_pkt[i, :].imag)
+
+            # plt.plot(mean_e.real)
+            # plt.plot(mean_e.imag)
+            # plt.ylim((0, 0.1))
+            # plt.show()
+
+            dataset = {
+                'data': trimmed_pkt
+            }
+            # savemat(f"WIFI-{sys.argv[1]}.mat", dataset)
         else:
-            print(False)
+            print("not a file")
 
-    if True:
-        exit()
-
-    pkt_len = pkt_len_list[sys.argv[1]]
-
-    s = None
-    e = None
-
-    s = 0
-    e = 100_000
-
-    if os.path.isfile(dat_filename):
-        print("is file")
-        data = np.fromfile(dat_filename, dtype=np.complex64)
-        print(data.shape)
-
-        if s is None or e is None:
-            s = 0
-            e = data.shape[0]
-
-        plot_data = data[s:e]
-        trimmed_pkt = trim(plot_data, pkt_len)
-
-        print(f"{trimmed_pkt.shape = }")
-
-        # mean_e = np.zeros((trimmed_pkt.shape[0], ))
-        # for pkt_i in range(trimmed_pkt.shape[0]):
-        #     mean_e[pkt_i] = np.mean(energy(trimmed_pkt[pkt_i, :]))
-
-        # for i in range(trimmed_pkt.shape[0]):
-        #     plt.plot(trimmed_pkt[i, :].real)
-        #     plt.plot(trimmed_pkt[i, :].imag)
-
-        # plt.plot(mean_e.real)
-        # plt.plot(mean_e.imag)
-        # plt.ylim((0, 0.1))
-        # plt.show()
-
-        dataset = {
-            'data': trimmed_pkt
-        }
-        # savemat(f"WIFI-{sys.argv[1]}.mat", dataset)
-    else:
-        print("not a file")
+        if True:
+            break
 
 if __name__ == "__main__":
     invalid_input = False
