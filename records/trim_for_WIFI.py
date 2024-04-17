@@ -57,8 +57,6 @@ def trim(data, pkt_len, mod):
         "64QAM": 0.00015
     }
 
-
-
     pkt_energy_threshold = pkt_e_threshold_list[mod]
 
     e_data = energy(data)
@@ -168,8 +166,8 @@ def main(args):
         s = None
         e = None
 
-        s = 20_000_000
-        e = 30_000_000
+        s = 30_000_000
+        e = 40_000_000
 
         if os.path.isfile(dat_filename):
             print("is file")
