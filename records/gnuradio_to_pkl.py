@@ -50,7 +50,9 @@ def convert_to_pkl(args, file_list, mod_list):
         full_filename = f"{src}{filename}"
         record_data = np.fromfile(open(full_filename), dtype=np.complex64)
 
-        if record_data.shape[0] > 20_000:
+        if record_data.shape[0] > 20_000*128:
+            print(f"{record_data.shape = }")
+            record_data = record_data[:20_000*128]
             print(f"{record_data.shape = }")
 
         mod_name = filename.split('.')[0]
