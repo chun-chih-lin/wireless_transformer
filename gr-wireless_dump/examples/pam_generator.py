@@ -70,17 +70,18 @@ class pam_generator(gr.top_block, Qt.QWidget):
         self.pam4 = pam4 = digital.constellation_calcdist([-3, -1, 1, 3], [0, 1, 3, 2],
         4, 1, digital.constellation.AMPLITUDE_NORMALIZATION).base()
         self.pam4.set_npwr(1.0)
+        self.gain_db = gain_db = 50
         self.gain = gain = .5
-        self.carrier_freq = carrier_freq = 2400e6
+        self.carrier_freq = carrier_freq = 2500e6
 
         ##################################################
         # Blocks
         ##################################################
 
-        self._gain_range = qtgui.Range(0.0, 1.0, 0.05, .5, 200)
-        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._gain_win)
-        self._carrier_freq_range = qtgui.Range(2400e6, 3800e6, 5e6, 2400e6, 200)
+        self._gain_db_range = qtgui.Range(0, 70, 10, 50, 200)
+        self._gain_db_win = qtgui.RangeWidget(self._gain_db_range, self.set_gain_db, "'gain_db'", "counter_slider", int, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._gain_db_win)
+        self._carrier_freq_range = qtgui.Range(2400e6, 3800e6, 5e6, 2500e6, 200)
         self._carrier_freq_win = qtgui.RangeWidget(self._carrier_freq_range, self.set_carrier_freq, "'carrier_freq'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._carrier_freq_win)
         self.uhd_usrp_sink_0 = uhd.usrp_sink(
@@ -97,7 +98,7 @@ class pam_generator(gr.top_block, Qt.QWidget):
 
         self.uhd_usrp_sink_0.set_center_freq(carrier_freq, 0)
         self.uhd_usrp_sink_0.set_antenna("TX/RX", 0)
-        self.uhd_usrp_sink_0.set_normalized_gain(gain, 0)
+        self.uhd_usrp_sink_0.set_gain(gain_db, 0)
         self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
             1024, #size
             samp_rate, #samp_rate
@@ -191,6 +192,9 @@ class pam_generator(gr.top_block, Qt.QWidget):
 
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
+        self._gain_range = qtgui.Range(0.0, 1.0, 0.05, .5, 200)
+        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._gain_win)
         self.digital_constellation_modulator_0 = digital.generic_mod(
             constellation=pam4,
             differential=True,
@@ -242,12 +246,18 @@ class pam_generator(gr.top_block, Qt.QWidget):
     def set_pam4(self, pam4):
         self.pam4 = pam4
 
+    def get_gain_db(self):
+        return self.gain_db
+
+    def set_gain_db(self, gain_db):
+        self.gain_db = gain_db
+        self.uhd_usrp_sink_0.set_gain(self.gain_db, 0)
+
     def get_gain(self):
         return self.gain
 
     def set_gain(self, gain):
         self.gain = gain
-        self.uhd_usrp_sink_0.set_normalized_gain(self.gain, 0)
 
     def get_carrier_freq(self):
         return self.carrier_freq
