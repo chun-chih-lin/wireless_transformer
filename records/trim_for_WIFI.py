@@ -66,21 +66,21 @@ def trim(data, pkt_len):
     ttl_pkt = None
     for idx in pkt_e_idx_data:
         pkt_s = idx_data[idx] - pkt_len
-        plt.axvline(idx_data[idx], color='k')
-        plt.axvline(pkt_s, color='r')
-        plt.plot(data.real)
-        plt.plot(data.imag)
-        plt.plot(e_data)
+        # plt.axvline(idx_data[idx], color='k')
+        # plt.axvline(pkt_s, color='r')
+        # plt.plot(data.real)
+        # plt.plot(data.imag)
+        # plt.plot(e_data)
         # print(f"{pkt_s = }")
         if ttl_pkt is None:
             ttl_pkt = np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)
         else:
             ttl_pkt = np.concatenate((ttl_pkt, np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)))
 
-        # plt.plot(data[pkt_s:pkt_s+pkt_len].real)
-        # plt.plot(data[pkt_s:pkt_s+pkt_len].imag)
+        plt.plot(data[pkt_s:pkt_s+pkt_len].real)
+        plt.plot(data[pkt_s:pkt_s+pkt_len].imag)
         plt.show()
-        break
+        # break
 
     # plt.show()
     return ttl_pkt
