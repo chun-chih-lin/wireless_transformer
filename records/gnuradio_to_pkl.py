@@ -16,13 +16,15 @@ if os.system("clear") != 0:
 # =====================================================
 def get_mod_list(t):
     if t == "simple":
+        dataset_type = "simple"
         mod_list = ["BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "AM-DSB", "AM-SSB", "PAM4", "CPFSK", "GFSK", "WBFM", "RAND"]
         # mod_idx = [x for x in range(len(mod_list))]
     else:
         # "protocol""
+        dataset_type = "protocol"
         mod_list = ["WIFI-BPSK", "WIFI-QPSK", "WIFI-16QAM", "WIFI-64QAM", "ZIGBEE-OQPSK", "BT-GFSK-LE1M", "BT-GFSK-LE2M", "BT-GFSK-S2Coding", "BT-GFSK-S2Coding"]
         # mod_idx = [x for x in range(len(mod_list))]
-    return mod_list
+    return mod_list, dataset_type
 
 
 def get_filenames_under_folder(src, ptn, mod_list):
@@ -36,7 +38,7 @@ def get_filenames_under_folder(src, ptn, mod_list):
             print(f"{filename} is not a file.")
     return filename_list
 
-def convert_to_pkl(args, file_list, mod_list):
+def convert_to_pkl(args, file_list, mod_list, dataset_type):
     src = args.s
     tgt = args.t
     ptn = args.p
@@ -83,7 +85,7 @@ def convert_to_pkl(args, file_list, mod_list):
     pattern = ".".join(ptn_seg)
     print(f"{ptn_seg = }, {pattern = }")
 
-    save_pkl_name = f"{save_prefix}{pattern}pkl"
+    save_pkl_name = f"{save_prefix}-{dataset_type}{pattern}pkl"
     save_filename = f"{tgt}{save_pkl_name}"
 
     if os.path.exists(save_filename):
@@ -104,7 +106,7 @@ def convert_to_pkl(args, file_list, mod_list):
 def main(args):
     print(sys.argv)
 
-    mod_list = get_mod_list(args.m)
+    mod_list, dataset_type = get_mod_list(args.m)
 
     file_list = get_filenames_under_folder(args.s, args.p, mod_list)
     print(f"{file_list = }")
@@ -122,7 +124,7 @@ def main(args):
         exit()
 
     #save_filename = None
-    convert_to_pkl(args, file_list, mod_list)
+    convert_to_pkl(args, file_list, mod_list, dataset_type)
 
     # save_to_pkl_file(args, pkl_dict, save_filename)
     pass
