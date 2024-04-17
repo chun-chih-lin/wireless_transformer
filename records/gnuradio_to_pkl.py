@@ -8,6 +8,7 @@ parser.add_argument('-s', help='source torch experience file directory.')
 parser.add_argument('-t', help='target npy file directory.')
 parser.add_argument('-p', help='dataset pattern')
 parser.add_argument('-m', help='wireless signal type. [s/p]')
+parser.add_argument('-y', help='yes to all')
 args = parser.parse_args()
 
 if os.system("clear") != 0:
@@ -151,6 +152,11 @@ if __name__ == '__main__':
 
     if invalid_input:
         exit()
+
+    print(f"{args.y = }")
+    if args.y is None:
+        args.y = False
+    print(f"{args.y = }")
 
     if args.t is None:
         args.t = args.s
