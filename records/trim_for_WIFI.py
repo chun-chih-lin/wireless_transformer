@@ -70,7 +70,7 @@ def trim(data, pkt_len):
     # print(f"{_idx_data = }")
 
     pkt_e_idx_data = np.where(_idx_data > 1)[0]
-    print(f"{pkt_e_idx_data.shape = }")
+    print(f"{pkt_e_idx_data.shape = }, {pkt_e_idx_data = }")
 
 
     # for s in above_t_data:
