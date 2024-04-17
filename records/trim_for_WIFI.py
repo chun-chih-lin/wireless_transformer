@@ -80,7 +80,7 @@ def trim(data, pkt_len):
         plt.plot(data[pkt_s:pkt_s+pkt_len].real)
         plt.plot(data[pkt_s:pkt_s+pkt_len].imag)
         plt.show()
-        # break
+        break
 
     # plt.show()
     return ttl_pkt
