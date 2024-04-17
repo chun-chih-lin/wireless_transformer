@@ -2,9 +2,16 @@ import numpy as np
 import os, sys
 import matplotlib.pyplot as plt
 
+
+import argparse
+parser = argparse.ArgumentParser(description='save torch experience file to npy.')
+parser.add_argument('-s', help='source torch experience file directory.')
+parser.add_argument('-t', help='target npy file directory.')
+parser.add_argument('-p', help='dataset pattern')
+args = parser.parse_args()
+
 if os.system('clear') != 0:
     os.system('cls')
-
 
 pkt_len_list = {
     "BPSK": 1280,
@@ -15,7 +22,6 @@ pkt_len_list = {
 
 def energy(ary):
     return ary * np.conj(ary)
-
 
 def trim(data, pkt_len):
     print(f"{data.shape = }")
@@ -59,53 +65,73 @@ def trim(data, pkt_len):
     # plt.show()
     return ttl_pkt
 
-def main():
-    print(sys.argv)
-    if len(sys.argv) >= 2:
-        dat_filename = f"WIFI-{sys.argv[1]}.dat"
+def main(args):
 
-        pkt_len = pkt_len_list[sys.argv[1]]
+    src = args.s
+    ptn = args.p
 
-        s = None
-        e = None
+    dat_filename = f"{src}WIFI-{sys.argv[1]}{ptn}dat"
+    print(f"{dat_filename = }")
+    if True:
+        exit()
 
-        # s = 0
-        # e = 100_000
+    pkt_len = pkt_len_list[sys.argv[1]]
 
-        if os.path.isfile(dat_filename):
-            print("is file")
-            data = np.fromfile(dat_filename, dtype=np.complex64)
-            print(data.shape)
+    s = None
+    e = None
 
-            if s is None or e is None:
-                s = 0
-                e = data.shape[0]
+    s = 0
+    e = 100_000
 
-            plot_data = data[s:e]
-            trimmed_pkt = trim(plot_data, pkt_len)
+    if os.path.isfile(dat_filename):
+        print("is file")
+        data = np.fromfile(dat_filename, dtype=np.complex64)
+        print(data.shape)
 
-            print(f"{trimmed_pkt.shape = }")
+        if s is None or e is None:
+            s = 0
+            e = data.shape[0]
 
-            # mean_e = np.zeros((trimmed_pkt.shape[0], ))
-            # for pkt_i in range(trimmed_pkt.shape[0]):
-            #     mean_e[pkt_i] = np.mean(energy(trimmed_pkt[pkt_i, :]))
+        plot_data = data[s:e]
+        trimmed_pkt = trim(plot_data, pkt_len)
 
-            # for i in range(trimmed_pkt.shape[0]):
-            #     plt.plot(trimmed_pkt[i, :].real)
-            #     plt.plot(trimmed_pkt[i, :].imag)
+        print(f"{trimmed_pkt.shape = }")
 
-            # plt.plot(mean_e.real)
-            # plt.plot(mean_e.imag)
-            # plt.ylim((0, 0.1))
-            # plt.show()
+        # mean_e = np.zeros((trimmed_pkt.shape[0], ))
+        # for pkt_i in range(trimmed_pkt.shape[0]):
+        #     mean_e[pkt_i] = np.mean(energy(trimmed_pkt[pkt_i, :]))
 
-            dataset = {
-                'data': trimmed_pkt
-            }
-            savemat(f"WIFI-{sys.argv[1]}.mat", dataset)
-        else:
-            print("not a file")
+        # for i in range(trimmed_pkt.shape[0]):
+        #     plt.plot(trimmed_pkt[i, :].real)
+        #     plt.plot(trimmed_pkt[i, :].imag)
+
+        # plt.plot(mean_e.real)
+        # plt.plot(mean_e.imag)
+        # plt.ylim((0, 0.1))
+        # plt.show()
+
+        dataset = {
+            'data': trimmed_pkt
+        }
+        # savemat(f"WIFI-{sys.argv[1]}.mat", dataset)
+    else:
+        print("not a file")
 
 if __name__ == "__main__":
-    main()
+    invalid_input = False
+    if args.s is None:
+        print("Need source directory")
+        invalid_input = True
+
+    if args.p is None:
+        print("Need pattern")
+        invalid_input = True
+
+    if invalid_input:
+        exit()
+
+    if args.t is None:
+        args.t = args.s
+
+    main(args)
 
