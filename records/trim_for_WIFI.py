@@ -32,7 +32,7 @@ def check_plot(data, e_data):
 def is_long_enough(ary, pkt_energy_threshold=0.2):
     e_ary = energy(ary)
     e_ary_mean = np.abs(e_ary.mean())
-    print(f"{e_ary_mean = }, {pkt_energy_threshold = }")
+    # print(f"{e_ary_mean = }, {pkt_energy_threshold = }")
     return e_ary_mean >= pkt_energy_threshold
 
     pass
