@@ -8,7 +8,7 @@ parser.add_argument('-s', help='source torch experience file directory.')
 parser.add_argument('-t', help='target npy file directory.')
 parser.add_argument('-p', help='dataset pattern')
 parser.add_argument('-m', help='wireless signal type. [s/p]', default='s')
-parser.add_argument('-y', help='yes to all', default=True)
+parser.add_argument('-y', help='yes to all', default=True, action='store_true')
 args = parser.parse_args()
 
 if os.system("clear") != 0:
