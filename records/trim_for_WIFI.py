@@ -74,7 +74,7 @@ def main(args):
         dat_filename = f"{src}WIFI-{mod}{ptn}dat"
         print(f"{dat_filename = }")
 
-        pkt_len = pkt_len_list[sys.argv[1]]
+        pkt_len = pkt_len_list[mod]
 
         s = None
         e = None
