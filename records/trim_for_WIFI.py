@@ -74,7 +74,7 @@ def trim(data, pkt_len):
     plt.plot(data.real, alpha=.2)
     plt.plot(data.imag, alpha=.2)
     [plt.axvline(x, color='r') for x in above_t_data]
-    [plt.axvline(x, color='b') for x in under_t_data]
+    # [plt.axvline(x, color='b') for x in under_t_data]
     plt.show()
 
     if True:
