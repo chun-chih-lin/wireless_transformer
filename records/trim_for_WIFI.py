@@ -70,12 +70,19 @@ def trim(data, pkt_len):
     pkt_e_idx_data = np.where(_idx_data > 1)[0]
     print(f"{pkt_e_idx_data.shape = }")
 
+
+    plt.plot(data.real, alpha=.2)
+    plt.plot(data.imag, alpha=.2)
+    plt.axvline(above_t_data, color='r')
+    plt.axvline(under_t_data, color='b')
+    plt.show()
+
+    if True:
+        return
+
     ttl_pkt = None
     for idx in pkt_e_idx_data:
         pkt_s = idx_data[idx] - pkt_len
-
-
-
 
         plt.axvline(idx_data[idx], color='k')
         plt.axvline(pkt_s, color='r')
