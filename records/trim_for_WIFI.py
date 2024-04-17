@@ -53,7 +53,6 @@ def trim(data, pkt_len):
     # check_plot(data, e_data)
 
     above_t_data = np.where(e_data >= e_threshold)[0]
-    print(f"{above_t_data = }")
     under_t_data = np.where(e_data < e_threshold)[0]
 
     e_data[above_t_data] = 0.25
@@ -74,8 +73,7 @@ def trim(data, pkt_len):
 
     plt.plot(data.real, alpha=.2)
     plt.plot(data.imag, alpha=.2)
-    plt.axvline(above_t_data, color='r')
-    plt.axvline(under_t_data, color='b')
+    plt.axvline(pkt_e_idx_data)
     plt.show()
 
     if True:
