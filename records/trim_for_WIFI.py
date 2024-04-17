@@ -29,10 +29,10 @@ def check_plot(data, e_data):
     plt.show()
     pass
 
-def is_long_enough(ary, pkt_energy_threshold=0.2):
+def is_long_enough(ary, pkt_s, pkt_spkt_energy_threshold=0.2):
     e_ary = energy(ary)
     e_ary_mean = np.mean(e_ary.real)
-    print(f"{e_ary_mean = }, {pkt_energy_threshold = }")
+    print(f"[{pkt_s}] {e_ary_mean = }, {pkt_energy_threshold = }")
     return e_ary_mean >= pkt_energy_threshold
 
     pass
@@ -85,7 +85,7 @@ def trim(data, pkt_len, mod):
 
 
     # for s in above_t_data:
-    #     e = is_long_enough(data[s:s+pkt_len], pkt_energy_threshold=pkt_energy_threshold)
+    #     e = is_long_enough(data[s:s+pkt_len], s, pkt_energy_threshold=pkt_energy_threshold)
 
     # plt.plot(data.real, alpha=.2)
     # plt.plot(data.imag, alpha=.2)
@@ -103,7 +103,7 @@ def trim(data, pkt_len, mod):
             continue
 
         detect_pkt = data[pkt_s:pkt_s+pkt_len]
-        if is_long_enough(detect_pkt, pkt_energy_threshold=pkt_energy_threshold):
+        if is_long_enough(detect_pkt, pkt_s, pkt_energy_threshold=pkt_energy_threshold):
             last_pkt_end = pkt_s+pkt_len
 
             pkt_s_list.append(pkt_s)
