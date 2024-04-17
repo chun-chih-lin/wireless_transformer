@@ -32,7 +32,7 @@ def check_plot(data, e_data):
 def is_long_enough(ary, pkt_energy_threshold=0.2):
     e_ary = energy(ary)
     e_ary_mean = np.mean(e_ary.real)
-    print(f"{e_ary_mean = }, {pkt_energy_threshold = }")
+    # print(f"{e_ary_mean = }, {pkt_energy_threshold = }")
     return e_ary_mean >= pkt_energy_threshold
 
     pass
@@ -44,17 +44,20 @@ def trim(data, pkt_len, mod):
     # e_threshold = 0.01
     # sec_threshold = 0.0008
 
+    # --------------------------------
     # 50 db outdoor
     e_threshold = 0.0001
     e_threshold = 0.00006
     sec_threshold = 0.00038
-
     pkt_e_threshold_list = {
         "BPSK": 0.00038,
         "QPSK": 0.00015,
         "16QAM": 0.00015,
         "64QAM": 0.00015
     }
+
+
+
     pkt_energy_threshold = pkt_e_threshold_list[mod]
 
     e_data = energy(data)
@@ -62,7 +65,7 @@ def trim(data, pkt_len, mod):
     # check_plot(data, e_data)
 
     above_t_data = np.where(e_data >= e_threshold)[0]
-    print(f"{above_t_data = }")
+    # print(f"{above_t_data = }")
     under_t_data = np.where(e_data < e_threshold)[0]
 
     e_data[above_t_data] = 0.25
@@ -110,49 +113,45 @@ def trim(data, pkt_len, mod):
             else:
                 ttl_pkt = np.concatenate((ttl_pkt, np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)))
 
-            # plt.plot(data[pkt_s:pkt_s+pkt_len].real)
-            # plt.plot(data[pkt_s:pkt_s+pkt_len].imag)
-            # plt.show()
-
-    print(f"{pkt_s_list = }")
-    plt.plot(data.real, alpha=.2)
-    plt.plot(data.imag, alpha=.2)
-    plt.plot(raw_e_data)
-    [plt.axvline(x, color='r') for x in pkt_s_list]
-    plt.axhline(e_threshold, color='r')
-    plt.show()
-
-    return ttl_pkt
-
-    if True:
-        return
-
-    for idx in pkt_e_idx_data:
-        print(f"{idx = }")
-        pkt_s = idx_data[idx] - pkt_len
-
-        # plt.axvline(idx_data[idx], color='k')
-        # plt.axvline(pkt_s, color='r')
-        # plt.plot(data.real, alpha=.2)
-        # plt.plot(data.imag, alpha=.2)
-        # plt.plot(e_data)
-        # print(f"{pkt_s = }")
-
-
-        detect_pkt = data[pkt_s:pkt_s+pkt_len]
-        if is_long_enough(detect_pkt, pkt_energy_threshold=pkt_energy_threshold):
-            if ttl_pkt is None:
-                ttl_pkt = np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)
-            else:
-                ttl_pkt = np.concatenate((ttl_pkt, np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)))
-
-            plt.plot(data[pkt_s:pkt_s+pkt_len].real)
-            plt.plot(data[pkt_s:pkt_s+pkt_len].imag)
-            plt.show()
-            # break
-
+    # print(f"{pkt_s_list = }")
+    # plt.plot(data.real, alpha=.2)
+    # plt.plot(data.imag, alpha=.2)
+    # plt.plot(raw_e_data)
+    # [plt.axvline(x, color='r') for x in pkt_s_list]
+    # plt.axhline(e_threshold, color='r')
     # plt.show()
+
     return ttl_pkt
+
+    # if True:
+    #     return
+
+    # for idx in pkt_e_idx_data:
+    #     print(f"{idx = }")
+    #     pkt_s = idx_data[idx] - pkt_len
+
+    #     # plt.axvline(idx_data[idx], color='k')
+    #     # plt.axvline(pkt_s, color='r')
+    #     # plt.plot(data.real, alpha=.2)
+    #     # plt.plot(data.imag, alpha=.2)
+    #     # plt.plot(e_data)
+    #     # print(f"{pkt_s = }")
+
+
+    #     detect_pkt = data[pkt_s:pkt_s+pkt_len]
+    #     if is_long_enough(detect_pkt, pkt_energy_threshold=pkt_energy_threshold):
+    #         if ttl_pkt is None:
+    #             ttl_pkt = np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)
+    #         else:
+    #             ttl_pkt = np.concatenate((ttl_pkt, np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)))
+
+    #         plt.plot(data[pkt_s:pkt_s+pkt_len].real)
+    #         plt.plot(data[pkt_s:pkt_s+pkt_len].imag)
+    #         plt.show()
+    #         # break
+
+    # # plt.show()
+    # return ttl_pkt
 
 def main(args):
 
@@ -202,6 +201,8 @@ def main(args):
             dataset = {
                 'data': trimmed_pkt
             }
+            save_dat_name = f"Trimmed-WIFI-{mod}{ptn}.dat"
+            print(f"{save_dat_name = }")
             # savemat(f"WIFI-{sys.argv[1]}.mat", dataset)
         else:
             print("not a file")
