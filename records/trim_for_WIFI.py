@@ -167,7 +167,7 @@ def main(args):
         s = None
         e = None
 
-        s = 100_000
+        s = 0
         e = 500_000
 
         if os.path.isfile(dat_filename):
