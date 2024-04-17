@@ -81,7 +81,7 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
         self.gain_db = gain_db = 30
         self.freq = freq = 5170000000
         self.encoding = encoding = 0
-        self.custom_freq = custom_freq = 2900e6
+        self.custom_freq = custom_freq = 2500e6
 
         ##################################################
         # Blocks
@@ -156,7 +156,7 @@ class WIIF_TX(gr.top_block, Qt.QWidget):
         self._encoding_button_group.buttonClicked[int].connect(
             lambda i: self.set_encoding(self._encoding_options[i]))
         self.top_layout.addWidget(self._encoding_group_box)
-        self._custom_freq_range = qtgui.Range(2400e6, 5920e6, 5e6, 2900e6, 200)
+        self._custom_freq_range = qtgui.Range(2400e6, 5920e6, 5e6, 2500e6, 200)
         self._custom_freq_win = qtgui.RangeWidget(self._custom_freq_range, self.set_custom_freq, "'custom_freq'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._custom_freq_win)
         self.wireless_dump_generate_random_message_0 = wireless_dump.generate_random_message('', pdu_length, 0, interval, num_message)
