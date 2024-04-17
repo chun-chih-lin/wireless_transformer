@@ -38,8 +38,8 @@ def trim(data, pkt_len):
     # sec_threshold = 0.0008
 
     # 50 db outdoor
-    e_threshold = 0.0001
-    sec_threshold = 0.000008
+    e_threshold = 0.001
+    sec_threshold = 0.00008
 
     e_data = energy(data)
 
