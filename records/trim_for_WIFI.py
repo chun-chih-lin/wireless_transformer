@@ -51,7 +51,7 @@ def trim(data, pkt_len):
     pkt_energy_threshold = 0.00038
 
     e_data = energy(data)
-
+    raw_e_data = e_data.copy()
     # check_plot(data, e_data)
 
     above_t_data = np.where(e_data >= e_threshold)[0]
@@ -109,6 +109,7 @@ def trim(data, pkt_len):
     print(f"{pkt_s_list = }")
     plt.plot(data.real, alpha=.2)
     plt.plot(data.imag, alpha=.2)
+    plt.plot(raw_e_data)
     [plt.axvline(x, color='r') for x in pkt_s_list]
     plt.show()
 
