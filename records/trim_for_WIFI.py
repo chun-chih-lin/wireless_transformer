@@ -73,6 +73,10 @@ def main(args):
     for mod in pkt_len_list.keys():
         dat_filename = f"{src}WIFI-{mod}{ptn}dat"
         print(f"{dat_filename = }")
+        if os.path.isfile(dat_filename):
+            print('True')
+        else:
+            print(False)
 
     if True:
         exit()
