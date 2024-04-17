@@ -20,7 +20,7 @@ def get_mod_list(t):
         # mod_idx = [x for x in range(len(mod_list))]
     else:
         # "protocol""
-        mod_list = ["WIFI-BPSK", "WIFI-QPSK", "WIFI-16QAM", "WIFI-64QAM", "ZIGBEE-OQPSK", "BT-GFSK-LE1M", "BT-GFSK-LE2M", "BT-GFSK-S2Coding", "BT-GFSK-S2Coding"]    
+        mod_list = ["WIFI-BPSK", "WIFI-QPSK", "WIFI-16QAM", "WIFI-64QAM", "ZIGBEE-OQPSK", "BT-GFSK-LE1M", "BT-GFSK-LE2M", "BT-GFSK-S2Coding", "BT-GFSK-S2Coding"]
         # mod_idx = [x for x in range(len(mod_list))]
     return mod_list
 
@@ -32,6 +32,8 @@ def get_filenames_under_folder(src, ptn, mod_list):
         full_filename = f"{src}{filename}"
         if os.path.isfile(full_filename):
             filename_list.append(filename)
+        else:
+            print(f"{filename: } is not a file.")
     return filename_list
 
 def convert_to_pkl(args, file_list, mod_list):
