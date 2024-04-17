@@ -33,6 +33,7 @@ def is_long_enough(ary, pkt_energy_threshold=0.2):
     e_ary = energy(ary)
     e_ary_mean = np.abs(e_ary.mean())
     print(f"{e_ary_mean = }")
+    return e_ary_mean >= pkt_energy_threshold
 
     pass
 
@@ -45,7 +46,7 @@ def trim(data, pkt_len):
 
     # 50 db outdoor
     e_threshold = 0.001
-    sec_threshold = 0.00008
+    sec_threshold = 0.0008
 
     e_data = energy(data)
 
@@ -115,7 +116,7 @@ def main(args):
         s = None
         e = None
 
-        s = 10_000
+        s = 20_000
         e = 60_000
 
         if os.path.isfile(dat_filename):
