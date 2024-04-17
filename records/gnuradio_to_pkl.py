@@ -7,16 +7,25 @@ parser = argparse.ArgumentParser(description='save torch experience file to npy.
 parser.add_argument('-s', help='source torch experience file directory.')
 parser.add_argument('-t', help='target npy file directory.')
 parser.add_argument('-p', help='dataset pattern')
+parser.add_argument('-m', help='wireless signal type. [s/p]')
 args = parser.parse_args()
 
 if os.system("clear") != 0:
     os.system("cls")
 
 # =====================================================
-mod_list = ["BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "AM-DSB", "AM-SSB", "PAM4", "CPFSK", "GFSK", "WBFM", "RAND"]
-mod_idx = [x for x in range(len(mod_list))]
+def get_mod_list(t):
+    if t == "simple":
+        mod_list = ["BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "AM-DSB", "AM-SSB", "PAM4", "CPFSK", "GFSK", "WBFM", "RAND"]
+        # mod_idx = [x for x in range(len(mod_list))]
+    else:
+        # "protocol""
+        mod_list = ["WIFI-BPSK", "WIFI-QPSK", "WIFI-16QAM", "WIFI-64QAM", "ZIGBEE-OQPSK", "BT-GFSK-LE1M", "BT-GFSK-LE2M", "BT-GFSK-S2Coding", "BT-GFSK-S2Coding"]    
+        # mod_idx = [x for x in range(len(mod_list))]
+    return mod_list
 
-def get_filenames_under_folder(src, ptn):
+
+def get_filenames_under_folder(src, ptn, mod_list):
     filename_list = []
     for mod in mod_list:
         filename = f"{mod}{ptn}dat"
@@ -25,7 +34,7 @@ def get_filenames_under_folder(src, ptn):
             filename_list.append(filename)
     return filename_list
 
-def convert_to_pkl(args, file_list):
+def convert_to_pkl(args, file_list, mod_list):
     src = args.s
     tgt = args.t
     ptn = args.p
@@ -88,7 +97,10 @@ def convert_to_pkl(args, file_list):
 # =====================================================
 def main(args):
     print(sys.argv)
-    file_list = get_filenames_under_folder(args.s, args.p)
+
+    mod_list = get_mod_list(args.m)
+
+    file_list = get_filenames_under_folder(args.s, args.p, mod_list)
     print(f"{file_list = }")
     if len(file_list) == 0:
         print(f"Path: {args.s} is not a folder. Abort")
@@ -104,7 +116,7 @@ def main(args):
         exit()
 
     #save_filename = None
-    convert_to_pkl(args, file_list)
+    convert_to_pkl(args, file_list, mod_list)
 
     # save_to_pkl_file(args, pkl_dict, save_filename)
     pass
@@ -120,6 +132,14 @@ if __name__ == '__main__':
         print("Need pattern")
         invalid_input = True
 
+    if args.m is None:
+        print("")
+        args.m = "simple"
+    elif args.m == "p":
+        args.m = "protocol"
+    else:
+        print("Invalid modulation type. [s/w]")
+        invalid_input = True
 
     if invalid_input:
         exit()
