@@ -29,7 +29,7 @@ def check_plot(data, e_data):
     plt.show()
     pass
 
-def is_long_enough(ary, pkt_s, pkt_spkt_energy_threshold=0.2):
+def is_long_enough(ary, pkt_s, pkt_energy_threshold=0.2):
     e_ary = energy(ary)
     e_ary_mean = np.mean(e_ary.real)
     print(f"[{pkt_s}] {e_ary_mean = }, {pkt_energy_threshold = }")
