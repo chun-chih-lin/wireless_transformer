@@ -48,6 +48,8 @@ def trim(data, pkt_len):
     e_threshold = 0.001
     sec_threshold = 0.0008
 
+    pkt_energy_threshold = 0.00038
+
     e_data = energy(data)
 
     # check_plot(data, e_data)
@@ -71,16 +73,13 @@ def trim(data, pkt_len):
     print(f"{pkt_e_idx_data.shape = }")
 
 
-    for s in above_t_data:
-        e = is_long_enough(data[s:s+pkt_len])
+    # for s in above_t_data:
+    #     e = is_long_enough(data[s:s+pkt_len], pkt_energy_threshold=pkt_energy_threshold)
 
-    plt.plot(data.real, alpha=.2)
-    plt.plot(data.imag, alpha=.2)
-    [plt.axvline(x, color='r') for x in above_t_data]
-    plt.show()
-
-    if True:
-        return
+    # plt.plot(data.real, alpha=.2)
+    # plt.plot(data.imag, alpha=.2)
+    # [plt.axvline(x, color='r') for x in above_t_data]
+    # plt.show()
 
     ttl_pkt = None
     for idx in pkt_e_idx_data:
@@ -95,18 +94,16 @@ def trim(data, pkt_len):
 
 
         detect_pkt = data[pkt_s:pkt_s+pkt_len]
-        is_long_enough(detect_pkt)
+        if is_long_enough(detect_pkt, pkt_energy_threshold=pkt_energy_threshold):
+            if ttl_pkt is None:
+                ttl_pkt = np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)
+            else:
+                ttl_pkt = np.concatenate((ttl_pkt, np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)))
 
-
-        if ttl_pkt is None:
-            ttl_pkt = np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)
-        else:
-            ttl_pkt = np.concatenate((ttl_pkt, np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)))
-
-        plt.plot(data[pkt_s:pkt_s+pkt_len].real)
-        plt.plot(data[pkt_s:pkt_s+pkt_len].imag)
-        plt.show()
-        # break
+            plt.plot(data[pkt_s:pkt_s+pkt_len].real)
+            plt.plot(data[pkt_s:pkt_s+pkt_len].imag)
+            plt.show()
+            # break
 
     # plt.show()
     return ttl_pkt
