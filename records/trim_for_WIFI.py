@@ -33,7 +33,7 @@ def is_long_enough(ary, pkt_s, pkt_energy_threshold=0.2):
     # e_ary = energy(ary)
     e_ary = np.abs(ary)
     e_ary_mean = np.mean(e_ary.real)
-    print(f"[{pkt_s}] {e_ary_mean = }, {pkt_energy_threshold = }")
+    # print(f"[{pkt_s}] {e_ary_mean = }, {pkt_energy_threshold = }")
     return e_ary_mean >= pkt_energy_threshold
 
     pass
@@ -112,13 +112,13 @@ def trim(data, pkt_len, mod):
             else:
                 ttl_pkt = np.concatenate((ttl_pkt, np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)))
 
-    print(f"{pkt_s_list = }")
-    plt.plot(data.real, alpha=.2)
-    plt.plot(data.imag, alpha=.2)
-    plt.plot(np.abs(data))
-    [plt.axvline(x, color='r') for x in pkt_s_list]
-    plt.axhline(e_threshold, color='r')
-    plt.show()
+    # print(f"{pkt_s_list = }")
+    # plt.plot(data.real, alpha=.2)
+    # plt.plot(data.imag, alpha=.2)
+    # plt.plot(np.abs(data))
+    # [plt.axvline(x, color='r') for x in pkt_s_list]
+    # plt.axhline(e_threshold, color='r')
+    # plt.show()
 
     return ttl_pkt
 
