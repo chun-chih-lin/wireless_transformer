@@ -55,7 +55,7 @@ def trim(data, pkt_len):
     under_t_data = np.where(e_data < e_threshold)[0]
 
     e_data[above_t_data] = 0.25
-    e_data[under_t_data] = e_data[under_t_data] + 0.9*e_data[under_t_data-1]
+    e_data[under_t_data] = e_data[under_t_data] + 0.5*e_data[under_t_data-1]
 
     idx_data = np.where(e_data > sec_threshold)[0]
 
