@@ -83,6 +83,7 @@ def trim(data, pkt_len):
 
     ttl_pkt = None
     for idx in pkt_e_idx_data:
+        print(f"{idx = }")
         pkt_s = idx_data[idx] - pkt_len
 
         # plt.axvline(idx_data[idx], color='k')
