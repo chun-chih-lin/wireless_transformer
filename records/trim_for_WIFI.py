@@ -1,9 +1,8 @@
 import numpy as np
 import os, sys
 import matplotlib.pyplot as plt
-
-
 import argparse
+
 parser = argparse.ArgumentParser(description='save torch experience file to npy.')
 parser.add_argument('-s', help='source torch experience file directory.')
 parser.add_argument('-t', help='target npy file directory.')
@@ -23,6 +22,15 @@ pkt_len_list = {
 def energy(ary):
     return ary * np.conj(ary)
 
+def check_plot(data, e_data):
+    plt.plot(data.real)
+    plt.plot(data.imag)
+    plt.plot(e_data)
+    plt.show()
+
+    pass
+
+
 def trim(data, pkt_len):
     print(f"{data.shape = }")
 
@@ -36,6 +44,8 @@ def trim(data, pkt_len):
 
     e_data[above_t_data] = 0.25
     e_data[under_t_data] = e_data[under_t_data] + 0.2*e_data[under_t_data-1]
+
+    check_plot(data, e_data)
 
     idx_data = np.where(e_data > sec_threshold)[0]
 
