@@ -82,17 +82,20 @@ def trim(data, pkt_len):
     # plt.show()
 
     ttl_pkt = None
+    pkt_s_list = []
 
     last_pkt_end = None
     for pkt_s in above_t_data:
         print(f"{pkt_s = }")
-        
+
         if last_pkt_end is not None and pkt_s <= last_pkt_end:
             continue
 
         detect_pkt = data[pkt_s:pkt_s+pkt_len]
         if is_long_enough(detect_pkt, pkt_energy_threshold=pkt_energy_threshold):
             last_pkt_end = pkt_s+pkt_len
+
+            pkt_s_list = pkt_s_list.append(pkt_s)
 
             if ttl_pkt is None:
                 ttl_pkt = np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)
@@ -102,6 +105,13 @@ def trim(data, pkt_len):
             plt.plot(data[pkt_s:pkt_s+pkt_len].real)
             plt.plot(data[pkt_s:pkt_s+pkt_len].imag)
             plt.show()
+
+    plt.plot(data.real, alpha=.2)
+    plt.plot(data.imag, alpha=.2)
+    [plt.axvline(x, color='r') for x in pkt_s_list]
+    plt.show()
+
+    return ttl_pkt
 
     if True:
         return
