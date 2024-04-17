@@ -203,7 +203,7 @@ def main(args):
             # }
             save_dat_name = f"{src}Trimmed-WIFI-{mod}{ptn}dat"
             print(f"{save_dat_name = }")
-            trimmed_pkt.tofile(save_dat_name, dtype=np.complex64)
+            trimmed_pkt.tofile(save_dat_name)
             # savemat(f"WIFI-{sys.argv[1]}.mat", dataset)
         else:
             print("not a file")
