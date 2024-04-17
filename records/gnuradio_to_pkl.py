@@ -7,8 +7,8 @@ parser = argparse.ArgumentParser(description='save torch experience file to npy.
 parser.add_argument('-s', help='source torch experience file directory.')
 parser.add_argument('-t', help='target npy file directory.')
 parser.add_argument('-p', help='dataset pattern')
-parser.add_argument('-m', help='wireless signal type. [s/p]')
-parser.add_argument('-y', help='yes to all')
+parser.add_argument('-m', help='wireless signal type. [s/p]', default='s')
+parser.add_argument('-y', help='yes to all', default=True)
 args = parser.parse_args()
 
 if os.system("clear") != 0:
@@ -141,8 +141,7 @@ if __name__ == '__main__':
         print("Need pattern")
         invalid_input = True
 
-    if args.m is None:
-        print("")
+    if args.m == "s":
         args.m = "simple"
     elif args.m == "p":
         args.m = "protocol"
