@@ -153,9 +153,6 @@ if __name__ == '__main__':
         exit()
 
     print(f"{args.y = }")
-    if args.y is None:
-        args.y = False
-    print(f"{args.y = }")
 
     if args.t is None:
         args.t = args.s
