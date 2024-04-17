@@ -38,7 +38,7 @@ def is_long_enough(ary, pkt_energy_threshold=0.2):
     pass
 
 
-def trim(data, pkt_len):
+def trim(data, pkt_len, mod):
     print(f"{data.shape = }")
 
     # e_threshold = 0.01
@@ -49,7 +49,13 @@ def trim(data, pkt_len):
     e_threshold = 0.00006
     sec_threshold = 0.00038
 
-    pkt_energy_threshold = 0.00038
+    pkt_e_threshold_list = {
+        "BPSK": 0.00038,
+        "QPSK": 0.00015,
+        "16QAM": 640,
+        "64QAM": 560
+    }
+    pkt_energy_threshold = pkt_e_threshold_list[mod]
 
     e_data = energy(data)
     raw_e_data = e_data.copy()
@@ -176,7 +182,7 @@ def main(args):
 
             plot_data = data[s:e]
             print(plot_data.shape)
-            trimmed_pkt = trim(plot_data, pkt_len)
+            trimmed_pkt = trim(plot_data, pkt_len, mod)
 
             print(f"{trimmed_pkt.shape = }")
 
