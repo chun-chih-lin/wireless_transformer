@@ -70,8 +70,10 @@ def main(args):
     src = args.s
     ptn = args.p
 
-    dat_filename = f"{src}WIFI-{sys.argv[1]}{ptn}dat"
-    print(f"{dat_filename = }")
+    for mod in pkt_len_list.keys():
+        dat_filename = f"{src}WIFI-{mod}{ptn}dat"
+        print(f"{dat_filename = }")
+
     if True:
         exit()
 
