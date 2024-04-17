@@ -39,13 +39,15 @@ def trim(data, pkt_len):
 
     e_data = energy(data)
 
+    check_plot(data, e_data)
+
     above_t_data = np.where(e_data >= e_threshold)[0]
     under_t_data = np.where(e_data < e_threshold)[0]
 
     e_data[above_t_data] = 0.25
     e_data[under_t_data] = e_data[under_t_data] + 0.2*e_data[under_t_data-1]
 
-    check_plot(data, e_data)
+    
 
     idx_data = np.where(e_data > sec_threshold)[0]
 
