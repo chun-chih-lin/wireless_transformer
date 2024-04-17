@@ -90,18 +90,24 @@ def convert_to_pkl(args, file_list, mod_list, dataset_type):
     save_filename = f"{tgt}{save_pkl_name}"
 
     if os.path.exists(save_filename):
-        ow = input(f"Save file {save_filename} exists. Overwrite it? [y/N]")
-        if ow.upper() == "N" or ow == "":
-            print("Abort.")
-            exit()
+        if args.y:
+            pass
+        else:
+            ow = input(f"Save file {save_filename} exists. Overwrite it? [y/N]")
+            if ow.upper() == "N" or ow == "":
+                print("Abort.")
+                exit()
 
-    confirm_cmd = input(f"Check and confirm to save to file: {save_filename} [Y/n]")
-    if confirm_cmd.upper() == 'Y' or confirm_cmd == "":
+    if args.y:
         with open(save_filename, 'wb') as f:
             pickle.dump(dataset_dict, f)
-        pass
     else:
-        print("Abort saving.")
+        confirm_cmd = input(f"Check and confirm to save to file: {save_filename} [Y/n]")
+        if confirm_cmd.upper() == 'Y' or confirm_cmd == "":
+            with open(save_filename, 'wb') as f:
+                pickle.dump(dataset_dict, f)
+        else:
+            print("Abort saving.")
         
 # =====================================================
 def main(args):
@@ -118,11 +124,14 @@ def main(args):
     for filename in file_list:
         print(filename)
 
-    input_cmd = input("Is it right? [Y/n]")
-    print(input_cmd, type(input_cmd))
-    if input_cmd.upper() != "Y" and input_cmd != "":
-        print('Abort.')
-        exit()
+    if args.y:
+        pass
+    else:
+        input_cmd = input("Is it right? [Y/n]")
+        print(input_cmd, type(input_cmd))
+        if input_cmd.upper() != "Y" and input_cmd != "":
+            print('Abort.')
+            exit()
 
     #save_filename = None
     convert_to_pkl(args, file_list, mod_list, dataset_type)
