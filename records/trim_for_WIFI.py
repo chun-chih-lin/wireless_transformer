@@ -167,8 +167,8 @@ def main(args):
         s = None
         e = None
 
-        s = 0
-        e = 100_000
+        # s = 0
+        # e = 100_000
 
         if os.path.isfile(dat_filename):
             print("is file")
@@ -198,11 +198,12 @@ def main(args):
             # plt.ylim((0, 0.1))
             # plt.show()
 
-            dataset = {
-                'data': trimmed_pkt
-            }
-            save_dat_name = f"Trimmed-WIFI-{mod}{ptn}.dat"
+            # dataset = {
+            #     'data': trimmed_pkt
+            # }
+            save_dat_name = f"{src}Trimmed-WIFI-{mod}{ptn}dat"
             print(f"{save_dat_name = }")
+            trimmed_pkt.tofile(save_dat_name, dtype=np.complex64)
             # savemat(f"WIFI-{sys.argv[1]}.mat", dataset)
         else:
             print("not a file")
