@@ -3,12 +3,14 @@ clear
 close all
 %%
 mod_list = ["PAM4", "BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "CPFSK", "GFSK", "AM-SSB", "AM-DSB", "WBFM"];
-% mod_list = ["AM-SSB", "AM-DSB", "WBFM", "PAM4"];
+% mod_list = ["PAM4", "AM-SSB", "AM-DSB", "WBFM"];
 
-data_folder = "..\RML2016.10a\";
+% data_folder = "..\RML2016.10a\";
+data_folder = "..\IgnoreMAT_IoT\";
 % data_folder = ".\";
 
-snr_lvl = "18";
+% snr_lvl = "18";
+set(0,'DefaultFigureVisible','off')
 
 Nsym = 10;           % Filter span in symbol durations
 beta = 0.35;         % Roll-off factor
@@ -22,7 +24,8 @@ rxfilter = comm.RaisedCosineReceiveFilter( ...
 
 for mod = mod_list
     % filename = strcat('Trimmed.', mod, '.mat');
-    filename = strcat(mod, '.', snr_lvl, '.mat');
+    % filename = strcat(mod, '.', snr_lvl, '.mat');
+    filename = strcat(mod, '.mat');
     loaddata = load(strcat(data_folder, filename)).data;
 
     % ori_raw_fig = figure();
@@ -45,44 +48,15 @@ for mod = mod_list
     % ori_raw_fig.Position = [100, 100, 1000, 600];
 
     rand_i = randi([1, size(loaddata, 1)], 1, 1);
-    % rand_i = 30;
+    % rand_i = 66;
 
     len_sig = 128;
 
-    rx_sig = loaddata(rand_i, 1, 1:len_sig) + 1j*loaddata(rand_i, 2, 1:len_sig);
-    rx_sig = squeeze(rx_sig).';
-
-    
-
-    
+    % rx_sig = loaddata(rand_i, 1, 1:len_sig) + 1j*loaddata(rand_i, 2, 1:len_sig);
+    % rx_sig = squeeze(rx_sig).';
+    rx_sig = loaddata(rand_i, :);
 
     %% Time Correlation
-    % for s_i = 1:len_sig/2
-    % for s_i = 50:53
-    %     s = s_i;
-    %     e = s_i + len_sig/2 - 1;
-    %     [apply_ret, r, method_name] = apply_autocorr(rx_sig(s:e), len_sig/2 - 1, 5);
-    %     auto_corr_fig = show_autocorr(r, strcat("Time Correlation. ", filename, '.Shift.', num2str(s_i)));
-    % end
-
-    
-
-    % filter_sig = rxfilter(real(rx_sig));
-    % filter_sig = rxfilter(imag(rx_sig));
-    % 
-    % filename
-    % size(rx_sig)
-    % size(filter_sig)
-    % rrc_fig = figure();
-    % for i = 1:size(filter_sig, 1)
-    %     plot(real(filter_sig(i, :)))
-    %     hold on
-    % end
-    % title(filename, Interpreter="none")
-    % 
-    % if 1
-    %     continue
-    % end
 
 
     %% DFT
@@ -94,18 +68,18 @@ for mod = mod_list
     
         [dft_ret, dft_r] = apply_dft(rx_sig(s:e));
         correlation(s_i) = frequency_correlation(abs(dft_ret));
-        ttl_dft_ret(s_i, :) = dft_ret;
+        ttl_dft_ret(s_i, :) = fftshift(dft_ret);
     end
 
     fig = figure();
-    subplot(3, 2, 1)
+    subplot(3, 3, 1)
     plot(real(rx_sig))
     hold on
     plot(imag(rx_sig))
     title('Total Time domain waveform')
     xlim([1, len_sig])
 
-    subplot(3, 2, 3)
+    subplot(3, 3, 4)
     yyaxis right
     plot(abs(fftshift(dft_ret)))
     yyaxis left
@@ -113,19 +87,21 @@ for mod = mod_list
     xlim([1, length(dft_ret)])
     title('FFT')
 
-    subplot(3, 2, 5)
+    subplot(3, 3, 7)
     bar(correlation)
     title('Half spectrum correlation')
     ylim([0.5, 1.1])
 
     max_amp = max(max(abs(real(ttl_dft_ret)), [], 'all'), max(abs(imag(ttl_dft_ret)), [], 'all'));
-    subplot(3, 2, [2, 4, 6])
 
+    subplot(3, 3, [2, 5, 8])
     step_size = 1;
-    color_steps = winter(len_sig/2/step_size);
-    
+    color_steps = jet(len_sig/2/step_size);
+    % color_steps = winter(len_sig/2/step_size);
     for s_i = 1:step_size:len_sig/2
-        plot(real(ttl_dft_ret(s_i, :)), imag(ttl_dft_ret(s_i, :)), '.', 'Color', color_steps((s_i+step_size-1)/step_size, :))
+        plot(real(ttl_dft_ret(s_i, :)), imag(ttl_dft_ret(s_i, :)), '.', ...
+            'Color', color_steps((s_i+step_size-1)/step_size, :), ...
+            'MarkerSize', 10)
         hold on
     end
     % plot(real(rx_sig), imag(rx_sig), '.')
@@ -133,10 +109,51 @@ for mod = mod_list
     xlim([-1.1*max_amp, 1.1*max_amp])
     ylim([-1.1*max_amp, 1.1*max_amp])
 
-    sgtitle(strcat("pkt: ", num2str(rand_i), '. ', filename), Interpreter="none")
-    fig.Position = [100, 100, 800, 400];
-    % break
+    subplot(3, 3, [3, 6, 9])
+    colormap hot
+    surf(abs(ttl_dft_ret), 'EdgeColor', 'none')
+    view(2)
+    xlabel("Subcarriers")
+    ylabel("Time Shift")
+    title("Amplitude")
+    axis square
+    xlim([1, 64])
+    ylim([1, 64])
 
+    sgtitle(strcat("pkt: ", num2str(rand_i), '. ', filename), Interpreter="none")
+    fig.Position = [100, 100, 1300, 400];
+
+
+    %%
+    dft_constellation_fig = figure();
+    color_steps = jet(len_sig/2/step_size);
+    for s_i = 1:step_size:len_sig/2
+        plot(real(ttl_dft_ret(s_i, :)), imag(ttl_dft_ret(s_i, :)), '.', ...
+            'Color', color_steps((s_i+step_size-1)/step_size, :), ...
+            'MarkerSize', 10)
+        hold on
+    end
+    axis square
+    set(gca, 'Xticklabel', [], 'YTickLabel', []);
+    xlim([-1.1*max_amp, 1.1*max_amp])
+    ylim([-1.1*max_amp, 1.1*max_amp])
+    dft_constellation_fig.Position = [100, 100, 300, 300];
+    constellation_fig_name = strcat("DFT_", mod, "_Constellation_Example");
+    save_figure(dft_constellation_fig, constellation_fig_name)
+
+    dft_overall_fig = figure();
+    colormap hot
+    surf(abs(ttl_dft_ret), 'EdgeColor', 'none')
+    view(2)
+    set(gca, 'Xticklabel', [], 'YTickLabel', []);
+    axis square
+    xlim([1, 64])
+    ylim([1, 64])
+    dft_overall_fig.Position = [100, 100, 300, 300];
+    dft_fig_name = strcat("DFT_", mod, "_OverSignal_Example");
+    save_figure(dft_overall_fig, dft_fig_name)
+
+    % break
 end
 
 %% Functions
@@ -223,7 +240,15 @@ function y = frequency_correlation(f_ary)
     y = dot(uni_l_ary, uni_u_ary);
 end
 
+function save_figure(fig, figname)
+    % global result_folder_name
+    result_folder_name = "../results/";
+    save_fig_name_png = strcat(result_folder_name, figname, '.png')
+    save_fig_name_pdf = strcat(result_folder_name, figname, '.pdf')
 
+    saveas(fig, save_fig_name_png)
+    exportgraphics(fig, save_fig_name_pdf)
+end
 
 
 
