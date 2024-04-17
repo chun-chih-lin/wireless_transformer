@@ -32,7 +32,7 @@ def check_plot(data, e_data):
 def is_long_enough(ary, pkt_energy_threshold=0.2):
     e_ary = energy(ary)
     e_ary_mean = np.abs(e_ary.mean())
-    print(f"{e_ary_mean = }")
+    print(f"{e_ary_mean = }, {pkt_energy_threshold = }")
     return e_ary_mean >= pkt_energy_threshold
 
     pass
@@ -71,10 +71,12 @@ def trim(data, pkt_len):
     print(f"{pkt_e_idx_data.shape = }")
 
 
+    for s in above_t_data:
+        e = is_long_enough(data[s:s+pkt_len])
+
     plt.plot(data.real, alpha=.2)
     plt.plot(data.imag, alpha=.2)
     [plt.axvline(x, color='r') for x in above_t_data]
-    # [plt.axvline(x, color='b') for x in under_t_data]
     plt.show()
 
     if True:
