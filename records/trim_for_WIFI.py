@@ -68,8 +68,8 @@ def trim(data, pkt_len):
         pkt_s = idx_data[idx] - pkt_len
         plt.axvline(idx_data[idx], color='k')
         plt.axvline(pkt_s, color='r')
-        plt.plot(data.real)
-        plt.plot(data.imag)
+        plt.plot(data.real, alpha=.2)
+        plt.plot(data.imag, alpha=.2)
         plt.plot(e_data)
         # print(f"{pkt_s = }")
         if ttl_pkt is None:
