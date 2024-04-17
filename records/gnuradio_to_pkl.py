@@ -33,7 +33,7 @@ def get_filenames_under_folder(src, ptn, mod_list):
         if os.path.isfile(full_filename):
             filename_list.append(filename)
         else:
-            print(f"{filename: } is not a file.")
+            print(f"{filename} is not a file.")
     return filename_list
 
 def convert_to_pkl(args, file_list, mod_list):
