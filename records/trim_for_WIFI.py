@@ -37,6 +37,7 @@ def trim(data, pkt_len):
     # e_threshold = 0.01
     # sec_threshold = 0.0008
 
+    # 50 db outdoor
     e_threshold = 0.0001
     sec_threshold = 0.0008
 
@@ -49,8 +50,6 @@ def trim(data, pkt_len):
 
     e_data[above_t_data] = 0.25
     e_data[under_t_data] = e_data[under_t_data] + 0.2*e_data[under_t_data-1]
-
-    
 
     idx_data = np.where(e_data > sec_threshold)[0]
 
@@ -75,9 +74,9 @@ def trim(data, pkt_len):
         else:
             ttl_pkt = np.concatenate((ttl_pkt, np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)))
 
-        # plt.plot(data[pkt_s:pkt_s+pkt_len].real)
-        # plt.plot(data[pkt_s:pkt_s+pkt_len].imag)
-        # plt.show()
+        plt.plot(data[pkt_s:pkt_s+pkt_len].real)
+        plt.plot(data[pkt_s:pkt_s+pkt_len].imag)
+        plt.show()
 
     # plt.show()
     return ttl_pkt
