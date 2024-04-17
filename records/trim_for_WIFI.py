@@ -113,13 +113,13 @@ def trim(data, pkt_len, mod):
             else:
                 ttl_pkt = np.concatenate((ttl_pkt, np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)))
 
-    # print(f"{pkt_s_list = }")
-    # plt.plot(data.real, alpha=.2)
-    # plt.plot(data.imag, alpha=.2)
-    # plt.plot(raw_e_data)
-    # [plt.axvline(x, color='r') for x in pkt_s_list]
-    # plt.axhline(e_threshold, color='r')
-    # plt.show()
+    print(f"{pkt_s_list = }")
+    plt.plot(data.real, alpha=.2)
+    plt.plot(data.imag, alpha=.2)
+    plt.plot(raw_e_data)
+    [plt.axvline(x, color='r') for x in pkt_s_list]
+    plt.axhline(e_threshold, color='r')
+    plt.show()
 
     return ttl_pkt
 
@@ -167,8 +167,8 @@ def main(args):
         s = None
         e = None
 
-        # s = 0
-        # e = 100_000
+        s = 100_000
+        e = 500_000
 
         if os.path.isfile(dat_filename):
             print("is file")
@@ -180,31 +180,12 @@ def main(args):
                 e = data.shape[0]
 
             plot_data = data[s:e]
-            print(plot_data.shape)
             trimmed_pkt = trim(plot_data, pkt_len, mod)
-
             print(f"{trimmed_pkt.shape = }")
 
-            # mean_e = np.zeros((trimmed_pkt.shape[0], ))
-            # for pkt_i in range(trimmed_pkt.shape[0]):
-            #     mean_e[pkt_i] = np.mean(energy(trimmed_pkt[pkt_i, :]))
-
-            # for i in range(trimmed_pkt.shape[0]):
-            #     plt.plot(trimmed_pkt[i, :].real)
-            #     plt.plot(trimmed_pkt[i, :].imag)
-
-            # plt.plot(mean_e.real)
-            # plt.plot(mean_e.imag)
-            # plt.ylim((0, 0.1))
-            # plt.show()
-
-            # dataset = {
-            #     'data': trimmed_pkt
-            # }
             save_dat_name = f"{src}Trimmed-WIFI-{mod}{ptn}dat"
             print(f"{save_dat_name = }")
-            trimmed_pkt.tofile(save_dat_name)
-            # savemat(f"WIFI-{sys.argv[1]}.mat", dataset)
+            # trimmed_pkt.tofile(save_dat_name)
         else:
             print("not a file")
 
