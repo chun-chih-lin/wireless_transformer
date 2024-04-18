@@ -83,7 +83,7 @@ def trim(data, pkt_len, tx_pwr, mod):
             "64QAM": 0.0015
         },
         "-20": {
-            "BPSK": 0.0027,
+            "BPSK": 0.0028,
             "QPSK": 0.0025,
             "16QAM": 0.0020,
             "64QAM": 0.0020
@@ -148,7 +148,8 @@ def trim(data, pkt_len, tx_pwr, mod):
             else:
                 ttl_pkt = np.concatenate((ttl_pkt, np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)))
         else:
-            print(f"{pkt_s} is not long enough.")
+            # print(f"{pkt_s} is not long enough.")
+            pass
 
     if data.shape[0] <= INSPECT_LEN:
         print(f"{pkt_s_list = }")
