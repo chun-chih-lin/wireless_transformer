@@ -84,10 +84,10 @@ def trim(args, data, pkt_len, tx_pwr, mod):
             "64QAM": 0.0015
         },
         "-20": {
-            "BPSK": 0.002,
-            "QPSK": 0.002,
-            "16QAM": 0.002,
-            "64QAM": 0.002
+            "BPSK": 0.0015,
+            "QPSK": 0.0015,
+            "16QAM": 0.0015,
+            "64QAM": 0.0015
         }
     }
 
