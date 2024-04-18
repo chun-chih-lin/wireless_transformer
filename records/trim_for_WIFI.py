@@ -20,6 +20,8 @@ pkt_len_list = {
     "64QAM": 560
 }
 
+INSPECT_LEN = 1_000_000
+
 def energy(ary):
     return ary * np.conj(ary)
 
@@ -113,7 +115,7 @@ def trim(data, pkt_len, mod):
             else:
                 ttl_pkt = np.concatenate((ttl_pkt, np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)))
 
-    if data.shape[0] <= 1_000_000:
+    if data.shape[0] <= INSPECT_LEN:
         print(f"{pkt_s_list = }")
         f, (ax1, ax2) = plt.subplots(2, 1)
         ax1.plot(data.real, alpha=.2)
@@ -127,7 +129,7 @@ def trim(data, pkt_len, mod):
             ax2.plot(ttl_pkt[i, :].imag)
         plt.show()
     else:
-        print(f"Data shape too large [{data.shape[0]} > 1_000_000]. Skip plot.")
+        print(f"Data shape too large [{data.shape[0]} > {INSPECT_LEN}]. Skip plot.")
 
     return ttl_pkt
 
@@ -178,7 +180,7 @@ def main(args):
 
         if args.i:
             s = 0
-            e = 100_000
+            e = INSPECT_LEN
 
         if os.path.isfile(dat_filename):
             print("is file")
