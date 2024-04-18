@@ -115,11 +115,16 @@ def trim(data, pkt_len, mod):
 
     if data.shape[0] <= 1_000_000:
         print(f"{pkt_s_list = }")
-        plt.plot(data.real, alpha=.2)
-        plt.plot(data.imag, alpha=.2)
-        plt.plot(np.abs(data))
-        [plt.axvline(x, color='r') for x in pkt_s_list]
-        plt.axhline(e_threshold, color='r')
+        f, (ax1, ax2) = plt.subplots(1, 2)
+        ax1.plot(data.real, alpha=.2)
+        ax1.plot(data.imag, alpha=.2)
+        ax1.plot(np.abs(data))
+        [ax1.axvline(x, color='r') for x in pkt_s_list]
+        ax1.axhline(e_threshold, color='r')
+
+        for i in range(ttl_pkt.shape[0]):
+            ax2.plot(ttl_pkt[i, :].real)
+            ax2.plot(ttl_pkt[i, :].imag)
         plt.show()
     else:
         print(f"Data shape too large [{data.shape[0]} > 1_000_000]. Skip plot.")
