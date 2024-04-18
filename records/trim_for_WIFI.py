@@ -57,41 +57,48 @@ def trim(args, data, pkt_len, tx_pwr, mod):
             "BPSK": 0.065,
             "QPSK": 0.065,
             "16QAM": 0.065,
-            "64QAM": 0.065
+            "64QAM": 0.065,
+            "e_threshold": 0.0025
         },
         "0": {
             "BPSK": 0.03,
             "QPSK": 0.03,
             "16QAM": 0.03,
-            "64QAM": 0.03
+            "64QAM": 0.03,
+            "e_threshold": 0.0025
         },
         "-5": {
             "BPSK": 0.020,
             "QPSK": 0.020,
             "16QAM": 0.015,
-            "64QAM": 0.015
+            "64QAM": 0.015,
+            "e_threshold": 0.0025
         },
         "-10": {
             "BPSK": 0.0025,
             "QPSK": 0.0020,
             "16QAM": 0.0015,
-            "64QAM": 0.0015
+            "64QAM": 0.0015,
+            "e_threshold": 0.0025
         },
         "-15": {
             "BPSK": 0.0025,
             "QPSK": 0.0020,
             "16QAM": 0.0015,
-            "64QAM": 0.0015
+            "64QAM": 0.0015,
+            "e_threshold": 0.0025
         },
         "-20": {
             "BPSK": 0.0011,
             "QPSK": 0.0010,
             "16QAM": 0.0010,
-            "64QAM": 0.0010
+            "64QAM": 0.0010,
+            "e_threshold": 0.0020
         }
     }
 
     pkt_energy_threshold = pkt_e_threshold_list[tx_pwr][mod]
+    e_threshold = pkt_e_threshold_list[tx_pwr]["e_threshold"]
 
     # e_data = energy(data)
     e_data = np.abs(data)
