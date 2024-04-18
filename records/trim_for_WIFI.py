@@ -112,13 +112,13 @@ def trim(data, pkt_len, mod):
             else:
                 ttl_pkt = np.concatenate((ttl_pkt, np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)))
 
-    # print(f"{pkt_s_list = }")
-    # plt.plot(data.real, alpha=.2)
-    # plt.plot(data.imag, alpha=.2)
-    # plt.plot(np.abs(data))
-    # [plt.axvline(x, color='r') for x in pkt_s_list]
-    # plt.axhline(e_threshold, color='r')
-    # plt.show()
+    print(f"{pkt_s_list = }")
+    plt.plot(data.real, alpha=.2)
+    plt.plot(data.imag, alpha=.2)
+    plt.plot(np.abs(data))
+    [plt.axvline(x, color='r') for x in pkt_s_list]
+    plt.axhline(e_threshold, color='r')
+    plt.show()
 
     return ttl_pkt
 
@@ -184,7 +184,7 @@ def main(args):
 
             save_dat_name = f"{src}Trimmed-WIFI-{mod}{ptn}dat"
             print(f"{save_dat_name = }")
-            trimmed_pkt.tofile(save_dat_name)
+            # trimmed_pkt.tofile(save_dat_name)
         else:
             print("not a file")
 
