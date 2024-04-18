@@ -144,6 +144,9 @@ def trim(args, data, pkt_len, tx_pwr, mod):
 
             pkt_s_list.append(pkt_s)
 
+            if pkt_s+pkt_len > data.shape[0]:
+                break
+
             if ttl_pkt is None:
                 ttl_pkt = np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)
             else:
