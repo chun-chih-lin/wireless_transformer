@@ -173,7 +173,7 @@ def main(args):
 
         if args.i:
             s = 0
-            e = 1_000_000
+            e = 100_000
 
         if os.path.isfile(dat_filename):
             print("is file")
