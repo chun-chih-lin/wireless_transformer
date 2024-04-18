@@ -21,7 +21,7 @@ pkt_len_list = {
 }
 
 # INSPECT_LEN = 1_000_000
-INSPECT_LEN = 10_000
+INSPECT_LEN = 1_000_000
 
 def energy(ary):
     return ary * np.conj(ary)
@@ -84,9 +84,9 @@ def trim(data, pkt_len, tx_pwr, mod):
         },
         "-20": {
             "BPSK": 0.0027,
-            "QPSK": 0.0020,
-            "16QAM": 0.0015,
-            "64QAM": 0.0015
+            "QPSK": 0.0025,
+            "16QAM": 0.0020,
+            "64QAM": 0.0020
         }
     }
 
