@@ -42,7 +42,7 @@ def is_long_enough(ary, pkt_s, pkt_energy_threshold=0.2):
     pass
 
 
-def trim(data, pkt_len, mod):
+def trim(data, pkt_len, tx_pwr, mod):
     print(f"{data.shape = }")
 
     # e_threshold = 0.01
@@ -54,13 +54,45 @@ def trim(data, pkt_len, mod):
     e_threshold = 0.00006
     sec_threshold = 0.00038
     pkt_e_threshold_list = {
-        "BPSK": 0.0025,
-        "QPSK": 0.0020,
-        "16QAM": 0.0015,
-        "64QAM": 0.0015
+        "5": {
+            "BPSK": 0.0025,
+            "QPSK": 0.0020,
+            "16QAM": 0.0015,
+            "64QAM": 0.0015
+        },
+        "0": {
+            "BPSK": 0.0025,
+            "QPSK": 0.0020,
+            "16QAM": 0.0015,
+            "64QAM": 0.0015
+        },
+        "-5": {
+            "BPSK": 0.0025,
+            "QPSK": 0.0020,
+            "16QAM": 0.0015,
+            "64QAM": 0.0015
+        },
+        "-10": {
+            "BPSK": 0.0025,
+            "QPSK": 0.0020,
+            "16QAM": 0.0015,
+            "64QAM": 0.0015
+        },
+        "-15": {
+            "BPSK": 0.0025,
+            "QPSK": 0.0020,
+            "16QAM": 0.0015,
+            "64QAM": 0.0015
+        },
+        "-20": {
+            "BPSK": 0.0025,
+            "QPSK": 0.0020,
+            "16QAM": 0.0015,
+            "64QAM": 0.0015
+        }
     }
 
-    pkt_energy_threshold = pkt_e_threshold_list[mod]
+    pkt_energy_threshold = pkt_e_threshold_list[tx_pwr][mod]
 
     e_data = energy(data)
     raw_e_data = e_data.copy()
@@ -168,6 +200,9 @@ def main(args):
     src = args.s
     ptn = args.p
 
+    tx_pwr = ptn.split('.')[0]
+    print(f"{tx_pwr = }")
+
     for mod in pkt_len_list.keys():
         print("----------------------------------------")
         dat_filename = f"{src}WIFI-{mod}{ptn}dat"
@@ -192,7 +227,7 @@ def main(args):
                 e = data.shape[0]
 
             plot_data = data[s:e]
-            trimmed_pkt = trim(plot_data, pkt_len, mod)
+            trimmed_pkt = trim(plot_data, pkt_len, tx_pwr, mod)
             print(f"{trimmed_pkt.shape = }")
 
             save_dat_name = f"{src}Trimmed-WIFI-{mod}{ptn}dat"
