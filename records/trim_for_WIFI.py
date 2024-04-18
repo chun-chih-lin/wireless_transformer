@@ -84,10 +84,10 @@ def trim(args, data, pkt_len, tx_pwr, mod):
             "64QAM": 0.0015
         },
         "-20": {
-            "BPSK": 0.0015,
-            "QPSK": 0.0015,
-            "16QAM": 0.0015,
-            "64QAM": 0.0015
+            "BPSK": 0.0011,
+            "QPSK": 0.0011,
+            "16QAM": 0.0011,
+            "64QAM": 0.0010
         }
     }
 
@@ -160,8 +160,7 @@ def trim(args, data, pkt_len, tx_pwr, mod):
         f, (ax1, ax2) = plt.subplots(2, 1)
         ax1.plot(data.real, alpha=.2)
         ax1.plot(data.imag, alpha=.2)
-        # ax1.plot(e_data, color='y')
-        ax1.plot(np.abs(data), linewidth=1)
+        ax1.plot(np.abs(data), linewidth=.5)
         [ax1.axvline(x, color='r', linewidth=.5) for x in pkt_s_list]
         ax1.axhline(e_threshold, color='r')
 
