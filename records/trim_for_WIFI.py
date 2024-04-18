@@ -200,7 +200,7 @@ def main(args):
     src = args.s
     ptn = args.p
 
-    tx_pwr = ptn.split('.')[0]
+    tx_pwr = ptn.split('.')[1]
     print(f"{tx_pwr = }")
 
     for mod in pkt_len_list.keys():
