@@ -211,6 +211,7 @@ def main(args):
     print(f"{tx_pwr = }")
 
     for mod in pkt_len_list.keys():
+    for mod in ["64QAM"]:
         print("----------------------------------------")
         dat_filename = f"{src}WIFI-{mod}{ptn}dat"
         print(f"{dat_filename = }")
@@ -244,8 +245,8 @@ def main(args):
         else:
             print("not a file")
 
-        # if True:
-        #     break
+        if True:
+            break
 
 if __name__ == "__main__":
     invalid_input = False
