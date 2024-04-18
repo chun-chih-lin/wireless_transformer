@@ -99,12 +99,12 @@ def trim(data, pkt_len, tx_pwr, mod):
 
     above_t_data = np.where(e_data >= e_threshold)[0]
     # print(f"{above_t_data = }")
-    under_t_data = np.where(e_data < e_threshold)[0]
+    # under_t_data = np.where(e_data < e_threshold)[0]
 
-    e_data[above_t_data] = 0.25
-    e_data[under_t_data] = e_data[under_t_data] + 0.2*e_data[under_t_data-1]
+    # e_data[above_t_data] = 0.25
+    # e_data[under_t_data] = e_data[under_t_data] + 0.2*e_data[under_t_data-1]
 
-    idx_data = np.where(e_data > sec_threshold)[0]
+    # idx_data = np.where(e_data > sec_threshold)[0]
 
     # print(f"{idx_data = }")
 
@@ -147,6 +147,8 @@ def trim(data, pkt_len, tx_pwr, mod):
                 ttl_pkt = np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)
             else:
                 ttl_pkt = np.concatenate((ttl_pkt, np.expand_dims(data[pkt_s:pkt_s+pkt_len], axis=0)))
+        else:
+            print(f"{pkt_s} is not long enough.")
 
     if data.shape[0] <= INSPECT_LEN:
         print(f"{pkt_s_list = }")
