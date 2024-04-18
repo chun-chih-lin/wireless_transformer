@@ -55,9 +55,9 @@ def trim(args, data, pkt_len, tx_pwr, mod):
     pkt_e_threshold_list = {
         "5": {
             "BPSK": 0.065,
-            "QPSK": 0.060,
-            "16QAM": 0.050,
-            "64QAM": 0.05
+            "QPSK": 0.065,
+            "16QAM": 0.065,
+            "64QAM": 0.065
         },
         "0": {
             "BPSK": 0.03,
