@@ -115,7 +115,7 @@ def trim(data, pkt_len, mod):
 
     if data.shape[0] <= 1_000_000:
         print(f"{pkt_s_list = }")
-        f, (ax1, ax2) = plt.subplots(1, 2)
+        f, (ax1, ax2) = plt.subplots(2, 1)
         ax1.plot(data.real, alpha=.2)
         ax1.plot(data.imag, alpha=.2)
         ax1.plot(np.abs(data))
