@@ -210,7 +210,7 @@ def main(args):
     tx_pwr = ptn.split('.')[1]
     print(f"{tx_pwr = }")
 
-    for mod in pkt_len_list.keys():
+    # for mod in pkt_len_list.keys():
     for mod in ["64QAM"]:
         print("----------------------------------------")
         dat_filename = f"{src}WIFI-{mod}{ptn}dat"
