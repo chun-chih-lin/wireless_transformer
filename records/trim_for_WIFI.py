@@ -7,6 +7,7 @@ parser = argparse.ArgumentParser(description='save torch experience file to npy.
 parser.add_argument('-s', help='source torch experience file directory.')
 parser.add_argument('-t', help='target npy file directory.')
 parser.add_argument('-p', help='dataset pattern')
+parser.add_argument('-i', help='Insepect the first 1_000_000 samples', default=False, action='store_true')
 args = parser.parse_args()
 
 if os.system('clear') != 0:
@@ -169,8 +170,9 @@ def main(args):
         s = None
         e = None
 
-        s = 0
-        e = 100_000
+        if args.i:
+            s = 0
+            e = 100_000
 
         if os.path.isfile(dat_filename):
             print("is file")
