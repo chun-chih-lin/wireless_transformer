@@ -166,8 +166,8 @@ def main(args):
         s = None
         e = None
 
-        # s = 30_000_000
-        # e = 40_000_000
+        s = 0
+        e = 100_000
 
         if os.path.isfile(dat_filename):
             print("is file")
@@ -188,8 +188,8 @@ def main(args):
         else:
             print("not a file")
 
-        # if True:
-        #     break
+        if True:
+            break
 
 if __name__ == "__main__":
     invalid_input = False
