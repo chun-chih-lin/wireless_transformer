@@ -110,12 +110,12 @@ def trim(data, pkt_len, tx_pwr, mod):
 
     # print(f"{idx_data = }")
 
-    _idx_data = np.array([0 for x in range(idx_data.shape[0])])
-    _idx_data[0:-1] = idx_data[1:] - idx_data[0:-1]
-    _idx_data[-1] = 5
-    # print(f"{_idx_data = }")
+    # _idx_data = np.array([0 for x in range(idx_data.shape[0])])
+    # _idx_data[0:-1] = idx_data[1:] - idx_data[0:-1]
+    # _idx_data[-1] = 5
+    # # print(f"{_idx_data = }")
 
-    pkt_e_idx_data = np.where(_idx_data > 1)[0]
+    # pkt_e_idx_data = np.where(_idx_data > 1)[0]
     # print(f"{pkt_e_idx_data.shape = }, {pkt_e_idx_data = }")
 
 
