@@ -155,6 +155,7 @@ def trim(data, pkt_len, tx_pwr, mod):
         f, (ax1, ax2) = plt.subplots(2, 1)
         ax1.plot(data.real, alpha=.2)
         ax1.plot(data.imag, alpha=.2)
+        ax1.plot(e_data, color='y')
         ax1.plot(np.abs(data))
         [ax1.axvline(x, color='r') for x in pkt_s_list]
         ax1.axhline(e_threshold, color='r')
