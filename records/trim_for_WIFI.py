@@ -189,7 +189,8 @@ def main(args):
 
             save_dat_name = f"{src}Trimmed-WIFI-{mod}{ptn}dat"
             print(f"{save_dat_name = }")
-            # trimmed_pkt.tofile(save_dat_name)
+            if args.i:
+                trimmed_pkt.tofile(save_dat_name)
         else:
             print("not a file")
 
