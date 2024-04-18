@@ -161,8 +161,8 @@ def trim(args, data, pkt_len, tx_pwr, mod):
         ax1.plot(data.real, alpha=.2)
         ax1.plot(data.imag, alpha=.2)
         # ax1.plot(e_data, color='y')
-        ax1.plot(np.abs(data))
-        [ax1.axvline(x, color='r', linewidth=1) for x in pkt_s_list]
+        ax1.plot(np.abs(data), linewidth=1)
+        [ax1.axvline(x, color='r', linewidth=.5) for x in pkt_s_list]
         ax1.axhline(e_threshold, color='r')
 
         if ttl_pkt is not None:
