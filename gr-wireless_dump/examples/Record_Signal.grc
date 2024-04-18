@@ -172,7 +172,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: save_mod + "." + tx_power + "." + str(int(carrier_freq/1e8)) + ".dat"
+    value: save_mod + "." + tx_power + "." + str(int(carrier_freq/1e7)) + ".dat"
   states:
     bus_sink: false
     bus_source: false
@@ -369,7 +369,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [320, 540.0]
+    coordinate: [320, 604.0]
     rotation: 0
     state: disabled
 - name: save_mod
@@ -381,7 +381,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [320, 604.0]
+    coordinate: [320, 540.0]
     rotation: 0
     state: disabled
 - name: save_mod
@@ -491,7 +491,7 @@ blocks:
     bus_structure: null
     coordinate: [920, 532.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: ttl_save_sample
   id: variable
   parameters:
@@ -503,7 +503,7 @@ blocks:
     bus_structure: null
     coordinate: [1040, 532.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: tx_power
   id: variable
   parameters:

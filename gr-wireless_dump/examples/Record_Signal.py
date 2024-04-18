@@ -68,8 +68,8 @@ class Record_Signal(gr.top_block, Qt.QWidget):
         self.carrier_freq = carrier_freq = 2360e6
         self.save_prefix = save_prefix = "Dataset_EIB_outdoor/"
         self.save_folder = save_folder = "/home/chunchi/Desktop/wireless_transformer/records/"
-        self.save_filename = save_filename = save_mod + "." + tx_power + "." + str(int(carrier_freq/1e8)) + ".dat"
-        self.ttl_save_sample = ttl_save_sample = 20e5
+        self.save_filename = save_filename = save_mod + "." + tx_power + "." + str(int(carrier_freq/1e7)) + ".dat"
+        self.ttl_save_sample = ttl_save_sample = 20e3
         self.save_full_filename = save_full_filename = save_folder + save_prefix + save_filename
         self.sample_per_input = sample_per_input = 128
         self.samp_rate = samp_rate = 20e6
@@ -177,21 +177,21 @@ class Record_Signal(gr.top_block, Qt.QWidget):
 
     def set_tx_power(self, tx_power):
         self.tx_power = tx_power
-        self.set_save_filename(self.save_mod + "." + self.tx_power + "." + str(int(self.carrier_freq/1e8)) + ".dat")
+        self.set_save_filename(self.save_mod + "." + self.tx_power + "." + str(int(self.carrier_freq/1e7)) + ".dat")
 
     def get_save_mod(self):
         return self.save_mod
 
     def set_save_mod(self, save_mod):
         self.save_mod = save_mod
-        self.set_save_filename(self.save_mod + "." + self.tx_power + "." + str(int(self.carrier_freq/1e8)) + ".dat")
+        self.set_save_filename(self.save_mod + "." + self.tx_power + "." + str(int(self.carrier_freq/1e7)) + ".dat")
 
     def get_carrier_freq(self):
         return self.carrier_freq
 
     def set_carrier_freq(self, carrier_freq):
         self.carrier_freq = carrier_freq
-        self.set_save_filename(self.save_mod + "." + self.tx_power + "." + str(int(self.carrier_freq/1e8)) + ".dat")
+        self.set_save_filename(self.save_mod + "." + self.tx_power + "." + str(int(self.carrier_freq/1e7)) + ".dat")
         self.uhd_usrp_source_0.set_center_freq(self.carrier_freq, 0)
 
     def get_save_prefix(self):
