@@ -33,14 +33,15 @@ def check_plot(data, e_data):
     plt.show()
     pass
 
-def is_long_enough(ary, pkt_s, pkt_energy_threshold=0.2):
+def is_long_enough(args, ary, pkt_s, pkt_energy_threshold=0.2):
     # e_ary = energy(ary)
     e_ary = np.abs(ary)
     e_ary_mean = np.mean(e_ary.real)
-    print(f"[{pkt_s}] {e_ary_mean = }, {pkt_energy_threshold = }")
+    if args.i:
+        print(f"[{pkt_s}] {e_ary_mean = }, {pkt_energy_threshold = }")
     return e_ary_mean >= pkt_energy_threshold
 
-def trim(data, pkt_len, tx_pwr, mod):
+def trim(args, data, pkt_len, tx_pwr, mod):
     print(f"{data.shape = }")
 
     # e_threshold = 0.01
@@ -138,7 +139,7 @@ def trim(data, pkt_len, tx_pwr, mod):
             continue
 
         detect_pkt = data[pkt_s:pkt_s+pkt_len]
-        if is_long_enough(detect_pkt, pkt_s, pkt_energy_threshold=pkt_energy_threshold):
+        if is_long_enough(args, detect_pkt, pkt_s, pkt_energy_threshold=pkt_energy_threshold):
             last_pkt_end = pkt_s+pkt_len
 
             pkt_s_list.append(pkt_s)
@@ -233,7 +234,7 @@ def main(args):
                 e = data.shape[0]
 
             plot_data = data[s:e]
-            trimmed_pkt = trim(plot_data, pkt_len, tx_pwr, mod)
+            trimmed_pkt = trim(args, plot_data, pkt_len, tx_pwr, mod)
             print(f"{trimmed_pkt.shape = }")
 
             save_dat_name = f"{src}Trimmed-WIFI-{mod}{ptn}dat"
