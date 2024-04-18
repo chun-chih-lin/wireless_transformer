@@ -20,7 +20,8 @@ pkt_len_list = {
     "64QAM": 560
 }
 
-INSPECT_LEN = 1_000_000
+# INSPECT_LEN = 1_000_000
+INSPECT_LEN = 10_000
 
 def energy(ary):
     return ary * np.conj(ary)
