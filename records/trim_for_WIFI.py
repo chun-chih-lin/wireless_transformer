@@ -162,6 +162,7 @@ def main(args):
     ptn = args.p
 
     for mod in pkt_len_list.keys():
+        print("----------------------------------------")
         dat_filename = f"{src}WIFI-{mod}{ptn}dat"
         print(f"{dat_filename = }")
 
