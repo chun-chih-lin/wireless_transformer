@@ -38,6 +38,14 @@ def main():
     all_exist, fail_list = is_all_file_exist()
     print(f"{all_exist = }, {fail_list = }")
     
+    for mod in mod_list:
+        src_filename = f"{args.s}{mod}{args.p}dat"
+        record_data = np.fromfile(open(src_filename), dtype=np.complex64)
+
+        print(f"{src_filename}, {record_data.shape = }")
+
+
+
     pass
 
 if __name__ == "__main__":
