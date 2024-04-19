@@ -151,7 +151,7 @@ def trim(args, data, pkt_len, tx_pwr, mod):
         if is_long_enough(args, detect_pkt, pkt_s, pkt_energy_threshold=pkt_energy_threshold):
 
             if args.i:
-                print(f"[{pkt_s}] {np.abs(detect_pkt) = }, {pkt_energy_threshold = }")
+                print(f"[{pkt_s}] {np.mean(np.abs(detect_pkt).real) = }, {pkt_energy_threshold = }")
             last_pkt_end = pkt_s+pkt_len
 
             pkt_s_list.append(pkt_s)
