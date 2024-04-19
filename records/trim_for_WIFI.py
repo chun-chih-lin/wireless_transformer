@@ -91,10 +91,10 @@ def trim(args, data, pkt_len, tx_pwr, mod):
             "e_threshold": 0.0025
         },
         "-20": {
-            "BPSK": 0.0037,
-            "QPSK": 0.0037,
-            "16QAM": 0.0038,
-            "64QAM": 0.0035,
+            "BPSK": 0.0039,
+            "QPSK": 0.0039,
+            "16QAM": 0.004,
+            "64QAM": 0.004,
             "e_threshold": 0.0015
         }
     }
