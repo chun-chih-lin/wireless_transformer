@@ -250,6 +250,7 @@ def main(args):
             print(f"{save_dat_name = }")
             if args.i:
                 trimmed_pkt.tofile(save_dat_name)
+                print("Saved to file.")
         else:
             print("not a file")
 
