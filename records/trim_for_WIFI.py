@@ -240,7 +240,6 @@ def main(args):
         if os.path.isfile(dat_filename):
             print("is file")
             data = np.fromfile(dat_filename, dtype=np.complex64)
-            print(data.shape)
 
             if s is None or e is None:
                 s = 0
