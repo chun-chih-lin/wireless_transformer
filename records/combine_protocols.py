@@ -38,7 +38,7 @@ def main():
     all_exist, fail_list = is_all_file_exist()
     print(f"{all_exist = }, {fail_list = }")
     
-    input_len = 128
+    input_len int = 128
 
     for mod in mod_list:
         print("------------------------")
