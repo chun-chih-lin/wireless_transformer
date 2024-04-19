@@ -73,6 +73,8 @@ def main():
     if confirm_save.upper() == 'Y':
         with open(save_filename, 'wb') as f:
             pickle.dump(dataset_dict, f)
+    else:
+        print("Abort.\n\n")
     pass
 
 if __name__ == "__main__":
