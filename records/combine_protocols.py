@@ -47,7 +47,8 @@ def main():
         src_filename = f"{args.s}{mod}{args.p}dat"
         record_data = np.fromfile(open(src_filename), dtype=np.complex64)
 
-        print(f"{src_filename}, {record_data.shape = }")
+        print(f"{src_filename}")
+        print(f"{record_data.shape = }")
 
         input_len = int(record_data.shape[0]/mod_l)
 
