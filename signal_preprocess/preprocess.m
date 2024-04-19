@@ -147,7 +147,7 @@ for e = 0:7
         fig.Position = [0, 100, 1200, 500];
 
         filename = strcat('E', num2str(e), '_Rand.png')
-        saveas(fig, strcat(save_fig_folder, filename))
+        % saveas(fig, strcat(save_fig_folder, filename))
         break
     end
     break

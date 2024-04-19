@@ -5,12 +5,12 @@ close all
 mod_list = ["PAM4", "BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "CPFSK", "GFSK", "AM-SSB", "AM-DSB", "WBFM"];
 % mod_list = ["PAM4", "AM-SSB", "AM-DSB", "WBFM"];
 
-% data_folder = "..\RML2016.10a\";
-data_folder = "..\IgnoreMAT_IoT\";
+data_folder = "..\RML2016.10a\";
+% data_folder = "..\IgnoreMAT_IoT\";
 % data_folder = ".\";
 
-% snr_lvl = "18";
-set(0,'DefaultFigureVisible','off')
+snr_lvl = "18";
+set(0,'DefaultFigureVisible','on')
 
 Nsym = 10;           % Filter span in symbol durations
 beta = 0.35;         % Roll-off factor
@@ -24,8 +24,8 @@ rxfilter = comm.RaisedCosineReceiveFilter( ...
 
 for mod = mod_list
     % filename = strcat('Trimmed.', mod, '.mat');
-    % filename = strcat(mod, '.', snr_lvl, '.mat');
-    filename = strcat(mod, '.mat');
+    filename = strcat(mod, '.', snr_lvl, '.mat');
+    % filename = strcat(mod, '.mat');
     loaddata = load(strcat(data_folder, filename)).data;
 
     % ori_raw_fig = figure();
@@ -153,7 +153,7 @@ for mod = mod_list
     dft_fig_name = strcat("DFT_", mod, "_OverSignal_Example");
     save_figure(dft_overall_fig, dft_fig_name)
 
-    % break
+    break
 end
 
 %% Functions
@@ -246,8 +246,8 @@ function save_figure(fig, figname)
     save_fig_name_png = strcat(result_folder_name, figname, '.png')
     save_fig_name_pdf = strcat(result_folder_name, figname, '.pdf')
 
-    saveas(fig, save_fig_name_png)
-    exportgraphics(fig, save_fig_name_pdf)
+    % saveas(fig, save_fig_name_png)
+    % exportgraphics(fig, save_fig_name_pdf)
 end
 
 

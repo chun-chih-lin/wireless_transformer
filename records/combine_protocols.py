@@ -1,3 +1,7 @@
+"""
+This file is used for combining WIFI, ZIGBEE, and BLUETOOTH data into one pickle file.
+"""
+
 import numpy as np
 import redis as redis
 import json
