@@ -92,9 +92,9 @@ def trim(args, data, pkt_len, tx_pwr, mod):
         },
         "-20": {
             "BPSK": 0.0033,
-            "QPSK": 0.0034,
+            "QPSK": 0.00338,
             "16QAM": 0.0033,
-            "64QAM": 0.0033,
+            "64QAM": 0.0032,
             "e_threshold": 0.0015
         }
     }
@@ -180,7 +180,7 @@ def trim(args, data, pkt_len, tx_pwr, mod):
             for i in range(ttl_pkt.shape[0]):
                 ax2.plot(ttl_pkt[i, :].real)
                 ax2.plot(ttl_pkt[i, :].imag)
-        plt.title(mod)
+        plt.title(f"{tx_pwr}. {mod}")
         plt.show()
     else:
         print(f"Data shape too large [{data.shape[0]} > {INSPECT_LEN}]. Skip plot.")
