@@ -70,7 +70,7 @@ def main():
     save_filename = f"{args.s}{dataset_prefix}-protocol{args.p}pkl"
     confirm_save = input(f"Save to {save_filename}? [Y/n]")
 
-    if confirm_save.upper() == 'Y':
+    if confirm_save.upper() == 'Y' or confirm_save == "":
         with open(save_filename, 'wb') as f:
             pickle.dump(dataset_dict, f)
     else:
