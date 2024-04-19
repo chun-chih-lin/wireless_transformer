@@ -46,7 +46,7 @@ def main():
         record_data = np.fromfile(open(src_filename), dtype=np.complex64)
 
         print(f"{src_filename}, {record_data.shape = }")
-        dim_input = record_data.shape[0]/input_len
+        dim_input = int(record_data.shape[0]/input_len)
 
         _X_c = record_data.reshape((dim_input, input_len))
         print(f"{_X_c.shape = }")
