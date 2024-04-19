@@ -65,10 +65,11 @@ def main():
             "Y": _Y
             }
 
-
     print(f"{dataset_dict.keys() = }")
     save_filename = f"{args.s}{dataset_prefix}-protocol{args.p}pkl"
     print(f"Save to {save_filename}")
+    with open(save_filename, 'wb') as f:
+        pickle.dump(dataset_dict, f)
     pass
 
 if __name__ == "__main__":
