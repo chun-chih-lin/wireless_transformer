@@ -56,10 +56,10 @@ def trim(args, data, pkt_len, tx_pwr, mod):
     sec_threshold = 0.00038
     pkt_e_threshold_list = {
         "5": {
-            "BPSK": 0.018,
-            "QPSK": 0.018,
-            "16QAM": 0.018,
-            "64QAM": 0.018,
+            "BPSK": 0.055,
+            "QPSK": 0.055,
+            "16QAM": 0.055,
+            "64QAM": 0.055,
             "e_threshold": 0.01
         },
         "0": {
