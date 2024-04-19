@@ -138,8 +138,6 @@ def trim(args, data, pkt_len, tx_pwr, mod):
     ttl_pkt = None
     pkt_s_list = []
 
-    print(f"{above_t_data = }")
-
     last_pkt_end = None
     for pkt_s in above_t_data:
         # print(f"{pkt_s = }")
