@@ -14,6 +14,7 @@ args = parser.parse_args()
 
 mod_list = ["Trimmed-WIFI-BPSK", "Trimmed-WIFI-QPSK", "Trimmed-WIFI-16QAM", "Trimmed-WIFI-64QAM", "ZIGBEE-OQPSK", "BT-GFSK-LE1M", "BT-GFSK-LE2M", "BT-GFSK-S2Coding", "BT-GFSK-S8Coding"]
 mod_idx = [x for x in range(len(mod_list))]
+mod_len = [1280, 880, 640, 560, 128, 128, 128, 128, 128]
 
 ret = os.system('clear')
 if ret != 0:
@@ -38,17 +39,18 @@ def main():
     all_exist, fail_list = is_all_file_exist()
     print(f"{all_exist = }, {fail_list = }")
     
-    input_len = int(128)
+    
 
-    for mod in mod_list:
+    for mod, mod_i, mod_l in zip(mod_list, mod_idx, mod_len):
         print("------------------------")
         src_filename = f"{args.s}{mod}{args.p}dat"
         record_data = np.fromfile(open(src_filename), dtype=np.complex64)
 
         print(f"{src_filename}, {record_data.shape = }")
-        dim_input = int(record_data.shape[0]/input_len)
 
-        _X_c = record_data.reshape((dim_input, input_len))
+        input_len = int(record_data.shape[0]/mod_l)
+
+        _X_c = record_data.reshape((input_len, mod_l))
         print(f"{_X_c.shape = }")
 
 
