@@ -37,9 +37,11 @@ def is_long_enough(args, ary, pkt_s, pkt_energy_threshold=0.2):
     # e_ary = energy(ary)
     e_ary = np.abs(ary)
     e_ary_mean = np.mean(e_ary.real)
-    if args.i:
-        print(f"[{pkt_s}] {e_ary_mean = }, {pkt_energy_threshold = }")
-    return e_ary_mean >= pkt_energy_threshold
+    # if args.i:
+    #     print(f"[{pkt_s}] {e_ary_mean = }, {pkt_energy_threshold = }")
+    
+    is_it = e_ary_mean >= pkt_energy_threshold
+    return is_it
 
 def trim(args, data, pkt_len, tx_pwr, mod):
     print(f"{data.shape = }")
@@ -90,7 +92,7 @@ def trim(args, data, pkt_len, tx_pwr, mod):
         },
         "-20": {
             "BPSK": 0.0033,
-            "QPSK": 0.0033,
+            "QPSK": 0.0034,
             "16QAM": 0.0033,
             "64QAM": 0.0033,
             "e_threshold": 0.0015
@@ -147,6 +149,9 @@ def trim(args, data, pkt_len, tx_pwr, mod):
 
         detect_pkt = data[pkt_s:pkt_s+pkt_len]
         if is_long_enough(args, detect_pkt, pkt_s, pkt_energy_threshold=pkt_energy_threshold):
+
+            if args.i:
+                print(f"[{pkt_s}] {np.abs(detect_pkt) = }, {pkt_energy_threshold = }")
             last_pkt_end = pkt_s+pkt_len
 
             pkt_s_list.append(pkt_s)
