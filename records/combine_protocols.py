@@ -37,7 +37,7 @@ def is_all_file_exist():
 def main():
     print(f"{args = }")
 
-    dataset_prefix = args.split("/")[1]
+    dataset_prefix = args.s.split("/")[1]
     all_exist, fail_list = is_all_file_exist()
     print(f"{all_exist = }, {fail_list = }")
 
