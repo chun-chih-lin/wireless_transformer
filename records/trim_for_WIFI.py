@@ -151,7 +151,7 @@ def trim(args, data, pkt_len, tx_pwr, mod):
         if is_long_enough(args, detect_pkt, pkt_s, pkt_energy_threshold=pkt_energy_threshold):
 
             if args.i:
-                print(f"[{pkt_s}] {np.mean(np.abs(detect_pkt).real) = }, {pkt_energy_threshold = }")
+                print(f"[{pkt_s}] e = {np.mean(np.abs(detect_pkt).real)}, {pkt_energy_threshold = }")
             last_pkt_end = pkt_s+pkt_len
 
             pkt_s_list.append(pkt_s)
@@ -180,6 +180,7 @@ def trim(args, data, pkt_len, tx_pwr, mod):
             for i in range(ttl_pkt.shape[0]):
                 ax2.plot(ttl_pkt[i, :].real)
                 ax2.plot(ttl_pkt[i, :].imag)
+        plt.title(mod)
         plt.show()
     else:
         print(f"Data shape too large [{data.shape[0]} > {INSPECT_LEN}]. Skip plot.")
