@@ -59,7 +59,7 @@ def main():
 
         _X = np.concatenate((_X_i, _X_q), axis=1)
 
-
+        print(f"{_X.shape = }")
         dataset_dict[mod_name] = {
             "X": _X,
             "Y": _Y
