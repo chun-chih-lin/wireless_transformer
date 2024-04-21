@@ -112,13 +112,13 @@ def main():
 
     print(f"{X.shape = }, {Y.shape = }")
 
-    # dataset_dict = {
-    #     'X': X,
-    #     'Y': Y
-    # }
+    dataset_dict = {
+        'X': X,
+        'Y': Y
+    }
 
-    # save_pkl_name = f"{args.n.split('.')[0]}-Time-Freq.pkl"
-    # print(f"{save_pkl_name = }")
+    save_pkl_name = f"{args.n.split('.')[0]}-Time-Freq.pkl"
+    print(f"{save_pkl_name = }")
     # with open(save_pkl_name, 'wb') as f:
     #     pickle.dump(dataset_dict, f)
     pass
