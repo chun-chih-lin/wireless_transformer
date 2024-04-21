@@ -102,9 +102,10 @@ def main():
     t1_stop = process_time() 
     print("Elapsed time during the whole program in seconds:", t1_stop - t1_start)
 
-    _X = np.concatenate((time_feature_ret, freq_feature_ret))
-    _X_i = np.expand_dims(_X.real, axis=1)
-    _X_q = np.expand_dims(_X.imag, axis=1)
+    print("----------------------------")
+    _X = np.concatenate((np.expand_dims(time_feature_ret, axis=1), np.expand_dims(freq_feature_ret, axis=1)), axis=1)
+    _X_i = _X.real
+    _X_q = _X.imag
     print(f"{_X.shape = }, {_X_i.shape = }, {_X_q.shape = }")
     X = np.concatenate((_X_i, _X_q), axis=1)
     Y = process_label
