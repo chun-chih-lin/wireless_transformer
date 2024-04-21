@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 
 
 def corrmtx(input_ary, N=64):
+    print(f"{input_ary.shape = }")
     H1 = np.expand_dims(input_ary, axis=1)
     H2 = np.flip(H1, 2)
 
