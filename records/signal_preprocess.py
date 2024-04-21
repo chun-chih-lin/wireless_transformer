@@ -119,10 +119,12 @@ def main():
 
     save_pkl_name = f"{args.s}{args.n.split('.')[0]}-Time-Freq.pkl"
     save_flag = input(f"Confirm save to file {save_pkl_name}? [y/N]")
-    if save_flag.upper() in ["", "Y"]:
+    if save_flag.upper() == "Y":
         with open(save_pkl_name, 'wb') as f:
             pickle.dump(dataset_dict, f)
         print(f"Saved to file: {save_pkl_name}")
+    else:
+        print("Abort.")
     pass
 
 
