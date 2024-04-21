@@ -86,10 +86,10 @@ for mod_i = 1:length(mod_list)
         % [corr_H, corr_R] = corrmtx(complex_sample, len_sub_sample - 1, "modified");
         title_str = strcat("Correlations Feature Extract: ", mod_name, "_Shifted_", num2str(start_sample));
         save_fig = 0;
-        % show_autocorr(corr_R, title_str, save_fig);
+        show_autocorr(corr_R, title_str, save_fig);
     end
 
-    % break
+    break
 
     %% DFT Features
     if 1
@@ -157,7 +157,7 @@ for mod_i = 1:length(mod_list)
         fig.Position = [100, 100, 800, 800];
         sgtitle(strcat("DFT Feature Extract: ", mod_name, "_Shifted_", num2str(start_sample)), Interpreter="none")
     end
-    % break
+    break
 end
 
 

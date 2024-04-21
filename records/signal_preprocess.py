@@ -3,9 +3,17 @@ import os, sys
 import matplotlib.pyplot as plt
 import _pickle as pickle
 
+from time import process_time
+
+from frequency_extraction import frequency_extraction
+from frequency_extraction import inspect_freq
+
+from time_extraction import time_extraction
+from time_extraction import inspect_time
+
 import argparse
 parser = argparse.ArgumentParser(description='save torch experience file to npy.')
-parser.add_argument('-s', help='source torch experience file directory.')
+parser.add_argument('-s', help='source torch experience file directory.', required=True)
 parser.add_argument('-t', help='target npy file directory.')
 parser.add_argument('-i', help='inspect result', default=False, action='store_true')
 args = parser.parse_args()
@@ -14,8 +22,12 @@ if os.system('clear') != 0:
     os.system('cls')
 
 INSPECT = args.i
-print(f"{INSPECT = }")
 
+RAW_FEATURE_LABEL = 0
+TIME_FEATURE_LABEL = 1
+FREQ_FEATURE_LABEL = 2
+
+print(f"{INSPECT = }")
 
 # ----------------------------------------------------
 def get_mod_list():
@@ -31,30 +43,68 @@ def get_mod_list():
 # ----------------------------------------------------
 def main():
     print(args.s)
+    t1_start = process_time() 
     mod_list, dataset_type = get_mod_list()
-
     if not os.path.exists(args.s):
         print(f"{args.s} is not a valid file")
         exit()
-
     with open(args.s, 'rb') as f:
         all_data = pickle.load(f, encoding='latin1')
 
-    print(dataset_type)
-    if dataset_type == "simple":
-        print(all_data.keys())
-        X = all_data["X"]
-        print(f"{X.shape = }")
-    else:
-        print(all_data.keys())
-        for key in all_data.keys():
-            X = all_data[key]["X"]
-            print(f"{key}, {X.shape = }")
-            
+    process_ary = all_data['X']
+    process_label = all_data['Y']
+
+    if INSPECT:
+        process_idx = [1, 20_001, 40_001, 60_001, \
+                  80_001, 100_001, 120_001, 140_001, \
+                  160_001, 180_001, 200_001]
+        # process_idx = [x for x in range(11_000)]
+
+        # process_idx = [100_001]
+        
+        process_ary = process_ary[process_idx, :, :]
+        process_label = process_label[process_idx]
+
+    # ==========================================
+    # Time Feature Extraction
+    print("----------------------------")
+    print("Time Feature Extraction")
+    time_extract_indent = 16
+    time_feature_ret = time_extraction(process_ary, indent=time_extract_indent)
+    time_feature_label = [TIME_FEATURE_LABEL for x in range(process_ary.shape[0])]
+    if INSPECT:
+        print(f"{time_feature_ret.shape = }")
+        if time_feature_ret.shape[0] <= 20:
+            inspect_time(time_feature_ret, process_label, mod_list)
+            pass
+        else:
+            print("Too many reault. Skip plotting.")
+
+    # ==========================================
+    # Frequency Feature Extraction
+    # Getting the Frequency Feature Extraction result and label.
+    print("----------------------------")
+    print("Frequency Feature Extraction")
+    freq_feature_ret = frequency_extraction(process_ary)
+    freq_feature_label = [FREQ_FEATURE_LABEL for x in range(process_ary.shape[0])]
+
+    if INSPECT:
+        print(f"{freq_feature_ret.shape = }")
+        if freq_feature_ret.shape[0] <= 20:
+            inspect_freq(freq_feature_ret, process_label, mod_list)
+            pass
+        else:
+            print("Too many reault. Skip plotting.")
+    # ==========================================
+
+    t1_stop = process_time() 
+    print("Elapsed time during the whole program in seconds:", t1_stop - t1_start)
 
 
-    
+    save_pkl_name = f"{args.s.split('.')}"
+    print(f"{save_pkl_name = }")
     pass
+
 
 if __name__ == '__main__':
     invalid_input = False
