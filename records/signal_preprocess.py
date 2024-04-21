@@ -34,7 +34,7 @@ TIME_FEATURE_LABEL = 1
 FREQ_FEATURE_LABEL = 2
 
 SAMPLE_PRE_MOD = 20_000
-SUB_SAMPLE_PRE_MOD = 5_000
+SUB_SAMPLE_PRE_MOD = 10_000
 
 print(f"{INSPECT = }")
 
@@ -95,7 +95,7 @@ def main():
 
     # ==========================================
     # Time Feature Extraction
-    time_indent = 32
+    time_indent = 64
     print("----------------------------")
     print("Time Feature Extraction")
     time_feature_ret = time_extraction(process_ary, indent=time_indent)
