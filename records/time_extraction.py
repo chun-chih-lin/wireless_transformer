@@ -21,7 +21,7 @@ def corrmtx(input_ary, N=64, batch_size=10_000):
         if R is None:
             R = _R
         else:
-            np.concatenate((R, _R), axis=0)
+            R = np.concatenate((R, _R), axis=0)
     return R
 
 def time_extraction(input_ary, indent=8):
