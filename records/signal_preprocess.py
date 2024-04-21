@@ -102,9 +102,24 @@ def main():
     t1_stop = process_time() 
     print("Elapsed time during the whole program in seconds:", t1_stop - t1_start)
 
+    _X = np.concatenate((time_feature_ret, freq_feature_ret))
+    _X_i = np.expand_dims(_X.real(), axis=1)
+    _X_q = np.expand_dims(_X.imag(), axis=1)
+    print(f"{_X.shape = }, {_X_i.shape = }, {_X_q.shape = }")
+    X = np.concatenate((_X_i, _X_q))
+    Y = process_label
 
-    save_pkl_name = f"{args.n.split('.')[0]}-Time-Freq.pkl"
-    print(f"{save_pkl_name = }")
+    print(f"{X.shape = }, {Y.shape = }")
+
+    # dataset_dict = {
+    #     'X': X,
+    #     'Y': Y
+    # }
+
+    # save_pkl_name = f"{args.n.split('.')[0]}-Time-Freq.pkl"
+    # print(f"{save_pkl_name = }")
+    # with open(save_pkl_name, 'wb') as f:
+    #     pickle.dump(dataset_dict, f)
     pass
 
 
