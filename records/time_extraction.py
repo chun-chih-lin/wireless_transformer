@@ -6,7 +6,7 @@ def corrmtx(input_ary, N=64, batch_size=10_000):
     n_batch = int(input_ary.shape[0]/batch_size) + 1
     R = None
     for n_b in range(n_batch):
-        print(f"  Batch #{n_b}...")
+        print(f"  Batch [{n_b}/{n_batch}]...")
         if (n_b+1)*batch_size <= input_ary.shape[0]:
             batch_ary = input_ary[n_b*batch_size:(n_b+1)*batch_size, :]
         else:
