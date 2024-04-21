@@ -31,7 +31,7 @@ def time_extraction(input_ary, indent=8):
         ttl_corrmtx_ret[:, i, :, :] = ret
         # break
 
-    # print(f"{ttl_corrmtx_ret.shape = }")
+    print(f"{ttl_corrmtx_ret.shape = }")
     # fig, axs = plt.subplots(2, 2)
     # axs[0, 0].matshow(np.abs(ttl_corrmtx_ret[0, 0, :, :]))
     # axs[0, 1].matshow(np.abs(ttl_corrmtx_ret[0, 1, :, :]))
