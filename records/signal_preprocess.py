@@ -56,7 +56,7 @@ def main():
     process_ary = all_data['X']
     process_label = all_data['Y']
 
-    print(f"sample per modulation: {process_ary.shape[0]/20_000 = }")
+    print(f"sample per modulation: {process_ary.shape[0] = }")
     if True:
         exit()
 
