@@ -44,7 +44,7 @@ def time_extraction(input_ary, indent=8):
     ttl_corrmtx_ret = np.zeros(ttl_corrmtx_ret_shape, dtype=np.complex64)
 
     for i, idx in enumerate(range(0, sub_ary_len, indent)):
-        print(f"#{i} Indent: {idx}")
+        print(f"[{i}/{time_indent_len}]", end=" ")
         ret = corrmtx(complex_input[:, idx:idx+sub_ary_len], N=N)
         ttl_corrmtx_ret[:, i, :, :] = ret
         # break
