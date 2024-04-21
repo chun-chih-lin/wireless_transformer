@@ -56,8 +56,8 @@ def get_sub_ary(process_ary, process_label):
     for i in range(num_sec):
         s = i*SAMPLE_PRE_MOD
         e = s + SUB_SAMPLE_PRE_MOD
-        ret_ary[i*SAMPLE_PRE_MOD:(i+1)*SAMPLE_PRE_MOD, :, :] = process_ary[s:e, :, :]
-        ret_label[i*SAMPLE_PRE_MOD:(i+1)*SAMPLE_PRE_MOD] = process_label[s:e]
+        ret_ary[i*SAMPLE_PRE_MOD:(i+1)*SUB_SAMPLE_PRE_MOD, :, :] = process_ary[s:e, :, :]
+        ret_label[i*SAMPLE_PRE_MOD:(i+1)*SUB_SAMPLE_PRE_MOD] = process_label[s:e]
     return ret_ary, ret_label
 
 # ----------------------------------------------------
