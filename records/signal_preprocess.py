@@ -128,10 +128,10 @@ def main():
     t1_stop = process_time() 
     print("Elapsed time during the whole program in seconds:", t1_stop - t1_start)
 
-    if INSPECT:
-        exit()
-
     print("----------------------------")
+    X_shape = (process_ary.shape[0], int(64*64/time_indent))
+    time_feature_ret = time_feature_ret.reshape((X_shape))
+    freq_feature_ret = freq_feature_ret.reshape((X_shape))
     _X = np.concatenate((np.expand_dims(time_feature_ret, axis=1), np.expand_dims(freq_feature_ret, axis=1)), axis=1)
     _X_i = _X.real
     _X_q = _X.imag
@@ -140,6 +140,9 @@ def main():
     Y = process_label
 
     print(f"{X.shape = }, {Y.shape = }")
+
+    if INSPECT:
+        exit()
 
     dataset_dict = {
         'X': X,
