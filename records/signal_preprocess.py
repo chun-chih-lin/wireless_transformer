@@ -44,15 +44,21 @@ def get_mod_list():
         # mod_idx = [x for x in range(len(mod_list))]
     return mod_list, dataset_type
 
-def get_idx(process_ary):
+def get_sub_ary(process_ary, process_label):
     num_sec = int(process_ary.shape[0]/SAMPLE_PRE_MOD)
     process_ary_shape = list(process_ary.shape)
     process_ary_shape[0] = int(num_sec*SUB_SAMPLE_PRE_MOD)
     process_ary_shape = tuple(process_ary_shape)
     print(f"{process_ary_shape = }, {process_ary_shape[0]}, {num_sec = }")
-    ret = np.zeros(process_ary_shape)
-    # for i in range(num_sec):
-    #     ret = process_ary
+
+    ret_ary = np.zeros(process_ary_shape)
+    ret_label = np.zeros((process_ary_shape[0], ))
+    for i in range(num_sec):
+        s = i*SAMPLE_PRE_MOD
+        e = s + SUB_SAMPLE_PRE_MOD
+        ret[i*SAMPLE_PRE_MOD:(i+1)*SAMPLE_PRE_MOD, :, :] = process_ary[s:e, :, :]
+        ret_label[i*SAMPLE_PRE_MOD:(i+1)*SAMPLE_PRE_MOD] = process_label[s:e]
+    return ret_ary, ret_label
 
 # ----------------------------------------------------
 def main():
@@ -69,7 +75,7 @@ def main():
     process_ary = all_data['X']
     process_label = all_data['Y']
 
-    get_idx(process_ary)
+    process_ary, process_label = get_sub_ary(process_ary, process_label)
     if True:
         exit()
 
