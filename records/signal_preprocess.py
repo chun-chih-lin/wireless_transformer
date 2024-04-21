@@ -71,7 +71,7 @@ def main():
     # Time Feature Extraction
     print("----------------------------")
     print("Time Feature Extraction")
-    time_extract_indent = 16
+    time_extract_indent = 32
     time_feature_ret = time_extraction(process_ary, indent=time_extract_indent)
     time_feature_label = [TIME_FEATURE_LABEL for x in range(process_ary.shape[0])]
     if INSPECT:
