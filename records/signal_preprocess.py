@@ -14,6 +14,7 @@ from time_extraction import inspect_time
 import argparse
 parser = argparse.ArgumentParser(description='save torch experience file to npy.')
 parser.add_argument('-s', help='source torch experience file directory.', required=True)
+parser.add_argument('-n', help='source pkl filename.', required=True)
 parser.add_argument('-t', help='target npy file directory.')
 parser.add_argument('-i', help='inspect result', default=False, action='store_true')
 args = parser.parse_args()
@@ -45,10 +46,11 @@ def main():
     print(args.s)
     t1_start = process_time() 
     mod_list, dataset_type = get_mod_list()
-    if not os.path.exists(args.s):
-        print(f"{args.s} is not a valid file")
+    filename = f"{args.s}{args.n}"
+    if not os.path.exists(filename):
+        print(f"{filename} is not a valid file")
         exit()
-    with open(args.s, 'rb') as f:
+    with open(filename, 'rb') as f:
         all_data = pickle.load(f, encoding='latin1')
 
     process_ary = all_data['X']
@@ -101,7 +103,7 @@ def main():
     print("Elapsed time during the whole program in seconds:", t1_stop - t1_start)
 
 
-    save_pkl_name = f"{args.s.split('.')}"
+    save_pkl_name = f"{args.n.split('.')}"
     print(f"{save_pkl_name = }")
     pass
 
