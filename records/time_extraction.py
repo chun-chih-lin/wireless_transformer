@@ -2,16 +2,25 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def corrmtx(input_ary, N=64):
+def corrmtx(input_ary, N=64, batch_size=10_000):
     print(f"{input_ary.shape = }")
-    H1 = np.expand_dims(input_ary, axis=1)
-    H2 = np.flip(H1, 2)
+    n_batch = int(input_ary.shape[0]/batch_size)
+    R = None
+    for n_b in range(n_batch):
+        batch_ary = input_ary[n_b*batch_size:(n_b+1)*batch_size, :]
+        H1 = np.expand_dims(batch_ary, axis=1)
+        H2 = np.flip(H1, 2)
 
-    H1 = H1[:, :, 0:N]
-    H2 = H2[:, :, 0:N]
+        H1 = H1[:, :, 0:N]
+        H2 = H2[:, :, 0:N]
 
-    H = np.concatenate((H2, H1), axis=1)/np.sqrt(2)
-    R = np.matmul(np.transpose(H.conj(), axes=(0, 2, 1)), H)
+        H = np.concatenate((H2, H1), axis=1)/np.sqrt(2)
+        _R = np.matmul(np.transpose(H.conj(), axes=(0, 2, 1)), H)
+
+        if R is None:
+            R = _R
+        else:
+            np.concatenate((R, _R), axis=0)
     return R
 
 def time_extraction(input_ary, indent=8):

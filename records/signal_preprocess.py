@@ -81,7 +81,7 @@ def main():
         process_idx = [1, 20_001, 40_001, 60_001, \
                   80_001, 100_001, 120_001, 140_001, \
                   160_001, 180_001, 200_001]
-        # process_idx = [x for x in range(11_000)]
+        process_idx = [x for x in range(20_000)]
 
         # process_idx = [100_001]
         
