@@ -103,7 +103,7 @@ def main():
     print("Elapsed time during the whole program in seconds:", t1_stop - t1_start)
 
 
-    save_pkl_name = f"{args.n.split('.')}"
+    save_pkl_name = f"{args.n.split('.')[0]}-Time-Freq.pkl"
     print(f"{save_pkl_name = }")
     pass
 
