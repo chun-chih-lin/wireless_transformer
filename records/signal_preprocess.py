@@ -106,7 +106,7 @@ def main():
     _X_i = np.expand_dims(_X.real, axis=1)
     _X_q = np.expand_dims(_X.imag, axis=1)
     print(f"{_X.shape = }, {_X_i.shape = }, {_X_q.shape = }")
-    X = np.concatenate((_X_i, _X_q))
+    X = np.concatenate((_X_i, _X_q), axis=1)
     Y = process_label
 
     print(f"{X.shape = }, {Y.shape = }")
