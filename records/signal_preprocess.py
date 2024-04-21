@@ -76,10 +76,7 @@ def main():
     process_label = all_data['Y']
 
     process_ary, process_label = get_sub_ary(process_ary, process_label)
-    if True:
-        exit()
-
-
+ 
     if INSPECT:
         process_idx = [1, 20_001, 40_001, 60_001, \
                   80_001, 100_001, 120_001, 140_001, \
@@ -95,7 +92,7 @@ def main():
     # Time Feature Extraction
     print("----------------------------")
     print("Time Feature Extraction")
-    time_extract_indent = 32
+    time_extract_indent = 16
     time_feature_ret = time_extraction(process_ary, indent=time_extract_indent)
     time_feature_label = [TIME_FEATURE_LABEL for x in range(process_ary.shape[0])]
     if INSPECT:
