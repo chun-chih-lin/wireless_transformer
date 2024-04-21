@@ -7,6 +7,7 @@ def corrmtx(input_ary, N=64, batch_size=10_000):
     n_batch = int(input_ary.shape[0]/batch_size)
     R = None
     for n_b in range(n_batch):
+        print(f"Batch #{n_b}...")
         batch_ary = input_ary[n_b*batch_size:(n_b+1)*batch_size, :]
         H1 = np.expand_dims(batch_ary, axis=1)
         H2 = np.flip(H1, 2)
