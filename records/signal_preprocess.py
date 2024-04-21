@@ -98,7 +98,7 @@ def main():
     if INSPECT:
         print(f"{time_feature_ret.shape = }")
         if time_feature_ret.shape[0] <= 20:
-            inspect_time(time_feature_ret, process_label, mod_list)
+            # inspect_time(time_feature_ret, process_label, mod_list)
             pass
         else:
             print("Too many reault. Skip plotting.")
@@ -114,7 +114,7 @@ def main():
     if INSPECT:
         print(f"{freq_feature_ret.shape = }")
         if freq_feature_ret.shape[0] <= 20:
-            inspect_freq(freq_feature_ret, process_label, mod_list)
+            # inspect_freq(freq_feature_ret, process_label, mod_list)
             pass
         else:
             print("Too many reault. Skip plotting.")
