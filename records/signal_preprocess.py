@@ -28,6 +28,9 @@ RAW_FEATURE_LABEL = 0
 TIME_FEATURE_LABEL = 1
 FREQ_FEATURE_LABEL = 2
 
+SAMPLE_PRE_MOD = 20_000
+SUB_SAMPLE_PRE_MOD = 10_000
+
 print(f"{INSPECT = }")
 
 # ----------------------------------------------------
@@ -40,6 +43,14 @@ def get_mod_list():
         mod_list = ["BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "AM-DSB", "AM-SSB", "PAM4", "CPFSK", "GFSK", "WBFM", "RAND"]
         # mod_idx = [x for x in range(len(mod_list))]
     return mod_list, dataset_type
+
+def get_idx(process_ary):
+    num_sec = int(process_ary.shape[0]/SAMPLE_PRE_MOD)
+    process_ary_shape = process_ary.shape
+    print(f"{process_ary_shape = }, {process_ary_shape[0]}")
+    # ret = np.zeros(process_ary_shape)
+    # for i in range(num_sec):
+
 
 # ----------------------------------------------------
 def main():
@@ -55,6 +66,11 @@ def main():
 
     process_ary = all_data['X']
     process_label = all_data['Y']
+
+    get_idx(process_ary)
+    if True:
+        exit()
+
 
     if INSPECT:
         process_idx = [1, 20_001, 40_001, 60_001, \
