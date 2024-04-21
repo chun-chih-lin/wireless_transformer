@@ -12,7 +12,7 @@ def dft(input_ary, batch_size=10_000):
 
     dft_ret = None
     for n_b in range(n_batch):
-        print(f"  Batch [{n_b}/{n_batch}]...")
+        print(f"Batch [{n_b}/{n_batch}]...")
         if (n_b+1)*batch_size <= input_ary.shape[0]:
             batch_ary = input_ary[n_b*batch_size:(n_b+1)*batch_size, :]
         else:
@@ -42,7 +42,7 @@ def frequency_extraction(input_ary, indent=8):
     ttl_dft_mtx_ret = np.zeros((num_pkt, time_indent_len, sub_ary_len), dtype=np.complex64)
 
     for i, idx in enumerate(range(0, sub_ary_len, indent)):
-        print(f"[{i}/{time_indent_len}]", end=" ")
+        print(f"[{i}/{time_indent_len}]", end="  ")
         sub_ary = np.expand_dims(complex_input[:, idx:idx+sub_ary_len], axis=1)
         dft_mtx_ret = dft(sub_ary)
         # dft_mtx_ret = np.matmul(sub_ary, dft_mtx)

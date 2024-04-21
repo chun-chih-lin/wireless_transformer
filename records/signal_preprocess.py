@@ -137,13 +137,13 @@ def main():
     time_feature_ret = time_feature_ret.reshape((X_shape))
     freq_feature_ret = freq_feature_ret.reshape((X_shape))
     _X = np.concatenate((np.expand_dims(time_feature_ret, axis=1), np.expand_dims(freq_feature_ret, axis=1)), axis=1)
-    _X_i = _X.real
-    _X_q = _X.imag
+    _X_i = _X.real.astype(np.float32)
+    _X_q = _X.imag.astype(np.float32)
     print(f"{_X.shape = }, {_X_i.shape = }, {_X_q.shape = }")
     X = np.concatenate((_X_i, _X_q), axis=1)
     Y = process_label
 
-    print(f"{X.shape = }, {Y.shape = }")
+    print(f"{X.shape = } {X.dtype = }, {Y.shape = } {Y.dtype = }")
 
     dataset_dict = {
         'X': X,
@@ -155,8 +155,8 @@ def main():
     if not YES_FOR_ALL:
         save_flag = input(f"Confirm save to file {save_pkl_name}? [y/N]")
     if save_flag.upper() == "Y" or YES_FOR_ALL:
-        # with open(save_pkl_name, 'wb') as f:
-        #     pickle.dump(dataset_dict, f)
+        with open(save_pkl_name, 'wb') as f:
+            pickle.dump(dataset_dict, f)
         print(f"Saved to file: {save_pkl_name}")
     else:
         print("Abort.")
