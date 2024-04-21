@@ -56,6 +56,10 @@ def main():
     process_ary = all_data['X']
     process_label = all_data['Y']
 
+    print(f"sample per modulation: {process_ary.shape[0]/20_000 = }")
+    if True:
+        exit()
+
     if INSPECT:
         process_idx = [1, 20_001, 40_001, 60_001, \
                   80_001, 100_001, 120_001, 140_001, \
