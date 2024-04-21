@@ -49,10 +49,10 @@ def get_idx(process_ary):
     process_ary_shape = list(process_ary.shape)
     process_ary_shape[0] = int(num_sec*SUB_SAMPLE_PRE_MOD)
     process_ary_shape = tuple(process_ary_shape)
-    print(f"{process_ary_shape = }, {process_ary_shape[0]}")
-    # ret = np.zeros(process_ary_shape)
+    print(f"{process_ary_shape = }, {process_ary_shape[0]}, {num_sec = }")
+    ret = np.zeros(process_ary_shape)
     # for i in range(num_sec):
-
+    #     ret = process_ary
 
 # ----------------------------------------------------
 def main():
