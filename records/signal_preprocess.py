@@ -19,10 +19,14 @@ parser.add_argument('-i', help='inspect result', default=False, action='store_tr
 parser.add_argument('-p', help='plot all result', default=False, action='store_true')
 parser.add_argument('-t', help='plot time result', default=False, action='store_true')
 parser.add_argument('-f', help='plot freq result', default=False, action='store_true')
+
+parser.add_argument('-y', help='Yes to all', default=False, action='store_true')
 args = parser.parse_args()
 
 if os.system('clear') != 0:
     os.system('cls')
+
+YES_FOR_ALL = args.y
 
 INSPECT = args.i
 SHOW_FIG = args.p
@@ -141,19 +145,18 @@ def main():
 
     print(f"{X.shape = }, {Y.shape = }")
 
-    if INSPECT:
-        exit()
-
     dataset_dict = {
         'X': X,
         'Y': Y
     }
 
     save_pkl_name = f"{args.s}{args.n.split('.')[0]}-Time-Freq.pkl"
-    save_flag = input(f"Confirm save to file {save_pkl_name}? [y/N]")
-    if save_flag.upper() == "Y":
-        with open(save_pkl_name, 'wb') as f:
-            pickle.dump(dataset_dict, f)
+    save_flag = 'N'
+    if not YES_FOR_ALL:
+        save_flag = input(f"Confirm save to file {save_pkl_name}? [y/N]")
+    if save_flag.upper() == "Y" or YES_FOR_ALL:
+        # with open(save_pkl_name, 'wb') as f:
+        #     pickle.dump(dataset_dict, f)
         print(f"Saved to file: {save_pkl_name}")
     else:
         print("Abort.")
