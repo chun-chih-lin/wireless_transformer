@@ -9,7 +9,7 @@ data_folder = "..\RML2016.10a\";
 % data_folder = "..\IgnoreMAT_IoT\";
 % data_folder = ".\";
 
-snr_lvl = "18";
+snr_lvl = "-2";
 set(0,'DefaultFigureVisible','on')
 
 Nsym = 10;           % Filter span in symbol durations
@@ -122,7 +122,10 @@ for mod = mod_list
 
     sgtitle(strcat("pkt: ", num2str(rand_i), '. ', filename), Interpreter="none")
     fig.Position = [100, 100, 1300, 400];
-
+    
+    if 1
+        continue
+    end
 
     %%
     dft_constellation_fig = figure();
@@ -153,7 +156,7 @@ for mod = mod_list
     dft_fig_name = strcat("DFT_", mod, "_OverSignal_Example");
     save_figure(dft_overall_fig, dft_fig_name)
 
-    break
+    % break
 end
 
 %% Functions

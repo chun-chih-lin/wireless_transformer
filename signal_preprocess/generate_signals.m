@@ -57,7 +57,7 @@ for n_mod = 1:numel(ttl_waveform_name)
         shift_waveform = waveform(s:e);
 
         %% Correlation Section
-        if 0
+        if 1
             [apply_ret, r, method_name] = apply_autocorr(shift_waveform, 63, 5);
             save_filename = strcat(method_name, "_", mod_name, "_Shifted_", num2str(step), '.png');
             auto_corr_fig = show_autocorr(r, strcat(mod_name, "_Shifted_", num2str(step)));
@@ -117,7 +117,7 @@ for n_mod = 1:numel(ttl_waveform_name)
         title("Constellation")
 
         
-        % break
+        break
     end
 
     sgtitle(mod_name, Interpreter="none")

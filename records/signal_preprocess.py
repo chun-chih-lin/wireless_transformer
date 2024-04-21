@@ -15,14 +15,19 @@ import argparse
 parser = argparse.ArgumentParser(description='save torch experience file to npy.')
 parser.add_argument('-s', help='source torch experience file directory.', required=True)
 parser.add_argument('-n', help='source pkl filename.', required=True)
-parser.add_argument('-t', help='target npy file directory.')
 parser.add_argument('-i', help='inspect result', default=False, action='store_true')
+parser.add_argument('-p', help='plot all result', default=False, action='store_true')
+parser.add_argument('-t', help='plot time result', default=False, action='store_true')
+parser.add_argument('-f', help='plot freq result', default=False, action='store_true')
 args = parser.parse_args()
 
 if os.system('clear') != 0:
     os.system('cls')
 
 INSPECT = args.i
+SHOW_FIG = args.p
+SHOW_TIME_FIG = SHOW_FIG or args.t
+SHOW_FREQ_FIG = SHOW_FIG or args.f
 
 RAW_FEATURE_LABEL = 0
 TIME_FEATURE_LABEL = 1
@@ -35,7 +40,7 @@ print(f"{INSPECT = }")
 
 # ----------------------------------------------------
 def get_mod_list():
-    if args.s.find("protocol") > 0:
+    if args.n.find("protocol") > 0:
         dataset_type = "protocol"
         mod_list = ["WIFI-BPSK", "WIFI-QPSK", "WIFI-16QAM", "WIFI-64QAM", "ZIGBEE-OQPSK", "BT-GFSK-LE1M", "BT-GFSK-LE2M", "BT-GFSK-S2Coding", "BT-GFSK-S2Coding"]
     else:
@@ -65,6 +70,7 @@ def main():
     print(args.s)
     t1_start = process_time() 
     mod_list, dataset_type = get_mod_list()
+    print(f"{mod_list}: {dataset_type = }")
     filename = f"{args.s}{args.n}"
     if not os.path.exists(filename):
         print(f"{filename} is not a valid file")
@@ -75,30 +81,28 @@ def main():
     process_ary = all_data['X']
     process_label = all_data['Y']
 
-    process_ary, process_label = get_sub_ary(process_ary, process_label)
+    # process_ary, process_label = get_sub_ary(process_ary, process_label)
  
     if INSPECT:
-        process_idx = [1, 20_001, 40_001, 60_001, \
-                  80_001, 100_001, 120_001, 140_001, \
-                  160_001, 180_001, 200_001]
-        process_idx = [x for x in range(20_000)]
-
+        process_idx = [5, 20_005, 40_005, 60_005, \
+                  80_005, 100_005, 120_005, 140_005, \
+                  160_005, 180_005, 200_005]
+        # process_idx = [x for x in range(20_000)]
         # process_idx = [100_001]
-        
         process_ary = process_ary[process_idx, :, :]
-        process_label = process_label[process_idx]
+        process_label = process_label[process_idx].astype(int)
+
 
     # ==========================================
     # Time Feature Extraction
+    time_indent = 32
     print("----------------------------")
     print("Time Feature Extraction")
-    time_extract_indent = 16
-    time_feature_ret = time_extraction(process_ary, indent=time_extract_indent)
+    time_feature_ret = time_extraction(process_ary, indent=time_indent)
     time_feature_label = [TIME_FEATURE_LABEL for x in range(process_ary.shape[0])]
     if INSPECT:
-        print(f"{time_feature_ret.shape = }")
         if time_feature_ret.shape[0] <= 20:
-            # inspect_time(time_feature_ret, process_label, mod_list)
+            inspect_time(time_feature_ret, process_label, mod_list, show=SHOW_TIME_FIG)
             pass
         else:
             print("Too many reault. Skip plotting.")
@@ -106,22 +110,26 @@ def main():
     # ==========================================
     # Frequency Feature Extraction
     # Getting the Frequency Feature Extraction result and label.
+    time_indent = 16
     print("----------------------------")
     print("Frequency Feature Extraction")
-    freq_feature_ret = frequency_extraction(process_ary)
+    freq_feature_ret = frequency_extraction(process_ary, indent=time_indent)
     freq_feature_label = [FREQ_FEATURE_LABEL for x in range(process_ary.shape[0])]
 
     if INSPECT:
-        print(f"{freq_feature_ret.shape = }")
         if freq_feature_ret.shape[0] <= 20:
-            # inspect_freq(freq_feature_ret, process_label, mod_list)
+            inspect_freq(freq_feature_ret, process_label, mod_list, show=SHOW_FREQ_FIG)
             pass
         else:
             print("Too many reault. Skip plotting.")
     # ==========================================
 
+    print("----------------------------")
     t1_stop = process_time() 
     print("Elapsed time during the whole program in seconds:", t1_stop - t1_start)
+
+    if INSPECT:
+        exit()
 
     print("----------------------------")
     _X = np.concatenate((np.expand_dims(time_feature_ret, axis=1), np.expand_dims(freq_feature_ret, axis=1)), axis=1)
@@ -157,7 +165,4 @@ if __name__ == '__main__':
 
     if invalid_input:
         exit()
-
-    if args.t is None:
-        args.t = args.s
     main()
