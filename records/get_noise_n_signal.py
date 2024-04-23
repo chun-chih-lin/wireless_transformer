@@ -44,6 +44,7 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     mov_avg = np.zeros(ary.shape)
 
     mov_avg = np.convolve(abs_ary, mov_wdw/mov_wdw_s)
+    mov_avg_threshold = (np.max(mov_avg) + np.mean(mov_avg))/2
 
     threshold = (np.max(abs_ary) + np.mean(abs_ary))/2
 
@@ -108,7 +109,7 @@ def main():
                 has_noise = True
             signal, noise = get_noise_signal(record_data, has_noise=has_noise)
             plt.show()
-            return
+            # return
 
 
         #     dataset_dict[mod] = {
