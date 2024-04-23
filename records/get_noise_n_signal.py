@@ -89,7 +89,8 @@ def main():
                 'N': noise
             }
 
-        save_filename = 
+        fileprefix = args.s.plot('/')[1]
+        save_filename = f"{args.s}{fileprefix}-signal-noise.pkl"
         print(f"Save to {save_filename}")
         # with open(save_filename, 'wb') as f:
         #     pickle.dump(dataset_dict, f)
