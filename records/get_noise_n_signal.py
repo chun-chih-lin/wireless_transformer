@@ -77,23 +77,23 @@ def main():
             has_noise = False
             print('-'*20)
             print(f"{filename = }, {mod = }")
-            # record_data = np.fromfile(open(filename), dtype=np.complex64)
+            record_data = np.fromfile(open(filename), dtype=np.complex64)
+            record_data = record_data[15_000:50_000]
 
-            # record_data = record_data[15_000:50_000]
-            # if filename.find("WIFI") > 0:
-            #     has_noise = True
-            # signal, noise = get_noise_signal(record_data, has_noise=has_noise)
+            if filename.find("WIFI") > 0:
+                has_noise = True
+            signal, noise = get_noise_signal(record_data, has_noise=has_noise)
 
-            # dataset_dict[mod] = {
-            #     'S': signal,
-            #     'N': noise
-            # }
+            dataset_dict[mod] = {
+                'S': signal,
+                'N': noise
+            }
 
         fileprefix = args.s.split('/')[1]
-        save_filename = f"{args.s}{fileprefix}-signal-noise.pkl"
+        save_filename = f"./Dataset_signal_noise/{fileprefix}-signal-noise.pkl"
         print(f"Save to {save_filename}")
-        # with open(save_filename, 'wb') as f:
-        #     pickle.dump(dataset_dict, f)
+        with open(save_filename, 'wb') as f:
+            pickle.dump(dataset_dict, f)
         print(f"Done for power: {tx_pwr}")
 
     pass
