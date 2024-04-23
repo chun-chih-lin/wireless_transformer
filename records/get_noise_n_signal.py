@@ -39,7 +39,7 @@ def get_filenames_under_folder(tx_pwr):
 def get_noise_signal(ary, spl_size=500, has_noise=False):
     abs_ary = np.abs(ary)
 
-    threshold = (np.max(abs_ary) + np.mean(abs_ary))/2
+    threshold = np.max(abs_ary)*0.8
 
     above_threshold = np.where(abs_ary > threshold)[0]
 
