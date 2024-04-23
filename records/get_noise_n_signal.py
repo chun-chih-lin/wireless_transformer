@@ -48,7 +48,7 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
 
     threshold = (np.max(abs_ary) + np.mean(abs_ary))/2
 
-    above_threshold = np.where(abs_ary > mov_avg_threshold)[0]
+    above_threshold = np.where(mov_avg > mov_avg_threshold)[0]
 
     
     if len(above_threshold) == 0:
