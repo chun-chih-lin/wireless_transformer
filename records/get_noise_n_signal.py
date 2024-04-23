@@ -93,17 +93,17 @@ def main():
                 has_noise = True
             signal, noise = get_noise_signal(record_data, has_noise=has_noise)
 
-            dataset_dict[mod] = {
-                'S': signal,
-                'N': noise
-            }
+        #     dataset_dict[mod] = {
+        #         'S': signal,
+        #         'N': noise
+        #     }
 
-        fileprefix = args.s.split('/')[1]
-        save_filename = f"./Dataset_signal_noise/{fileprefix}.{tx_pwr}.signal-noise.pkl"
-        print(f"Save to {save_filename}")
-        with open(save_filename, 'wb') as f:
-            pickle.dump(dataset_dict, f)
-        print(f"Done for power: {tx_pwr}")
+        # fileprefix = args.s.split('/')[1]
+        # save_filename = f"./Dataset_signal_noise/{fileprefix}.{tx_pwr}.signal-noise.pkl"
+        # print(f"Save to {save_filename}")
+        # with open(save_filename, 'wb') as f:
+        #     pickle.dump(dataset_dict, f)
+        # print(f"Done for power: {tx_pwr}")
 
     pass
 
