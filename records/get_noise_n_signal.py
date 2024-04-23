@@ -37,9 +37,15 @@ def get_filenames_under_folder():
                 print(f"{filename} is not a file.")
     return filename_list
 
-def get_noise_signal(ary, spl_size=500, has_noise=False):
+def get_noise_signal(ary, threshold=0.25, spl_size=500, has_noise=False):
     print("-"*10)
     print(f"Getting noise")
+    abs_ary = np.abs(ary)
+
+    above_threshold = np.where(abs_ary > threshold)
+    print(f"{above_threshold = }")
+    print(f"{np.max(above_threshold) = }")
+
     s_ret = np.zeros((spl_size, ))
     n_ret = np.zeros((spl_size, ))
     print(f"{ary.shape = }")
@@ -48,8 +54,8 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     plt.figure("signal")
     plt.plot(ary.real)
     plt.plot(ary.imag)
-    plt.plot(np.abs(ary), 
-        linewidth=.5)
+    plt.plot(np.abs(ary), linewidth=.5)
+    plt.axvlines(above_threshold[0], color='r', linewidth=.5)
     return s_ret, n_ret
 
 # ======================================================
