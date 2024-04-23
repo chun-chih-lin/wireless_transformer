@@ -39,7 +39,7 @@ def get_filenames_under_folder(tx_pwr):
 def get_noise_signal(ary, spl_size=500, has_noise=False):
     abs_ary = np.abs(ary)
 
-    mov_wdw_s = 20
+    mov_wdw_s = 100
     mov_wdw = np.ones((mov_wdw_s, ))
     mov_avg = np.zeros(ary.shape)
 
