@@ -25,16 +25,15 @@ def load_pickle(filename):
     return data
     pass
 
-def get_filenames_under_folder():
+def get_filenames_under_folder(tx_pwr):
     filename_list = []
-    for tx_pwr in TX_PWR_LIST:
-        for mod in MOD_LIST:
-            filename = f"{mod}.{tx_pwr}.236.dat"
-            full_filename = f"{args.s}{filename}"
-            if os.path.isfile(full_filename):
-                filename_list.append(full_filename)
-            else:
-                print(f"{filename} is not a file.")
+    for mod in MOD_LIST:
+        filename = f"{mod}.{tx_pwr}.236.dat"
+        full_filename = f"{args.s}{filename}"
+        if os.path.isfile(full_filename):
+            filename_list.append(full_filename)
+        else:
+            print(f"{filename} is not a file.")
     return filename_list
 
 def get_noise_signal(ary, spl_size=500, has_noise=False):
@@ -63,42 +62,29 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
 
     if not valid_setting:
         return False, False
-
-
-    
-    # print(f"{above_threshold = }")
-    # print(f"{np.max(abs_ary) = }")
-    # print(f"{np.min(abs_ary) = }")
-    # print(f"{np.mean(abs_ary) = }")
-
     s_ret = ary[first_idx:first_idx+spl_size]
     n_ret = ary[first_idx-spl_size:first_idx]
-
-    # plt.figure("signal")
-    # plt.plot(ary.real)
-    # plt.plot(ary.imag)
-    # plt.plot(np.abs(ary), linewidth=.5)
-    # plt.axhline(threshold, color='r', linewidth=.5)
-    # plt.axvline(first_idx, color='r', linewidth=.5)
     return s_ret, n_ret
 
 # ======================================================
 def main():
     
-    file_list = get_filenames_under_folder()
-    for filename in file_list:
-        has_noise = False
-        print('-'*20)
-        print(f"{filename = }")
-        record_data = np.fromfile(open(filename), dtype=np.complex64)
+    for tx_pwr in TX_PWR_LIST:
+        print("=="*10)
+        file_list = get_filenames_under_folder(tx_pwr)
+        for filename in file_list:
+            has_noise = False
+            print('-'*20)
+            print(f"{filename = }")
+            record_data = np.fromfile(open(filename), dtype=np.complex64)
 
-        record_data = record_data[15_000:50_000]
-        if filename.find("WIFI") > 0:
-            has_noise = True
-        get_noise_signal(record_data, has_noise=has_noise)
+            record_data = record_data[15_000:50_000]
+            if filename.find("WIFI") > 0:
+                has_noise = True
+            # sig, noise = get_noise_signal(record_data, has_noise=has_noise)
 
-        # plt.show()
-        # break
+            
+        print(f"Done for power: {tx_pwr}")
 
     pass
 
