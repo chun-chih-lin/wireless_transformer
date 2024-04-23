@@ -14,7 +14,6 @@ if ret != 0:
 # ======================================================
 MOD_LIST = ["WIFI-BPSK", "WIFI-QPSK", "WIFI-16QAM", "WIFI-64QAM", "ZIGBEE-OQPSK", "BT-GFSK-LE1M", "BT-GFSK-LE2M", "BT-GFSK-S2Coding", "BT-GFSK-S2Coding"]
 TX_PWR_LIST = [str(x) for x in range(-20, 10, 5)]
-HAS_NOISE_LIST = ["WIFI-BPSK", "WIFI-QPSK", "WIFI-16QAM", "WIFI-64QAM"]
 # ======================================================
 def load_pickle(filename):
     if not os.path.isfile(filename):
@@ -53,7 +52,11 @@ def main():
         print('-'*20)
         print(f"{filename = }")
         record_data = np.fromfile(open(filename), dtype=np.complex64)
-        sig, noise = get_noise_n_signal(record_data)
+        if filename.find("WIFI"):
+            print("Has noise")
+        print("Has signal")
+        # sig, noise = get_noise_n_signal(record_data)
+
         break
 
     pass
