@@ -58,7 +58,7 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
         print(f"{first_idx-spl_size}:{first_idx} < 0")
         valid_setting = False
 
-    if first_idx+spl_size > ary.shape[0]:
+    if has_noise and first_idx+spl_size > ary.shape[0]:
         print("Not enough for signal")
         print(f"{first_idx}:{first_idx+spl_size} > {ary.shape[0]}")
         valid_setting = False
