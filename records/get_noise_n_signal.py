@@ -84,7 +84,7 @@ def main():
             # record_data = record_data[15_000:50_000]
 
             # EIB_outdoor: 15_000:50_000
-            record_data = record_data[14_500:20_000]
+            record_data = record_data[14_500:50_000]
 
             # EIB_room_328_to_hallway: 15_000:50_000
             # record_data = record_data[15_000:50_000]
