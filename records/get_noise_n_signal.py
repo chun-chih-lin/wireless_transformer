@@ -57,7 +57,7 @@ def main():
         print("Has signal")
         # sig, noise = get_noise_n_signal(record_data)
 
-        break
+        # break
 
     pass
 
