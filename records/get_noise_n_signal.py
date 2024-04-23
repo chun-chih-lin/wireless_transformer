@@ -45,20 +45,41 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     threshold = (np.max(abs_ary) + np.mean(abs_ary))/2
 
     above_threshold = np.where(abs_ary > threshold)[0]
-    print(f"{above_threshold = }")
-    print(f"{np.max(abs_ary) = }")
-    print(f"{np.min(abs_ary) = }")
-    print(f"{np.mean(abs_ary) = }")
 
-    s_ret = np.zeros((spl_size, ))
-    n_ret = np.zeros((spl_size, ))
+    valid_setting = True
+    if len(above_threshold) == 0:
+        print("Threhold is invalid")
+        valid_setting = False
+    
+    if first_idx-spl_size < 0:
+        print("Not enough for noise")
+        print(f"{first_idx-spl_size}:{first_idx} < 0")
+        valid_setting = False
+
+    if first_idx+spl_size > ary.shape[0]:
+        print("Not enough for signal")
+        print(f"{first_idx}:{first_idx+spl_size} > {ary.shape[0]}")
+        valid_setting = False
+
+    if not valid_setting:
+        return False, False
+
+
+    first_idx = above_threshold[0]
+    # print(f"{above_threshold = }")
+    # print(f"{np.max(abs_ary) = }")
+    # print(f"{np.min(abs_ary) = }")
+    # print(f"{np.mean(abs_ary) = }")
+
+    s_ret = ary[first_idx:first_idx+spl_size]
+    n_ret = ary[first_idx-spl_size:first_idx]
 
     plt.figure("signal")
     plt.plot(ary.real)
     plt.plot(ary.imag)
     plt.plot(np.abs(ary), linewidth=.5)
     plt.axhline(threshold, color='r', linewidth=.5)
-    plt.axvline(above_threshold[0], color='r', linewidth=.5)
+    plt.axvline(first_idx, color='r', linewidth=.5)
     return s_ret, n_ret
 
 # ======================================================
