@@ -38,8 +38,6 @@ def get_filenames_under_folder():
     return filename_list
 
 def get_noise_signal(ary, spl_size=500, has_noise=False):
-    print("-"*10)
-    print(f"Getting noise")
     abs_ary = np.abs(ary)
 
     threshold = (np.max(abs_ary) + np.mean(abs_ary))/2
@@ -96,7 +94,6 @@ def main():
 
         record_data = record_data[0:40_000]
         if filename.find("WIFI") > 0:
-            print("Has noise")
             has_noise = True
         get_noise_signal(record_data, has_noise=has_noise)
 
