@@ -46,11 +46,13 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
 
     above_threshold = np.where(abs_ary > threshold)[0]
 
-    valid_setting = True
+    
     if len(above_threshold) == 0:
         print("Threhold is invalid")
-        valid_setting = False
+        return False, False
     
+    valid_setting = True
+    first_idx = above_threshold[0]
     if first_idx-spl_size < 0:
         print("Not enough for noise")
         print(f"{first_idx-spl_size}:{first_idx} < 0")
@@ -65,7 +67,7 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
         return False, False
 
 
-    first_idx = above_threshold[0]
+    
     # print(f"{above_threshold = }")
     # print(f"{np.max(abs_ary) = }")
     # print(f"{np.min(abs_ary) = }")
