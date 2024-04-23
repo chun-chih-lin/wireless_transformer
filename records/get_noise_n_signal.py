@@ -39,7 +39,7 @@ def get_filenames_under_folder(tx_pwr):
 def get_noise_signal(ary, spl_size=500, has_noise=False):
     abs_ary = np.abs(ary)
 
-    threshold = np.max(abs_ary)*0.5
+    threshold = (np.max(abs_ary) + np.mean(abs_ary))/2
 
     above_threshold = np.where(abs_ary > threshold)[0]
 
@@ -69,6 +69,8 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     plt.plot(abs_ary)
     plt.axvline(above_threshold[0], color='r', linewidth=0.5)
     plt.axhline(threshold, color='r', linewidth=0.5)
+    plt.axhline(np.mas(abs_ary), color='b', linewidth=0.5)
+    plt.axhline(np.mean(abs_ary), color='k', linewidth=0.5)
     return s_ret, n_ret
 
 # ======================================================
