@@ -89,7 +89,7 @@ def main():
             #     'N': noise
             # }
 
-        fileprefix = args.s.plot('/')[1]
+        fileprefix = args.s.split('/')[1]
         save_filename = f"{args.s}{fileprefix}-signal-noise.pkl"
         print(f"Save to {save_filename}")
         # with open(save_filename, 'wb') as f:
