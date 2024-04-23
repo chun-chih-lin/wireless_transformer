@@ -90,7 +90,7 @@ def main():
             }
 
         fileprefix = args.s.split('/')[1]
-        save_filename = f"./Dataset_signal_noise/{fileprefix}-{tx_pwr}-signal-noise.pkl"
+        save_filename = f"./Dataset_signal_noise/{fileprefix}.{tx_pwr}.signal-noise.pkl"
         print(f"Save to {save_filename}")
         with open(save_filename, 'wb') as f:
             pickle.dump(dataset_dict, f)
