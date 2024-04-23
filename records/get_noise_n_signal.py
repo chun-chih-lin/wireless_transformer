@@ -68,7 +68,7 @@ def main():
         print(f"{filename = }")
         record_data = np.fromfile(open(filename), dtype=np.complex64)
 
-        record_data = record_data[0:10_000]
+        record_data = record_data[0:20_000]
         print("Has signal")
         signal = get_signal(record_data)
 
