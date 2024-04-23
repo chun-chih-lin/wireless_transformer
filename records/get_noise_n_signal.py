@@ -47,6 +47,7 @@ def get_noise_signal(ary, threshold=0.25, spl_size=500, has_noise=False):
     print(f"{np.max(abs_ary) = }")
     print(f"{np.min(abs_ary) = }")
     print(f"{np.mean(abs_ary) = }")
+    print(f"{np.median(abs_ary) = }")
 
     s_ret = np.zeros((spl_size, ))
     n_ret = np.zeros((spl_size, ))
