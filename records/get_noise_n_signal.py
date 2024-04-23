@@ -44,7 +44,7 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
 
     threshold = (np.max(abs_ary) + np.mean(abs_ary))/2
 
-    above_threshold = np.where(abs_ary > threshold)
+    above_threshold = np.where(abs_ary > threshold)[0]
     print(f"{above_threshold = }")
     print(f"{np.max(abs_ary) = }")
     print(f"{np.min(abs_ary) = }")
