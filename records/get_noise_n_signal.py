@@ -63,6 +63,12 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
         n_ret = ary[first_idx-spl_size:first_idx]
     else:
         n_ret = np.zeros((spl_size, ))
+
+    plt.plot(ary.real)
+    plt.plot(ary.imag)
+    plt.plot(abs_ary)
+    plt.axvline(above_threshold[0], color='r', linewidth=0.5)
+    plt.axhline(threshold, color='r', linewidth=0.5)
     return s_ret, n_ret
 
 # ======================================================
@@ -92,6 +98,8 @@ def main():
             if filename.find("WIFI") > 0:
                 has_noise = True
             signal, noise = get_noise_signal(record_data, has_noise=has_noise)
+            plt.show()
+
 
         #     dataset_dict[mod] = {
         #         'S': signal,
