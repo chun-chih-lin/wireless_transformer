@@ -76,12 +76,12 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     s_ret = ary[first_idx:first_idx+spl_size]
     n_ret = ary[first_idx-spl_size:first_idx]
 
-    plt.figure("signal")
-    plt.plot(ary.real)
-    plt.plot(ary.imag)
-    plt.plot(np.abs(ary), linewidth=.5)
-    plt.axhline(threshold, color='r', linewidth=.5)
-    plt.axvline(first_idx, color='r', linewidth=.5)
+    # plt.figure("signal")
+    # plt.plot(ary.real)
+    # plt.plot(ary.imag)
+    # plt.plot(np.abs(ary), linewidth=.5)
+    # plt.axhline(threshold, color='r', linewidth=.5)
+    # plt.axvline(first_idx, color='r', linewidth=.5)
     return s_ret, n_ret
 
 # ======================================================
