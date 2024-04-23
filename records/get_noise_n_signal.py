@@ -36,13 +36,19 @@ def get_filenames_under_folder():
                 print(f"{filename} is not a file.")
     return filename_list
 
-def get_noise_n_signal(ary, spl_size=500):
-    sig = np.zeros((spl_size, ))
-    noise = np.zeros((spl_size, ))
+def get_noise(ary, spl_size=500):
+    print("-"*20)
+    print(f"Getting noise")
+    rel = np.zeros((spl_size, ))
     print(f"{ary.shape = }")
+    return rel
 
-    return sig, noise
-    pass
+def get_signal(ary, spl_size=500):
+    print("-"*20)
+    print(f"Getting noise")
+    ret = np.zeros((spl_size, ))
+    print(f"{ary.shape = }")
+    return ret
 
 # ======================================================
 def main():
@@ -54,10 +60,12 @@ def main():
         record_data = np.fromfile(open(filename), dtype=np.complex64)
         if filename.find("WIFI") > 0:
             print("Has noise")
+            noise = get_noise(record_data)
         print("Has signal")
-        # sig, noise = get_noise_n_signal(record_data)
+        signal = get_signal(record_data)
+        
 
-        # break
+        break
 
     pass
 
