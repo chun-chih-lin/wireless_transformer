@@ -47,7 +47,6 @@ def get_noise_n_signal(ary, spl_size=500):
 # ======================================================
 def main():
     
-    print(data.keys())
     file_list = get_filenames_under_folder()
     for filename in file_list:
         print('-'*20)
