@@ -52,7 +52,7 @@ def main():
         print('-'*20)
         print(f"{filename = }")
         record_data = np.fromfile(open(filename), dtype=np.complex64)
-        if filename.find("WIFI"):
+        if filename.find("WIFI") > 0:
             print("Has noise")
         print("Has signal")
         # sig, noise = get_noise_n_signal(record_data)
