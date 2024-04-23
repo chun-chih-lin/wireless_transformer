@@ -76,6 +76,7 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     plt.plot(abs_ary)
     plt.axvline(above_threshold[0], color='r', linewidth=0.5)
     plt.axhline(threshold, color='r', linewidth=0.5)
+    plt.axhline(mov_avg_threshold, color='y', linewidth=0.5)
     plt.axhline(np.max(abs_ary), color='b', linewidth=0.5)
     plt.axhline(np.mean(abs_ary), color='k', linewidth=0.5)
     plt.plot(mov_avg, color='g', linewidth=0.5)
