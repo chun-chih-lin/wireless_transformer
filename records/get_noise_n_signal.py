@@ -57,12 +57,13 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     
     valid_setting = True
     first_idx = above_threshold[0]-int(mov_wdw_s/2)
-    if has_noise and first_idx-spl_size < 0:
+    noise_start = first_idx-spl_size-50
+    if has_noise and noise_start < 0:
         print("Not enough for noise")
-        print(f"{first_idx-spl_size}:{first_idx} < 0")
+        print(f"{noise_start}:{noise_start+spl_size} < 0")
         n_ret = np.zeros((spl_size, ))
     else:
-        n_ret = ary[first_idx-spl_size:first_idx]
+        n_ret = ary[noise_start:noise_start+spl_size]
 
     if first_idx+spl_size > ary.shape[0]:
         print("Not enough for signal")
