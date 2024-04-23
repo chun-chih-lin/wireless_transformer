@@ -98,10 +98,10 @@ def main():
 
             # Range:
             # EIB_3F_hallway: 15_000:50_000
-            # record_data = record_data[15_000:50_000]
+            record_data = record_data[15_000:50_000]
 
             # EIB_outdoor: 30_000:70_000
-            record_data = record_data[30_000:70_000]
+            # record_data = record_data[30_000:70_000]
 
             # EIB_room_328_to_hallway: 20_000:50_000
             # record_data = record_data[20_000:50_000]
