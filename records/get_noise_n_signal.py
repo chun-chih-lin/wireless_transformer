@@ -39,7 +39,13 @@ def get_filenames_under_folder(tx_pwr):
 def get_noise_signal(ary, spl_size=500, has_noise=False):
     abs_ary = np.abs(ary)
 
-    threshold = (np.max(abs_ary) + np.mean(abs_ary))/2*1.2
+    mov_wdw_s = 20
+    mov_wdw = np.ones((mov_wdw_s, ))
+    mov_avg = np.zeros(ary.shape)
+
+    mov_avg = np.convolve(ary, mov_wdw/mov_wdw_s)
+
+    threshold = (np.max(abs_ary) + np.mean(abs_ary))/2
 
     above_threshold = np.where(abs_ary > threshold)[0]
 
@@ -71,6 +77,7 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     plt.axhline(threshold, color='r', linewidth=0.5)
     plt.axhline(np.max(abs_ary), color='b', linewidth=0.5)
     plt.axhline(np.mean(abs_ary), color='k', linewidth=0.5)
+    plt.plot(mov_avg, color='g', linewidth=0.5)
     return s_ret, n_ret
 
 # ======================================================
@@ -101,6 +108,7 @@ def main():
                 has_noise = True
             signal, noise = get_noise_signal(record_data, has_noise=has_noise)
             plt.show()
+            return
 
 
         #     dataset_dict[mod] = {
