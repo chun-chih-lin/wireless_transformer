@@ -49,11 +49,13 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     threshold = (np.max(abs_ary) + np.mean(abs_ary))/2
 
     above_threshold = np.where(mov_avg > mov_avg_threshold)[0]
-
     
     if len(above_threshold) == 0:
         print("Threhold is invalid")
         return False, False
+    
+    n_ret = np.zeros((spl_size, ))
+    s_ret = np.zeros((spl_size, ))
     
     valid_setting = True
     first_idx = above_threshold[0]-int(mov_wdw_s/2)
@@ -61,14 +63,12 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     if has_noise and noise_start < 0:
         print("Not enough for noise")
         print(f"{noise_start}:{noise_start+spl_size} < 0")
-        n_ret = np.zeros((spl_size, ))
     else:
         n_ret = ary[noise_start:noise_start+spl_size]
 
     if first_idx+spl_size > ary.shape[0]:
         print("Not enough for signal")
         print(f"{first_idx}:{first_idx+spl_size} > {ary.shape[0]}")
-        s_ret = np.zeros((spl_size, ))
     else:
         s_ret = ary[first_idx:first_idx+spl_size]
 
