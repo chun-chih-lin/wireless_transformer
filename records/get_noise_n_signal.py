@@ -71,15 +71,15 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     else:
         s_ret = ary[first_idx:first_idx+spl_size]
 
-    # plt.plot(ary.real)
-    # plt.plot(ary.imag)
-    # plt.plot(abs_ary)
-    # plt.axvline(first_idx, color='r', linewidth=0.5)
-    # plt.axhline(threshold, color='r', linewidth=0.5)
-    # plt.axhline(mov_avg_threshold, color='y', linewidth=0.5)
-    # plt.axhline(np.max(abs_ary), color='b', linewidth=0.5)
-    # plt.axhline(np.mean(abs_ary), color='k', linewidth=0.5)
-    # plt.plot(mov_avg, color='g', linewidth=0.5)
+    plt.plot(ary.real)
+    plt.plot(ary.imag)
+    plt.plot(abs_ary)
+    plt.axvline(first_idx, color='r', linewidth=0.5)
+    plt.axhline(threshold, color='r', linewidth=0.5)
+    plt.axhline(mov_avg_threshold, color='y', linewidth=0.5)
+    plt.axhline(np.max(abs_ary), color='b', linewidth=0.5)
+    plt.axhline(np.mean(abs_ary), color='k', linewidth=0.5)
+    plt.plot(mov_avg, color='g', linewidth=0.5)
     return s_ret, n_ret
 
 # ======================================================
@@ -113,7 +113,7 @@ def main():
             if filename.find("WIFI") > 0:
                 has_noise = True
             signal, noise = get_noise_signal(record_data, has_noise=has_noise)
-            # plt.show()
+            plt.show()
         # return
 
             dataset_dict[mod] = {
