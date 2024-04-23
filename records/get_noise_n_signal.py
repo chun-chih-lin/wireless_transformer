@@ -52,8 +52,8 @@ def main():
     for filename in file_list:
         print('-'*20)
         print(f"{filename = }")
-        data = load_pickle(f"{filename}")
-        sig, noise = get_noise_n_signal(data[mod]["X"])
+        record_data = np.fromfile(open(full_filename), dtype=np.complex64)
+        sig, noise = get_noise_n_signal(record_data)
 
     pass
 
