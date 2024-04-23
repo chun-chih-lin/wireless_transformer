@@ -103,8 +103,8 @@ def main():
             # Dataset_EIB_outdoor: 30_000:70_000
             # record_data = record_data[30_000:70_000]
 
-            # Dataset_room_328_to_hallway: 20_000:50_000
-            record_data = record_data[20_000:50_000]
+            # Dataset_room_328_to_hallway: 18_000:50_000
+            record_data = record_data[18_000:50_000]
 
             if filename.find("WIFI") > 0:
                 has_noise = True
