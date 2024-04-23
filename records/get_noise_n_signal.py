@@ -98,8 +98,8 @@ def main():
             has_noise = True
         get_noise_signal(record_data, has_noise=has_noise)
 
-        plt.show()
-        break
+        # plt.show()
+        # break
 
     pass
 
