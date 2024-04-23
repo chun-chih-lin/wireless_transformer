@@ -48,7 +48,7 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
 
     threshold = (np.max(abs_ary) + np.mean(abs_ary))/2
 
-    above_threshold = np.where(abs_ary > threshold)[0]
+    above_threshold = np.where(abs_ary > mov_avg_threshold)[0]
 
     
     if len(above_threshold) == 0:
@@ -104,14 +104,13 @@ def main():
             # record_data = record_data[30_000:70_000]
 
             # EIB_room_328_to_hallway: 30_000:70_000
-            record_data = record_data[25_000:80_000]
+            record_data = record_data[25_000:50_000]
 
             if filename.find("WIFI") > 0:
                 has_noise = True
             signal, noise = get_noise_signal(record_data, has_noise=has_noise)
             plt.show()
-            # return
-
+            return
 
         #     dataset_dict[mod] = {
         #         'S': signal,
