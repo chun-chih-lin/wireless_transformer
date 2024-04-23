@@ -44,7 +44,7 @@ def get_noise(ary, spl_size=500):
     print(f"{ary.shape = }")
 
 
-    plt.figure("noise")
+    # plt.figure("noise")
     return rel
 
 def get_signal(ary, spl_size=500):
@@ -55,6 +55,8 @@ def get_signal(ary, spl_size=500):
 
 
     plt.figure("signal")
+    plt.plot(ary.real)
+    plt.plot(ary.imag)
     return ret
 
 # ======================================================
@@ -67,12 +69,12 @@ def main():
         record_data = np.fromfile(open(filename), dtype=np.complex64)
 
         record_data = record_data[0:10_000]
+        print("Has signal")
+        signal = get_signal(record_data)
+
         if filename.find("WIFI") > 0:
             print("Has noise")
             noise = get_noise(record_data)
-        print("Has signal")
-        signal = get_signal(record_data)
-        
 
         plt.show()
         break
