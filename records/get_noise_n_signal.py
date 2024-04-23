@@ -48,7 +48,8 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     plt.figure("signal")
     plt.plot(ary.real)
     plt.plot(ary.imag)
-    plt.plot(np.abs(ary))
+    plt.plot(np.abs(ary), 
+        linewidth=.5)
     return s_ret, n_ret
 
 # ======================================================
