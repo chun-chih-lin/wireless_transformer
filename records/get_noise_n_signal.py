@@ -1,6 +1,7 @@
 import numpy as np
 import sys, os
 import _pickle as pickle
+import matplotlib.pyplot as plt
 
 import argparse
 parser = argparse.ArgumentParser(description='save torch experience file to npy.')
@@ -41,6 +42,9 @@ def get_noise(ary, spl_size=500):
     print(f"Getting noise")
     rel = np.zeros((spl_size, ))
     print(f"{ary.shape = }")
+
+
+    plt.figure("noise")
     return rel
 
 def get_signal(ary, spl_size=500):
@@ -48,6 +52,9 @@ def get_signal(ary, spl_size=500):
     print(f"Getting noise")
     ret = np.zeros((spl_size, ))
     print(f"{ary.shape = }")
+
+
+    plt.figure("signal")
     return ret
 
 # ======================================================
@@ -67,6 +74,7 @@ def main():
         signal = get_signal(record_data)
         
 
+        plt.show()
         break
 
     pass
