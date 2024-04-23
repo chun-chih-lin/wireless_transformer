@@ -54,6 +54,7 @@ def main():
         print(f"{filename = }")
         record_data = np.fromfile(open(filename), dtype=np.complex64)
         sig, noise = get_noise_n_signal(record_data)
+        break
 
     pass
 
