@@ -50,18 +50,15 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     print(f"{np.min(abs_ary) = }")
     print(f"{np.mean(abs_ary) = }")
 
-
     s_ret = np.zeros((spl_size, ))
     n_ret = np.zeros((spl_size, ))
-    print(f"{ary.shape = }")
-
 
     plt.figure("signal")
     plt.plot(ary.real)
     plt.plot(ary.imag)
     plt.plot(np.abs(ary), linewidth=.5)
     plt.axhline(threshold, color='r', linewidth=.5)
-    # plt.axvline(above_threshold[0], color='r', linewidth=.5)
+    plt.axvline(above_threshold[0], color='r', linewidth=.5)
     return s_ret, n_ret
 
 # ======================================================
