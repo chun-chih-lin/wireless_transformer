@@ -105,7 +105,7 @@ def main():
                 record_data = record_data[30_000:70_000]
             elif args.s.find("Dataset_room_328_to_hallway") > 0:
                 print("Getting for Dataset_room_328_to_hallway...")
-                record_data = record_data[15_000:50_000]
+                record_data = record_data[14_000:50_000]
             else:
                 print(f"Does not fit known folder: {args.s}")
                 exit()
