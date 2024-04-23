@@ -43,7 +43,7 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     mov_wdw = np.ones((mov_wdw_s, ))
     mov_avg = np.zeros(ary.shape)
 
-    mov_avg = np.convolve(ary, mov_wdw/mov_wdw_s)
+    mov_avg = np.convolve(abs_ary, mov_wdw/mov_wdw_s)
 
     threshold = (np.max(abs_ary) + np.mean(abs_ary))/2
 
