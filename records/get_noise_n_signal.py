@@ -37,7 +37,7 @@ def get_filenames_under_folder():
                 print(f"{filename} is not a file.")
     return filename_list
 
-def get_noise_signal(ary, spl_size=500, has_noise=has_noise):
+def get_noise_signal(ary, spl_size=500, has_noise=False):
     print("-"*10)
     print(f"Getting noise")
     s_ret = np.zeros((spl_size, ))
