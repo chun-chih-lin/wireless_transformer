@@ -62,14 +62,14 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
         print(f"{first_idx-spl_size}:{first_idx} < 0")
         n_ret = np.zeros((spl_size, ))
     else:
-        n_ret = ary[first_idx:first_idx+spl_size]
+        n_ret = ary[first_idx-spl_size:first_idx]
 
     if first_idx+spl_size > ary.shape[0]:
         print("Not enough for signal")
         print(f"{first_idx}:{first_idx+spl_size} > {ary.shape[0]}")
         s_ret = np.zeros((spl_size, ))
     else:
-        s_ret = ary[first_idx-spl_size:first_idx]
+        s_ret = ary[first_idx:first_idx+spl_size]
 
     # plt.plot(ary.real)
     # plt.plot(ary.imag)
@@ -97,14 +97,18 @@ def main():
             record_data = np.fromfile(open(filename), dtype=np.complex64)
 
             # Range:
-            # Dataset_EIB_3F_hallway: 15_000:50_000
-            # record_data = record_data[15_000:50_000]
-
-            # Dataset_EIB_outdoor: 30_000:70_000
-            # record_data = record_data[30_000:70_000]
-
-            # Dataset_room_328_to_hallway: 18_000:50_000
-            record_data = record_data[16_000:50_000]
+            if args.s.find("Dataset_EIB_3F_hallway") > 0:
+                print("Getting for Dataset_EIB_3F_hallway...")
+                record_data = record_data[15_000:50_000]
+            elif args.s.find("Dataset_EIB_outdoor") > 0:
+                print("Getting for Dataset_EIB_outdoor...")
+                record_data = record_data[30_000:70_000]
+            elif args.s.find("Dataset_room_328_to_hallway") > 0:
+                print("Getting for Dataset_room_328_to_hallway...")
+                record_data = record_data[16_000:50_000]
+            else:
+                print(f"Does not fit known folder: {args.s}")
+                exit()
 
             if filename.find("WIFI") > 0:
                 has_noise = True
