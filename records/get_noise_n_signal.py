@@ -55,7 +55,7 @@ def get_noise_signal(ary, threshold=0.25, spl_size=500, has_noise=False):
     plt.plot(ary.real)
     plt.plot(ary.imag)
     plt.plot(np.abs(ary), linewidth=.5)
-    plt.axvlines(above_threshold[0], color='r', linewidth=.5)
+    # plt.axvline(above_threshold[0], color='r', linewidth=.5)
     return s_ret, n_ret
 
 # ======================================================
