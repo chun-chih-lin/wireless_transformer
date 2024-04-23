@@ -60,16 +60,16 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     if has_noise and first_idx-spl_size < 0:
         print("Not enough for noise")
         print(f"{first_idx-spl_size}:{first_idx} < 0")
-        s_ret = ary[first_idx:first_idx+spl_size]
-    else:
         s_ret = np.zeros((spl_size, ))
+    else:
+        s_ret = ary[first_idx:first_idx+spl_size]
 
     if first_idx+spl_size > ary.shape[0]:
         print("Not enough for signal")
         print(f"{first_idx}:{first_idx+spl_size} > {ary.shape[0]}")
-        n_ret = ary[first_idx-spl_size:first_idx]
-    else:
         n_ret = np.zeros((spl_size, ))
+    else:
+        n_ret = ary[first_idx-spl_size:first_idx]
 
     # plt.plot(ary.real)
     # plt.plot(ary.imag)
