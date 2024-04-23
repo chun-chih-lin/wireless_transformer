@@ -73,14 +73,15 @@ def main():
         print("=="*10)
         file_list = get_filenames_under_folder(tx_pwr)
         for filename in file_list:
+            mod = filename.split('/')[2].split('.')[0]
             has_noise = False
             print('-'*20)
-            print(f"{filename = }")
-            record_data = np.fromfile(open(filename), dtype=np.complex64)
+            print(f"{filename = }, {mod = }")
+            # record_data = np.fromfile(open(filename), dtype=np.complex64)
 
-            record_data = record_data[15_000:50_000]
-            if filename.find("WIFI") > 0:
-                has_noise = True
+            # record_data = record_data[15_000:50_000]
+            # if filename.find("WIFI") > 0:
+            #     has_noise = True
             # sig, noise = get_noise_signal(record_data, has_noise=has_noise)
 
             
