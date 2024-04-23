@@ -83,7 +83,7 @@ def main():
             # EIB_3F_hallway: 15_000:50_000
             # record_data = record_data[15_000:50_000]
 
-            # EIB_outdoor: 15_000:50_000
+            # EIB_outdoor: 30_000:70_000
             record_data = record_data[30_000:70_000]
 
             # EIB_room_328_to_hallway: 15_000:50_000
@@ -93,16 +93,16 @@ def main():
                 has_noise = True
             signal, noise = get_noise_signal(record_data, has_noise=has_noise)
 
-        #     dataset_dict[mod] = {
-        #         'S': signal,
-        #         'N': noise
-        #     }
+            dataset_dict[mod] = {
+                'S': signal,
+                'N': noise
+            }
 
-        # fileprefix = args.s.split('/')[1]
-        # save_filename = f"./Dataset_signal_noise/{fileprefix}.{tx_pwr}.signal-noise.pkl"
-        # print(f"Save to {save_filename}")
-        # with open(save_filename, 'wb') as f:
-        #     pickle.dump(dataset_dict, f)
+        fileprefix = args.s.split('/')[1]
+        save_filename = f"./Dataset_signal_noise/{fileprefix}.{tx_pwr}.signal-noise.pkl"
+        print(f"Save to {save_filename}")
+        with open(save_filename, 'wb') as f:
+            pickle.dump(dataset_dict, f)
         print(f"Done for power: {tx_pwr}")
 
     pass
