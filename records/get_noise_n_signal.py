@@ -110,7 +110,7 @@ def main():
                 has_noise = True
             signal, noise = get_noise_signal(record_data, has_noise=has_noise)
             plt.show()
-            # return
+        return
 
         #     dataset_dict[mod] = {
         #         'S': signal,
