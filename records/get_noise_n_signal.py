@@ -60,16 +60,16 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     if has_noise and first_idx-spl_size < 0:
         print("Not enough for noise")
         print(f"{first_idx-spl_size}:{first_idx} < 0")
-        s_ret = np.zeros((spl_size, ))
+        n_ret = np.zeros((spl_size, ))
     else:
-        s_ret = ary[first_idx:first_idx+spl_size]
+        n_ret = ary[first_idx:first_idx+spl_size]
 
     if first_idx+spl_size > ary.shape[0]:
         print("Not enough for signal")
         print(f"{first_idx}:{first_idx+spl_size} > {ary.shape[0]}")
-        n_ret = np.zeros((spl_size, ))
+        s_ret = np.zeros((spl_size, ))
     else:
-        n_ret = ary[first_idx-spl_size:first_idx]
+        s_ret = ary[first_idx-spl_size:first_idx]
 
     # plt.plot(ary.real)
     # plt.plot(ary.imag)
@@ -97,13 +97,13 @@ def main():
             record_data = np.fromfile(open(filename), dtype=np.complex64)
 
             # Range:
-            # EIB_3F_hallway: 15_000:50_000
+            # Dataset_EIB_3F_hallway: 15_000:50_000
             # record_data = record_data[15_000:50_000]
 
-            # EIB_outdoor: 30_000:70_000
+            # Dataset_EIB_outdoor: 30_000:70_000
             # record_data = record_data[30_000:70_000]
 
-            # EIB_room_328_to_hallway: 20_000:50_000
+            # Dataset_room_328_to_hallway: 20_000:50_000
             record_data = record_data[20_000:50_000]
 
             if filename.find("WIFI") > 0:
