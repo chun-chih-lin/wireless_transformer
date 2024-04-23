@@ -53,17 +53,16 @@ def get_noise_signal(ary, spl_size=500, has_noise=False):
     if has_noise and first_idx-spl_size < 0:
         print("Not enough for noise")
         print(f"{first_idx-spl_size}:{first_idx} < 0")
-        valid_setting = False
+        s_ret = ary[first_idx:first_idx+spl_size]
+    else:
+        s_ret = np.zeros((spl_size, ))
 
     if first_idx+spl_size > ary.shape[0]:
         print("Not enough for signal")
         print(f"{first_idx}:{first_idx+spl_size} > {ary.shape[0]}")
-        valid_setting = False
-
-    if not valid_setting:
-        return False, False
-    s_ret = ary[first_idx:first_idx+spl_size]
-    n_ret = ary[first_idx-spl_size:first_idx]
+        n_ret = ary[first_idx-spl_size:first_idx]
+    else:
+        n_ret = np.zeros((spl_size, ))
     return s_ret, n_ret
 
 # ======================================================
@@ -72,6 +71,7 @@ def main():
     for tx_pwr in TX_PWR_LIST:
         print("=="*10)
         file_list = get_filenames_under_folder(tx_pwr)
+        dataset_dict = {}
         for filename in file_list:
             mod = filename.split('/')[2].split('.')[0]
             has_noise = False
@@ -82,9 +82,17 @@ def main():
             # record_data = record_data[15_000:50_000]
             # if filename.find("WIFI") > 0:
             #     has_noise = True
-            # sig, noise = get_noise_signal(record_data, has_noise=has_noise)
+            # signal, noise = get_noise_signal(record_data, has_noise=has_noise)
 
-            
+            dataset_dict[mod] = {
+                'S': signal,
+                'N': noise
+            }
+
+        save_filename = 
+        print(f"Save to {save_filename}")
+        # with open(save_filename, 'wb') as f:
+        #     pickle.dump(dataset_dict, f)
         print(f"Done for power: {tx_pwr}")
 
     pass
