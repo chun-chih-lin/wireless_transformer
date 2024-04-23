@@ -14,7 +14,7 @@ if ret != 0:
 
 # ======================================================
 MOD_LIST = ["WIFI-BPSK", "WIFI-QPSK", "WIFI-16QAM", "WIFI-64QAM", "ZIGBEE-OQPSK", "BT-GFSK-LE1M", "BT-GFSK-LE2M", "BT-GFSK-S2Coding", "BT-GFSK-S2Coding"]
-TX_PWR_LIST = [str(x) for x in range(5, 10, 5)]
+TX_PWR_LIST = [str(x) for x in range(-20, 10, 5)]
 # ======================================================
 def load_pickle(filename):
     if not os.path.isfile(filename):
@@ -86,8 +86,8 @@ def main():
             # EIB_outdoor: 30_000:70_000
             # record_data = record_data[30_000:70_000]
 
-            # EIB_room_328_to_hallway: 15_000:50_000
-            record_data = record_data[30_000:70_000]
+            # EIB_room_328_to_hallway: 30_000:70_000
+            record_data = record_data[20_000:50_000]
 
             if filename.find("WIFI") > 0:
                 has_noise = True
