@@ -32,7 +32,7 @@ def get_filenames_under_folder():
             filename = f"{mod}.{tx_pwr}.236.dat"
             full_filename = f"{args.s}{filename}"
             if os.path.isfile(full_filename):
-                filename_list.append(filename)
+                filename_list.append(full_filename)
             else:
                 print(f"{filename} is not a file.")
     return filename_list
