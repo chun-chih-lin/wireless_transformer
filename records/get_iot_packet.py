@@ -71,8 +71,8 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
     plt.plot(ary.imag)
     plt.plot(abs_ary)
     plt.axhline(mov_avg_threshold, color='y', linewidth=0.5)
-    plt.plot(x_p, mov_avg[:n_ary], color='b', linewidth=0.7)
-    plt.plot(x_p, above_list[:n_ary], color='r', linewidth=0.7)
+    plt.plot(x_p, mov_avg[mov_wdw_s:], color='b', linewidth=0.7)
+    plt.plot(x_p, above_list[mov_wdw_s:], color='r', linewidth=0.7)
 
 
     pass
