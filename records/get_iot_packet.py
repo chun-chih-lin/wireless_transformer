@@ -53,7 +53,7 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
     above_threshold = np.where(mov_avg > mov_avg_threshold)[0]
     above_list = [0.8*max_v if x > mov_avg_threshold else 0 for x in mov_avg]
 
-    x_p = [x for x in range(n_ary)]
+    x_p = [x for x in range(n_ary)] + int(mov_wdw_s/2)
 
     if len(above_threshold) == 0:
         print("Threhold is invalid")
