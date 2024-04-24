@@ -61,9 +61,9 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
     pkt_ret = None
     print(f"{above_threshold = }")
 
-    print(f"{mov_avg.shape = }")
-    print(f"{x_p.shape = }")
-    print(f"{above_list.shape = }")
+    print(f"{len(mov_avg) = }")
+    print(f"{len(x_p) = }")
+    print(f"{len(above_list) = }")
 
 
     plt.plot(ary.real)
