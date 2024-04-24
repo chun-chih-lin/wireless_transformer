@@ -76,7 +76,7 @@ def main():
             data = data[0:100_000]
 
         packets = get_packets(data)
-        if packets is None:
+        if not INSPECT and packets is None:
             print(f"Processe {full_filename} failed. Not packet detected.")
             continue
 
