@@ -40,6 +40,7 @@ def get_filename_list():
 # ==========================================================
 def get_packets(ary, pkt_size=500, mov_wdw_s=100):
     abs_ary = np.abs(ary)
+    n_ary = ary.shape[0]
 
     mov_wdw = np.ones((mov_wdw_s, ))
     mov_avg = np.zeros(ary.shape)
@@ -52,7 +53,7 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
     above_threshold = np.where(mov_avg > mov_avg_threshold)[0]
     above_list = [0.8*max_v if x > mov_avg_threshold else 0 for x in mov_avg]
 
-    x_p = [x for x in range(ary.shape[0])]
+    x_p = [x for x in range(n_ary)]
 
     if len(above_threshold) == 0:
         print("Threhold is invalid")
@@ -70,8 +71,8 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
     plt.plot(ary.imag)
     plt.plot(abs_ary)
     plt.axhline(mov_avg_threshold, color='y', linewidth=0.5)
-    plt.plot(x_p, mov_avg, color='b', linewidth=0.7)
-    plt.plot(x_p, above_list, color='r', linewidth=0.7)
+    plt.plot(x_p, mov_avg[:n_ary], color='b', linewidth=0.7)
+    plt.plot(x_p, above_list[:n_ary], color='r', linewidth=0.7)
 
 
     pass
