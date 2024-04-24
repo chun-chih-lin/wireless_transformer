@@ -1,6 +1,7 @@
 import numpy as np
 import os, sys
 import _pickle as pickle
+import matplotlib.pyplot as plt
 
 import argparse
 parser = argparse.ArgumentParser(description='save torch experience file to npy.')
@@ -47,6 +48,7 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
 
     mov_avg_threshold = (np.max(mov_avg) + np.mean(mov_avg))/2
     above_threshold = np.where(mov_avg > mov_avg_threshold)[0]
+    above_list = [1 if x > mov_avg_threshold else 0 for x in mov_avg]
 
     if len(above_threshold) == 0:
         print("Threhold is invalid")
@@ -54,6 +56,11 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
 
     pkt_ret = None
     print(f"{above_threshold = }")
+
+    plt.plot(ary.real)
+    plt.plot(ary.imag)
+    plt.plot(abs_ary)
+    plt.axhline(mov_avg_threshold, color='y', linewidth=0.5)
 
 
     pass
@@ -79,6 +86,9 @@ def main():
         if not INSPECT and packets is None:
             print(f"Processe {full_filename} failed. Not packet detected.")
             continue
+
+        if INSPECT:
+            plt.show()
 
         n_pkt = packets.shape[0]
         print(f"Number of packet: {n_pkt}")
