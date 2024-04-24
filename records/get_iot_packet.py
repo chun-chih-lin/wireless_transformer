@@ -46,9 +46,11 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
 
     mov_avg = np.convolve(abs_ary, mov_wdw/mov_wdw_s)
 
+    max_v = np.max(mov_avg)
+
     mov_avg_threshold = (np.max(mov_avg) + np.mean(mov_avg))/2
     above_threshold = np.where(mov_avg > mov_avg_threshold)[0]
-    above_list = [1 if x > mov_avg_threshold else 0 for x in mov_avg]
+    above_list = [0.8*max_v if x > mov_avg_threshold else 0 for x in mov_avg]
 
     if len(above_threshold) == 0:
         print("Threhold is invalid")
@@ -61,6 +63,7 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
     plt.plot(ary.imag)
     plt.plot(abs_ary)
     plt.axhline(mov_avg_threshold, color='y', linewidth=0.5)
+    plt.plot(above_list, color='r', linewidth=0.5)
 
 
     pass
