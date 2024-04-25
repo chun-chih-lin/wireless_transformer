@@ -62,6 +62,11 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=100):
     if len(falling_detect) != len(raising_detect):
         raising_detect = raising_detect[:len(falling_detect)]
 
+    if falling_detect[-1] >= n_ary:
+        raising_detect.pop(-1)
+        falling_detect.pop(-1)
+
+
     packet_len = falling_detect - raising_detect
     min_packet_len = np.min(packet_len)
     print(f"{min_packet_len = }, {n_ary = }, {falling_detect[-1]}")
