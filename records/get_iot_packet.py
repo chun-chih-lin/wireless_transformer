@@ -84,7 +84,7 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
         for raise_d in raising_detect:
             plt.axvline(raise_d, color='r', linestyle='-.', linewidth=0.7)
         for fall_d in falling_detect:
-            plt.axvline(raise_d+pkt_size, color='r', linestyle=':', linewidth=0.7)
+            plt.axvline(fall_d, color='r', linestyle=':', linewidth=0.7)
 
     for raise_d in raising_detect:
         pkt = np.expand_dims(ary[raise_d:raise_d+pkt_size], axis=0)
