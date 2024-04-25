@@ -2,6 +2,7 @@ import numpy as np
 import os, sys
 import _pickle as pickle
 import matplotlib.pyplot as plt
+import math
 
 import argparse
 parser = argparse.ArgumentParser(description='save torch experience file to npy.')
@@ -116,7 +117,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
     pass
 
 # ==========================================================
-BATCH_SIZE=10_000_000
+BATCH_SIZE=100_000_000
 
 def main():
     filename_list = get_filename_list()
@@ -129,6 +130,8 @@ def main():
 
         print(f"Processing {full_filename}...")
         data = load_dat_from_file(full_filename)
+
+        n_batch = math.ceil(data.shape[0]/BATCH_SIZE)
         print(data.shape)
 
         if INSPECT:
