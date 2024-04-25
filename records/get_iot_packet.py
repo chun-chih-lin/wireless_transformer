@@ -63,8 +63,8 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
         raising_detect = raising_detect[:len(falling_detect)]
 
     packet_len = falling_detect - raising_detect
-    max_packet_len = np.max(packet_len)
-    print(f"{max_packet_len = }")
+    min_packet_len = np.min(packet_len)
+    print(f"{min_packet_len = }")
 
     x_p = [x+int(mov_wdw_s/2) for x in range(n_ary)]
 
@@ -73,15 +73,6 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
         return None
 
     pkt_ret = None
-    print(f"{above_threshold = }")
-
-    print(f"{len(mov_avg) = }")
-    print(f"{len(x_p) = }")
-    print(f"{len(above_list) = }")
-    
-    print(f"{raising_detect.shape = }")
-    print(f"{falling_detect.shape = }")
-
     if INSPECT:
         print(f"{raising_detect = }")
         above_list = above_list*0.8*max_v
@@ -99,7 +90,10 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
             print(f"Packet length: {fall_d-raise_d}")
 
     for raise_d in raising_detect:
-        pkt = np.expand_dims(ary[raise_d:raise_d+pkt_size], axis=0)
+        if min_packet_len > pkt_size:
+            min_packet_len = pkt_size
+
+        pkt = np.expand_dims(ary[raise_d:raise_d+min_packet_len], axis=0)
         if pkt_ret is None:
             pkt_ret = pkt
         else:
