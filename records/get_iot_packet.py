@@ -53,7 +53,7 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
     above_threshold = np.where(mov_avg > mov_avg_threshold)[0]
     above_list = np.array([1 if x > mov_avg_threshold else 0 for x in mov_avg])
 
-    raising_detect = np.where(above_list[1:] - above_list[:-1] == 1)
+    raising_detect = np.where(above_list[1:] - above_list[:-1] == 1)[0]
 
     x_p = [x+int(mov_wdw_s/2) for x in range(n_ary)]
 
