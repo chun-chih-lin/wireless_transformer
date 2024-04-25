@@ -69,8 +69,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
     if falling_detect[-1] >= n_ary-int(mov_wdw_s/2):
         raising_detect = raising_detect[:-1]
         falling_detect = falling_detect[:-1]
-
-    print(f"{len(raising_detect) = }")
+    
     packet_len = falling_detect - raising_detect
     min_packet_len = np.min(packet_len)
 
@@ -79,8 +78,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
     if len(above_threshold) == 0:
         print("Threhold is invalid")
         return None
-
-    pkt_ret = None
+    
     if INSPECT:
         print(f"{raising_detect = }")
         print(f"{falling_detect = }")
@@ -99,6 +97,8 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
         plt.title(filename)
         plt.show()
 
+    print(f"{len(raising_detect) = }, {min_packet_len = }")
+    pkt_ret = None
     for raise_d in raising_detect:
         if min_packet_len > pkt_size:
             min_packet_len = pkt_size
