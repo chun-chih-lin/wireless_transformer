@@ -108,6 +108,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
             break
 
         pkt = np.expand_dims(ary[raise_d:raise_d+min_packet_len], axis=0)
+        print(f"{pkt.shape = }")
         if pkt_ret is None:
             pkt_ret = pkt
         else:
@@ -130,6 +131,8 @@ def main():
 
         print(f"Processing {full_filename}...")
         data = load_dat_from_file(full_filename)
+        if INSPECT:
+            data = data[500_000:600_000]
 
         n_batch = math.ceil(data.shape[0]/BATCH_SIZE)
         print(f"Total batches: {n_batch}")
@@ -137,20 +140,20 @@ def main():
 
         for n_b in range(n_batch):
             print(f"[{n_b}/{n_batch}]")
+            if n_b == n_batch-1:
+                data = data[n_b*BATCH_SIZE:]
+            else:
+                data = data[n_b*BATCH_SIZE:(n_b+1)*BATCH_SIZE]
 
+            packets = get_packets(data, filename)
+            if not INSPECT and packets is None:
+                print(f"Processe {full_filename} failed. Not packet detected.")
+                continue
 
-        if INSPECT:
-            data = data[500_000:600_000]
-        data = data[0:BATCH_SIZE]
-
-        packets = get_packets(data, filename)
-        if not INSPECT and packets is None:
-            print(f"Processe {full_filename} failed. Not packet detected.")
-            continue
-
-        n_pkt = packets.shape[0]
-        print(f"{packets.shape = }")
-        print(f"Number of packet: {n_pkt}")
+            n_pkt = packets.shape[0]
+            print(f"{packets.shape = }")
+            print(f"Number of packet: {n_pkt}")
+            save_batch_packets = 
         break
     pass
 
