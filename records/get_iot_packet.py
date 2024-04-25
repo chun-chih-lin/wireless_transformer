@@ -15,7 +15,7 @@ args = parser.parse_args()
 INSPECT = args.i
 MOD_LIST = ["WIFI-BPSK", "WIFI-QPSK", "WIFI-16QAM", "WIFI-64QAM", "ZIGBEE-OQPSK", "BT-GFSK-LE1M", "BT-GFSK-LE2M", "BT-GFSK-S2Coding", "BT-GFSK-S2Coding"]
 BATCH_SIZE=100_000_000
-MAX_PACKET=20_000
+MAX_PACKET=10_000
 
 if os.system("clear") != 0:
     os.system("cls")
@@ -55,7 +55,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
     mov_avg_threshold = (np.max(mov_avg) + np.mean(mov_avg)*9)/10
     above_threshold = np.where(mov_avg > mov_avg_threshold)[0]
     if len(above_threshold) == 0:
-        print("Threhold is invalid")
+        print("=============== Threhold is invalid ===============")
         return []
 
     above_list = np.array([1 if x > mov_avg_threshold else 0 for x in mov_avg])
@@ -87,6 +87,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
     
     packet_len = falling_detect - raising_detect
     if len(packet_len) == 0:
+        print("=============== Not detecting any packet ===============")
         return []
 
     min_packet_len = np.min(packet_len)
@@ -156,7 +157,7 @@ def main():
         print(f"Total batches: {n_batch}, Total sample: {data.shape}")
 
         for n_b in range(n_batch):
-            save_batch_packets_name = f"{args.s}B{n_b+1}-{n_batch}_{filename_prefix}.pkl"
+            save_batch_packets_name = f"{args.s}packets/B{n_b+1}-{n_batch}_{filename_prefix}.pkl"
             print(f"{save_batch_packets_name = }")
             if os.path.exists(save_batch_packets_name):
                 print(f"File {save_batch_packets_name} exists. Skip")
@@ -173,8 +174,10 @@ def main():
             print(f"{process_data.shape = }")
             packets = get_packets(process_data, filename)
             if packets is None:
+                print("Packet is None")
                 continue
             if len(packets) == 0:
+                print("Can not get any packets.")
                 continue
             if not INSPECT and packets is None:
                 print(f"Processe {full_filename} failed. Not packet detected.")
