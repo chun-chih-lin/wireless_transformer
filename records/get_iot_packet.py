@@ -90,8 +90,8 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
     
     print(f"{len(raising_detect) = }, {min_packet_len = }")
     if INSPECT:
-        print(f"{raising_detect = }")
-        print(f"{falling_detect = }")
+        # print(f"{raising_detect = }")
+        # print(f"{falling_detect = }")
         above_list = above_list*0.8*max_v
         plt.plot(ary.real, linewidth=0.5)
         plt.plot(ary.imag, linewidth=0.5)
