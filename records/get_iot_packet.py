@@ -150,12 +150,12 @@ def main():
             print(f"[{n_b+1}/{n_batch}]")
             print(f"{n_b*BATCH_SIZE = }, {(n_b+1)*BATCH_SIZE = }")
             if (n_b+1)*BATCH_SIZE >= data.shape[0]:
-                data = data[n_b*BATCH_SIZE:]
+                process_data = data[n_b*BATCH_SIZE:]
             else:
-                data = data[n_b*BATCH_SIZE:(n_b+1)*BATCH_SIZE]
+                process_data = data[n_b*BATCH_SIZE:(n_b+1)*BATCH_SIZE]
 
-            print(f"{data.shape = }")
-            packets = get_packets(data, filename)
+            print(f"{process_data.shape = }")
+            packets = get_packets(process_data, filename)
             if not INSPECT and packets is None:
                 print(f"Processe {full_filename} failed. Not packet detected.")
                 continue
