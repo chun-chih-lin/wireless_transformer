@@ -62,6 +62,9 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
     if len(falling_detect) != len(raising_detect):
         raising_detect = raising_detect[:len(falling_detect)]
 
+    packet_len = falling_detect - raising_detect
+    max_packet_len = np.max(packet_len)
+    print(f"{max_packet_len = }")
 
     x_p = [x+int(mov_wdw_s/2) for x in range(n_ary)]
 
