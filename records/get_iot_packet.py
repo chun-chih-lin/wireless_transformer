@@ -108,7 +108,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
             break
 
         pkt = np.expand_dims(ary[raise_d:raise_d+min_packet_len], axis=0)
-        print(f"{pkt.shape = }")
+        # print(f"{pkt.shape = }")
         if pkt_ret is None:
             pkt_ret = pkt
         else:
