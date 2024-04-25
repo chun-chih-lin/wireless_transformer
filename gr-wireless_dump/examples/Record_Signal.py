@@ -64,8 +64,8 @@ class Record_Signal(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.tx_power = tx_power = "-20"
-        self.save_mod = save_mod = "WIFI-64QAM"
-        self.samp_rate = samp_rate = 5e6
+        self.save_mod = save_mod = "WIFI-BPSK"
+        self.samp_rate = samp_rate = 20e6
         self.carrier_freq = carrier_freq = 2360e6
         self.save_prefix = save_prefix = "Dataset_diff_samprate/"
         self.save_folder = save_folder = "/home/chunchi/Desktop/wireless_transformer/records/"
