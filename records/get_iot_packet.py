@@ -88,7 +88,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
 
     if len(above_threshold) == 0:
         print("Threhold is invalid")
-        return None
+        return []
     
     print(f"{len(raising_detect) = }, {min_packet_len = }")
     if INSPECT:
@@ -159,7 +159,7 @@ def main():
 
             print(f"{process_data.shape = }")
             packets = get_packets(process_data, filename)
-            if not packets:
+            if len(packets) == 0:
                 continue
             if not INSPECT and packets is None:
                 print(f"Processe {full_filename} failed. Not packet detected.")
