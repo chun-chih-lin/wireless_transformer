@@ -102,7 +102,7 @@ def main():
         data = load_dat_from_file(full_filename)
 
         if INSPECT:
-            data = data[0:100_000]
+            data = data[100_000:200_000]
 
         packets = get_packets(data)
         if not INSPECT and packets is None:
