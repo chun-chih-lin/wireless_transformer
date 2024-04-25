@@ -154,7 +154,7 @@ def main():
             n_pkt = packets.shape[0]
             print(f"{packets.shape = }")
             print(f"Number of packet: {n_pkt}")
-            save_batch_packets_name = f"B{n_b}_{filename_prefix}.pkl"
+            save_batch_packets_name = f"B{n_b+1}-{n_batch}_{filename_prefix}.pkl"
             print(f"{save_batch_packets_name = }")
         break
     pass
