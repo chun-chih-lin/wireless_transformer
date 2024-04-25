@@ -64,7 +64,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=100):
 
     packet_len = falling_detect - raising_detect
     min_packet_len = np.min(packet_len)
-    print(f"{min_packet_len = }")
+    print(f"{min_packet_len = }, {n_ary = }, {falling_detect[-1]}")
 
     x_p = [x+int(mov_wdw_s/2) for x in range(n_ary)]
 
@@ -75,6 +75,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=100):
     pkt_ret = None
     if INSPECT:
         print(f"{raising_detect = }")
+        print(f"{falling_detect = }")
         above_list = above_list*0.8*max_v
         plt.plot(ary.real, linewidth=0.5)
         plt.plot(ary.imag, linewidth=0.5)
@@ -96,7 +97,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=100):
 
         if raise_d+min_packet_len > n_ary:
             break
-            
+
         pkt = np.expand_dims(ary[raise_d:raise_d+min_packet_len], axis=0)
         if pkt_ret is None:
             pkt_ret = pkt
