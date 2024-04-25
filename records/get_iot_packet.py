@@ -133,7 +133,7 @@ def main():
         print(f"Processing {full_filename}...")
         data = load_dat_from_file(full_filename)
         if INSPECT:
-            data = data[1_000_000:2_000_000]
+            data = data[1_000_000:10_000_000]
 
         n_batch = math.ceil(data.shape[0]/BATCH_SIZE)
         print(f"Total batches: {n_batch}")
