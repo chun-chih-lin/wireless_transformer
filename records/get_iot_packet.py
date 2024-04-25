@@ -78,6 +78,8 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
         plt.axhline(mov_avg_threshold, color='y', linewidth=0.5)
         plt.plot(x_p, mov_avg[mov_wdw_s-1:], color='b', linewidth=0.7)
         plt.plot(x_p, above_list[mov_wdw_s-1:], color='r', linewidth=0.7)
+        for raise_d in raising_detect:
+            plt.axvline(raise_d, color='r', linewidth=0.5)
 
     return np.array([])
     pass
