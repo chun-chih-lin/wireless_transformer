@@ -155,7 +155,7 @@ blocks:
     bus_structure: null
     coordinate: [712, 180.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: samp_rate
   id: variable
   parameters:
@@ -167,7 +167,7 @@ blocks:
     bus_structure: null
     coordinate: [712, 244.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: sample_per_input
   id: variable
   parameters:
@@ -432,7 +432,7 @@ blocks:
     bus_structure: null
     coordinate: [624, 540.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: save_mod
   id: variable
   parameters:
@@ -468,7 +468,7 @@ blocks:
     bus_structure: null
     coordinate: [744, 604.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: save_mod
   id: variable
   parameters:
