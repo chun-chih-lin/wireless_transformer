@@ -153,7 +153,7 @@ def main():
             n_pkt = packets.shape[0]
             print(f"{packets.shape = }")
             print(f"Number of packet: {n_pkt}")
-            save_batch_packets = 
+            # save_batch_packets = 
         break
     pass
 
