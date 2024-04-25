@@ -14,6 +14,8 @@ args = parser.parse_args()
 
 INSPECT = args.i
 MOD_LIST = ["WIFI-BPSK", "WIFI-QPSK", "WIFI-16QAM", "WIFI-64QAM", "ZIGBEE-OQPSK", "BT-GFSK-LE1M", "BT-GFSK-LE2M", "BT-GFSK-S2Coding", "BT-GFSK-S2Coding"]
+BATCH_SIZE=100_000_000
+MAX_PACKET=20_000
 
 if os.system("clear") != 0:
     os.system("cls")
@@ -52,6 +54,10 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
 
     mov_avg_threshold = (np.max(mov_avg) + np.mean(mov_avg)*9)/10
     above_threshold = np.where(mov_avg > mov_avg_threshold)[0]
+    if len(above_threshold) == 0:
+        print("Threhold is invalid")
+        return []
+
     above_list = np.array([1 if x > mov_avg_threshold else 0 for x in mov_avg])
 
     raising_detect = np.where(above_list[1:] - above_list[:-1] == 1)[0] - int(mov_wdw_s/2)
@@ -85,10 +91,6 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
     min_packet_len = np.min(packet_len)
 
     x_p = [x+int(mov_wdw_s/2) for x in range(n_ary)]
-
-    if len(above_threshold) == 0:
-        print("Threhold is invalid")
-        return []
     
     print(f"{len(raising_detect) = }, {min_packet_len = }")
     if INSPECT:
@@ -110,10 +112,12 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
         plt.show()
 
     pkt_ret = None
+    if min_packet_len > pkt_size:
+        min_packet_len = pkt_size
+    
+    pkt_i = 0
     for raise_d in raising_detect:
-        if min_packet_len > pkt_size:
-            min_packet_len = pkt_size
-
+        pkt_i += 1
         if raise_d+min_packet_len > n_ary:
             break
 
@@ -124,11 +128,13 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
         else:
             pkt_ret = np.concatenate((pkt_ret, pkt), axis=0)
 
+        if pkt_i >= MAX_PACKET:
+            break
+
     return pkt_ret
     pass
 
 # ==========================================================
-BATCH_SIZE=100_000_000
 
 def main():
     filename_list = get_filename_list()
@@ -171,6 +177,8 @@ def main():
             print(f"{save_batch_packets_name = }")
 
             packets.tofile(save_batch_packets_name)
+            if n_pkt >= MAX_PACKET:
+                break
     pass
 
 if __name__ == '__main__':
