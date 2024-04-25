@@ -79,7 +79,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
 
     to_remove = []
     for i, (raise_d, fall_d) in enumerate(zip(raising_detect, falling_detect)):
-        if fall_d - raise_d < 300:
+        if fall_d - raise_d < 100:
             to_remove.append(i)
 
     raising_detect = np.delete(raising_detect, to_remove)
@@ -141,6 +141,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
 def main():
     filename_list = get_filename_list()
     for filename in filename_list:
+        print("-"*25)
         print("-"*25)
         filename_prefix = ".".join(filename.split('.')[:-1])
         full_filename = f"{args.s}{filename}"
