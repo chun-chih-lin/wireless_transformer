@@ -54,6 +54,7 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
     above_list = np.array([1 if x > mov_avg_threshold else 0 for x in mov_avg])
 
     raising_detect = np.where(above_list[1:] - above_list[:-1] == 1)[0] - int(mov_wdw_s/2)
+    falling_detect = np.where(above_list[1:] - above_list[:-1] == -1)[0] - int(mov_wdw_s/2)
 
     x_p = [x+int(mov_wdw_s/2) for x in range(n_ary)]
 
@@ -82,16 +83,16 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
         plt.plot(x_p, above_list[mov_wdw_s-1:], color='r', linewidth=0.7)
         for raise_d in raising_detect:
             plt.axvline(raise_d, color='r', linestyle='-.', linewidth=0.7)
+        for fall_d in falling_detect:
             plt.axvline(raise_d+pkt_size, color='r', linestyle=':', linewidth=0.7)
 
     for raise_d in raising_detect:
         pkt = np.expand_dims(ary[raise_d:raise_d+pkt_size], axis=0)
-        print(f"{pkt.shape = }")
         if pkt_ret is None:
             pkt_ret = pkt
         else:
             pkt_ret = np.concatenate((pkt_ret, pkt), axis=0)
-            
+
     return pkt_ret
     pass
 
