@@ -38,7 +38,7 @@ def get_filename_list():
     return filelist
 
 # ==========================================================
-def get_packets(ary, pkt_size=500, mov_wdw_s=100):
+def get_packets(ary, filename, pkt_size=500, mov_wdw_s=100):
     abs_ary = np.abs(ary)
     n_ary = ary.shape[0]
 
@@ -120,7 +120,7 @@ def main():
         if INSPECT:
             data = data[500_000:600_000]
 
-        packets = get_packets(data)
+        packets = get_packets(data, filename)
         if not INSPECT and packets is None:
             print(f"Processe {full_filename} failed. Not packet detected.")
             continue
