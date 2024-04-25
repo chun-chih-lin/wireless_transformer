@@ -80,6 +80,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
         print("Threhold is invalid")
         return None
     
+    print(f"{len(raising_detect) = }, {min_packet_len = }")
     if INSPECT:
         print(f"{raising_detect = }")
         print(f"{falling_detect = }")
@@ -98,7 +99,6 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
         plt.title(filename)
         plt.show()
 
-    print(f"{len(raising_detect) = }, {min_packet_len = }")
     pkt_ret = None
     for raise_d in raising_detect:
         if min_packet_len > pkt_size:
@@ -133,7 +133,7 @@ def main():
         print(f"Processing {full_filename}...")
         data = load_dat_from_file(full_filename)
         if INSPECT:
-            data = data[0:600_000]
+            data = data[0:1_000_000]
 
         n_batch = math.ceil(data.shape[0]/BATCH_SIZE)
         print(f"Total batches: {n_batch}")
