@@ -124,6 +124,7 @@ def main():
     filename_list = get_filename_list()
     for filename in filename_list:
         print("-"*25)
+        filename_prefix = ".".join(filename.split('.')[:-1])
         full_filename = f"{args.s}{filename}"
         if not os.path.exists(full_filename):
             print(f"{full_filename} is not a file.")
@@ -153,7 +154,8 @@ def main():
             n_pkt = packets.shape[0]
             print(f"{packets.shape = }")
             print(f"Number of packet: {n_pkt}")
-            # save_batch_packets = 
+            save_batch_packets_name = f"B{n_b}_{filename_prefix}.pkl"
+            print(f"{save_batch_packets_name = }")
         break
     pass
 
