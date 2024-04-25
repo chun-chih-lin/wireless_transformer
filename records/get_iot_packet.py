@@ -70,6 +70,14 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
     if falling_detect[-1] >= n_ary-int(mov_wdw_s/2):
         raising_detect = raising_detect[:-1]
         falling_detect = falling_detect[:-1]
+
+    to_remove = []
+    for i, (raise_d, fall_d) in enumerate(zip(raising_detect, falling_detect)):
+        if fall_d - raise_d < 300:
+            to_remove.append(i)
+
+    raising_detect.remove(to_remove)
+    falling_detect.remove(to_remove)
     
     packet_len = falling_detect - raising_detect
     min_packet_len = np.min(packet_len)
