@@ -87,6 +87,8 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
         for (raise_d, fall_d) in zip(raising_detect, falling_detect):
             plt.axvline(raise_d, color='r', linestyle='-.', linewidth=0.7)
             plt.axvline(fall_d, color='r', linestyle=':', linewidth=0.7)
+        plt.title(filename)
+        plt.show()
 
     for raise_d in raising_detect:
         if min_packet_len > pkt_size:
@@ -122,10 +124,6 @@ def main():
         if not INSPECT and packets is None:
             print(f"Processe {full_filename} failed. Not packet detected.")
             continue
-
-        if INSPECT:
-            plt.title(filename)
-            plt.show()
 
         n_pkt = packets.shape[0]
         print(f"{packets.shape = }")
