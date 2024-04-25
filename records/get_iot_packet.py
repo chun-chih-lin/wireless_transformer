@@ -90,7 +90,7 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
         plt.axhline(mov_avg_threshold, color='k', linewidth=0.7)
         plt.plot(x_p, mov_avg[mov_wdw_s-1:], color='b', linewidth=0.7)
         plt.plot(x_p, above_list[mov_wdw_s-1:], color='r', linewidth=0.7)
-        for (raise_d, fall_d) in zip(raising_detect, falling_detect)
+        for (raise_d, fall_d) in zip(raising_detect, falling_detect):
             plt.axvline(raise_d, color='r', linestyle='-.', linewidth=0.7)
             plt.axvline(fall_d, color='r', linestyle=':', linewidth=0.7)
             print(f"Packet length: {fall_d-raise_d}")
