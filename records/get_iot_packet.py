@@ -80,6 +80,8 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
     falling_detect = np.delete(falling_detect, to_remove)
     
     packet_len = falling_detect - raising_detect
+    if len(packet_len) == 0:
+        return False
     min_packet_len = np.min(packet_len)
 
     x_p = [x+int(mov_wdw_s/2) for x in range(n_ary)]
@@ -147,6 +149,7 @@ def main():
         print(f"Total batches: {n_batch}, Total sample: {data.shape}")
 
         for n_b in range(n_batch):
+            print("-"*10)
             print(f"[{n_b+1}/{n_batch}]")
             print(f"{n_b*BATCH_SIZE = }, {(n_b+1)*BATCH_SIZE = }")
             if (n_b+1)*BATCH_SIZE >= data.shape[0]:
@@ -156,6 +159,8 @@ def main():
 
             print(f"{process_data.shape = }")
             packets = get_packets(process_data, filename)
+            if not packets:
+                continue
             if not INSPECT and packets is None:
                 print(f"Processe {full_filename} failed. Not packet detected.")
                 continue
