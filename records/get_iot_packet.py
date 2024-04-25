@@ -38,7 +38,7 @@ def get_filename_list():
     return filelist
 
 # ==========================================================
-def get_packets(ary, pkt_size=500, mov_wdw_s=250):
+def get_packets(ary, pkt_size=500, mov_wdw_s=100):
     abs_ary = np.abs(ary)
     n_ary = ary.shape[0]
 
