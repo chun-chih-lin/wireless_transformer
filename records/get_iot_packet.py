@@ -107,6 +107,7 @@ def main():
             continue
 
         if INSPECT:
+            plt.title(filename)
             plt.show()
 
         n_pkt = packets.shape[0]
