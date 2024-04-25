@@ -87,7 +87,8 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
     
     packet_len = falling_detect - raising_detect
     if len(packet_len) == 0:
-        return False
+        return []
+
     min_packet_len = np.min(packet_len)
 
     x_p = [x+int(mov_wdw_s/2) for x in range(n_ary)]
@@ -155,6 +156,12 @@ def main():
         print(f"Total batches: {n_batch}, Total sample: {data.shape}")
 
         for n_b in range(n_batch):
+            save_batch_packets_name = f"{args.s}B{n_b+1}-{n_batch}_{filename_prefix}.pkl"
+            print(f"{save_batch_packets_name = }")
+            if os.path.exists(save_batch_packets_name):
+                print(f"File {save_batch_packets_name} exists. Skip")
+                continue
+
             print("-"*10)
             print(f"[{n_b+1}/{n_batch}]")
             print(f"{n_b*BATCH_SIZE = }, {(n_b+1)*BATCH_SIZE = }")
@@ -165,6 +172,8 @@ def main():
 
             print(f"{process_data.shape = }")
             packets = get_packets(process_data, filename)
+            if packets is None:
+                continue
             if len(packets) == 0:
                 continue
             if not INSPECT and packets is None:
@@ -173,8 +182,7 @@ def main():
 
             n_pkt = packets.shape[0]
             print(f"Number of packet: {packets.shape[0]}, length: {packets.shape[1]}")
-            save_batch_packets_name = f"{args.s}B{n_b+1}-{n_batch}_{filename_prefix}.pkl"
-            print(f"{save_batch_packets_name = }")
+            
 
             packets.tofile(save_batch_packets_name)
             if n_pkt >= MAX_PACKET:
