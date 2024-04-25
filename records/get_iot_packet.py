@@ -153,6 +153,7 @@ def main():
             else:
                 data = data[n_b*BATCH_SIZE:(n_b+1)*BATCH_SIZE]
 
+            print(f"{data.shape = }")
             packets = get_packets(data, filename)
             if not INSPECT and packets is None:
                 print(f"Processe {full_filename} failed. Not packet detected.")
@@ -162,9 +163,8 @@ def main():
             print(f"Number of packet: {packets.shape[0]}, length: {packets.shape[1]}")
             save_batch_packets_name = f"{args.s}B{n_b+1}-{n_batch}_{filename_prefix}.pkl"
             print(f"{save_batch_packets_name = }")
-            
-            # packets.tofile(save_batch_packets_name)
-        break
+
+            packets.tofile(save_batch_packets_name)
     pass
 
 if __name__ == '__main__':
