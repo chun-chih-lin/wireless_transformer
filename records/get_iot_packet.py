@@ -63,8 +63,8 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=100):
         raising_detect = raising_detect[:len(falling_detect)]
 
     if falling_detect[-1] >= n_ary:
-        raising_detect.pop(-1)
-        falling_detect.pop(-1)
+        raising_detect = raising_detect[:-1]
+        falling_detect = falling_detect[:-1]
 
 
     packet_len = falling_detect - raising_detect
