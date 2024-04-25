@@ -50,7 +50,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
 
     max_v = np.max(mov_avg)
 
-    mov_avg_threshold = (np.max(mov_avg) + np.mean(mov_avg)*7)/8
+    mov_avg_threshold = (np.max(mov_avg) + np.mean(mov_avg)*6)/7
     above_threshold = np.where(mov_avg > mov_avg_threshold)[0]
     above_list = np.array([1 if x > mov_avg_threshold else 0 for x in mov_avg])
 
