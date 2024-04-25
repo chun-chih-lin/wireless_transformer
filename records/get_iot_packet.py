@@ -56,6 +56,13 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
     raising_detect = np.where(above_list[1:] - above_list[:-1] == 1)[0] - int(mov_wdw_s/2)
     falling_detect = np.where(above_list[1:] - above_list[:-1] == -1)[0] - int(mov_wdw_s/2)
 
+    if falling_detect[0] < raising_detect[0]:
+        falling_detect.pop(0)
+
+    if len(falling_detect) != len(raising_detect):
+        raising_detect = raising_detect[:len(falling_detect)]
+
+
     x_p = [x+int(mov_wdw_s/2) for x in range(n_ary)]
 
     if len(above_threshold) == 0:
@@ -68,7 +75,9 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
     print(f"{len(mov_avg) = }")
     print(f"{len(x_p) = }")
     print(f"{len(above_list) = }")
-
+    
+    print(f"{raising_detect.shape = }")
+    print(f"{falling_detect.shape = }")
 
     if INSPECT:
         print(f"{raising_detect = }")
@@ -81,10 +90,10 @@ def get_packets(ary, pkt_size=500, mov_wdw_s=100):
         plt.axhline(mov_avg_threshold, color='k', linewidth=0.7)
         plt.plot(x_p, mov_avg[mov_wdw_s-1:], color='b', linewidth=0.7)
         plt.plot(x_p, above_list[mov_wdw_s-1:], color='r', linewidth=0.7)
-        for raise_d in raising_detect:
+        for (raise_d, fall_d) in zip(raising_detect, falling_detect)
             plt.axvline(raise_d, color='r', linestyle='-.', linewidth=0.7)
-        for fall_d in falling_detect:
             plt.axvline(fall_d, color='r', linestyle=':', linewidth=0.7)
+            print(f"Packet length: {fall_d-raise_d}")
 
     for raise_d in raising_detect:
         pkt = np.expand_dims(ary[raise_d:raise_d+pkt_size], axis=0)
