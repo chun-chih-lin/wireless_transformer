@@ -132,7 +132,12 @@ def main():
         data = load_dat_from_file(full_filename)
 
         n_batch = math.ceil(data.shape[0]/BATCH_SIZE)
+        print(f"Total batches: {n_batch}")
         print(data.shape)
+
+        for n_b in range(n_batch):
+            print(f"[{n_b}/{n_batch}]")
+
 
         if INSPECT:
             data = data[500_000:600_000]
