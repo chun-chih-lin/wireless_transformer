@@ -116,8 +116,9 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
     pass
 
 # ==========================================================
-def main():
+BATCH_SIZE=10_000_000
 
+def main():
     filename_list = get_filename_list()
     for filename in filename_list:
         print("-"*25)
@@ -132,6 +133,7 @@ def main():
 
         if INSPECT:
             data = data[500_000:600_000]
+        data = data[0:BATCH_SIZE]
 
         packets = get_packets(data, filename)
         if not INSPECT and packets is None:
@@ -141,6 +143,7 @@ def main():
         n_pkt = packets.shape[0]
         print(f"{packets.shape = }")
         print(f"Number of packet: {n_pkt}")
+        break
     pass
 
 if __name__ == '__main__':
