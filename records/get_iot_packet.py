@@ -94,6 +94,9 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=100):
         if min_packet_len > pkt_size:
             min_packet_len = pkt_size
 
+        if raise_d+min_packet_len > n_ary:
+            break
+            
         pkt = np.expand_dims(ary[raise_d:raise_d+min_packet_len], axis=0)
         if pkt_ret is None:
             pkt_ret = pkt
