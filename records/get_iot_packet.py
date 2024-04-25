@@ -112,8 +112,6 @@ def main():
 
         n_pkt = packets.shape[0]
         print(f"Number of packet: {n_pkt}")
-
-        break
     pass
 
 if __name__ == '__main__':
