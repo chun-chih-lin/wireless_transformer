@@ -160,7 +160,7 @@ def main():
             print(f"{save_batch_packets_name = }")
             if os.path.exists(save_batch_packets_name):
                 print(f"File {save_batch_packets_name} exists. Skip")
-                continue
+                break
 
             print("-"*10)
             print(f"[{n_b+1}/{n_batch}]")
