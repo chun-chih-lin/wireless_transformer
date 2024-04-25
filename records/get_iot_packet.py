@@ -38,7 +38,7 @@ def get_filename_list():
     return filelist
 
 # ==========================================================
-def get_packets(ary, filename, pkt_size=500, mov_wdw_s=100):
+def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
     abs_ary = np.abs(ary)
     n_ary = ary.shape[0]
 
@@ -62,14 +62,17 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=100):
     if len(falling_detect) != len(raising_detect):
         raising_detect = raising_detect[:len(falling_detect)]
 
-    if falling_detect[-1] >= n_ary:
+    if raising_detect[0] <= int(mov_wdw_s/2):
+        raising_detect = raising_detect[1:]
+        falling_detect = falling_detect[1:]
+
+    if falling_detect[-1] >= n_ary-int(mov_wdw_s/2):
         raising_detect = raising_detect[:-1]
         falling_detect = falling_detect[:-1]
 
 
     packet_len = falling_detect - raising_detect
     min_packet_len = np.min(packet_len)
-    print(f"{min_packet_len = }, {n_ary = }, {falling_detect[-1]}")
 
     x_p = [x+int(mov_wdw_s/2) for x in range(n_ary)]
 
