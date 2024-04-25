@@ -70,7 +70,7 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
         raising_detect = raising_detect[:-1]
         falling_detect = falling_detect[:-1]
 
-
+    print(f"{len(raising_detect) = }")
     packet_len = falling_detect - raising_detect
     min_packet_len = np.min(packet_len)
 
