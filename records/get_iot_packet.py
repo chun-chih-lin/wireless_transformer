@@ -128,6 +128,7 @@ def main():
 
         print(f"Processing {full_filename}...")
         data = load_dat_from_file(full_filename)
+        print(data.shape)
 
         if INSPECT:
             data = data[500_000:600_000]
