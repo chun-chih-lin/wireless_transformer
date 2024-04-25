@@ -76,8 +76,8 @@ def get_packets(ary, filename, pkt_size=500, mov_wdw_s=10):
         if fall_d - raise_d < 300:
             to_remove.append(i)
 
-    raising_detect.remove(to_remove)
-    falling_detect.remove(to_remove)
+    raising_detect = np.delete(raising_detect, to_remove)
+    falling_detect = np.delete(falling_detect, to_remove)
     
     packet_len = falling_detect - raising_detect
     min_packet_len = np.min(packet_len)
