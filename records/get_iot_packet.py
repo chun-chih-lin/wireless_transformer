@@ -149,7 +149,7 @@ def main():
         for n_b in range(n_batch):
             print(f"[{n_b+1}/{n_batch}]")
             print(f"{n_b*BATCH_SIZE = }, {(n_b+1)*BATCH_SIZE = }")
-            if (n_b+1)*BATCH_SIZE >= data.shpae[0]:
+            if (n_b+1)*BATCH_SIZE >= data.shape[0]:
                 data = data[n_b*BATCH_SIZE:]
             else:
                 data = data[n_b*BATCH_SIZE:(n_b+1)*BATCH_SIZE]
