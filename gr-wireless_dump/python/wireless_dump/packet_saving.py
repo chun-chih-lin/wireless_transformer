@@ -59,6 +59,7 @@ class packet_saving(gr.sync_block):
         self.pkt_end = None
 
         self.state = FIND_RAISING_EDGE
+        print("Resetting Done.")
 
     # ----------------------------------------------
     # Callback functions
@@ -126,6 +127,7 @@ class packet_saving(gr.sync_block):
 
             i = 0
             while len(in0) > 0 and len(in1) > 0:
+                print(f"{len(in0) = }, {len(in1) = }")
                 if self.state == FIND_RAISING_EDGE:
                     # Find a new packet
                     moving_avg_ret = self.get_moving_avg(in1)
