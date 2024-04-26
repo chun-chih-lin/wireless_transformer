@@ -75,6 +75,7 @@ class packet_saving(gr.sync_block):
 
     def set_threshold(self, threshold):
         self.threshold = threshold
+        print(f"Setting self.threshold: {self.threshold}")
 
     def update_save_filename(self):
         if self.init:
