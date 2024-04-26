@@ -133,24 +133,23 @@ class packet_saving(gr.sync_block):
 
                     if len(above_list) == 0:
                         # Nothing is greater than the threshold
-                        self.consume_each([len(in0), len(in1)])
+                        self.consume_each(len(in0))
                         continue
 
                     r_edge = self.get_edges(above_list, edge=RAISING_EDGE)
-                    print(f"{above_list = }, {np.mean(above_list) = }")
-                    print(f"{r_edge = }")
 
                     if len(r_edge) == 0:
                         # Nothing is greater than the threshold
-                        self.consume_each([len(in0), len(in1)])
+                        self.consume_each(len(in0))
                         continue
 
                     self.pkt_start = r_edge[0]
                     if self.record:
+                        print("Find the Raising edge. Go to State 2.")
                         self.state = FIND_FALLING_EDGE
-                        self.consume_each([len(in0), len(in1)])
+                        self.consume_each(len(in0))
                     else:
-                        self.consume_each([self.pkt_start, self.pkt_start])
+                        self.consume_each(self.pkt_start)
                 else:
                     # Find the end of the packet
                     moving_avg_ret = self.get_moving_avg(in1)
@@ -164,7 +163,7 @@ class packet_saving(gr.sync_block):
                         else:
                             self.cur_packet = np.concatenate((self.cur_packet, in0))
 
-                        self.consume_each([len(in0), len(in0)])
+                        self.consume_each(len(in0))
                         continue
 
                     # Find at least one falling edge.
@@ -177,6 +176,7 @@ class packet_saving(gr.sync_block):
                         pass
 
                     if self.pkt_end is not None:
+
                         # get a complete packet
                         self.cur_packet = in0[:self.pkt_end]
                         
@@ -198,12 +198,12 @@ class packet_saving(gr.sync_block):
                         self.pkt_end = None
                         self.state = FIND_RAISING_EDGE
 
-                        self.consume_each([len(self.cur_packet), len(self.cur_packet)])
+                        self.consume_each(len(self.cur_packet))
 
                     else:
                         # non of the edge works
                         self.cur_packet = np.concatenate((self.cur_packet, in0))
-                        self.consume_each([len(in0), len(in0)])
+                        self.consume_each(len(in0))
 
 
                 # self.consume(0, len(in0))
