@@ -156,8 +156,8 @@ class packet_saving(gr.sync_block):
                         self.consume(1, len(in1))
                     else:
                         # self.consume_each(self.pkt_start)
-                        self.consume(0, len(self.pkt_start))
-                        self.consume(1, len(self.pkt_start))
+                        self.consume(0, self.pkt_start)
+                        self.consume(1, self.pkt_start)
                 else:
                     # Find the end of the packet
                     moving_avg_ret = self.get_moving_avg(in1)
