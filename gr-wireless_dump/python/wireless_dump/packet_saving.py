@@ -131,12 +131,13 @@ class packet_saving(gr.sync_block):
                     moving_avg_ret = self.get_moving_avg(in1)
                     above_list = self.where_over_threhsold(moving_avg_ret)
 
-                    if np.isscalar(above_list):
+                    if len(above_list) == 0:
                         # Nothing is greater than the threshold
                         self.consume_each([len(in0), len(in1)])
                         pass
 
                     r_edge = self.get_edges(above_list, edge=RAISING_EDGE)
+
                     self.pkt_start = r_edge[0]
                     self.state = FIND_FALLING_EDGE
 
@@ -145,7 +146,7 @@ class packet_saving(gr.sync_block):
                     # Find the end of the packet
                     f_edge = self.get_edges(above_list, edge=FALLING_EDGE)
 
-                    if np.isscalar(f_edge):
+                    if len(f_edge) == 0:
                         # Do not find any falling edge.
                         if self.cur_packet is None:
                             self.cur_packet = in0
