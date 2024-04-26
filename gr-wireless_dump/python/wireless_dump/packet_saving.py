@@ -134,11 +134,16 @@ class packet_saving(gr.sync_block):
                     if len(above_list) == 0:
                         # Nothing is greater than the threshold
                         self.consume_each([len(in0), len(in1)])
-                        pass
+                        continue
 
                     r_edge = self.get_edges(above_list, edge=RAISING_EDGE)
                     print(f"{above_list = }, {np.mean(above_list) = }")
                     print(f"{r_edge = }")
+
+                    if len(r_edge) == 0:
+                        # Nothing is greater than the threshold
+                        self.consume_each([len(in0), len(in1)])
+                        continue
 
                     self.pkt_start = r_edge[0]
                     if self.record:
