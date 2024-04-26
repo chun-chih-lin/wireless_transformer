@@ -138,6 +138,7 @@ class packet_saving(gr.sync_block):
 
                     print(f"{len(above_list) = }")
                     r_edge = self.get_edges(above_list, edge=RAISING_EDGE)
+                    print(f"{r_edge = }")
 
                     self.pkt_start = r_edge[0]
                     if self.record:
