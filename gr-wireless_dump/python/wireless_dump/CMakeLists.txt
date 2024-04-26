@@ -25,6 +25,7 @@ gr_python_install(
     wifi_dump.py
     generate_random_message.py
     capture_signal_on_tx.py
+    packet_saving.py
     DESTINATION ${GR_PYTHON_DIR}/gnuradio/wireless_dump)
 
 ########################################################################
@@ -43,3 +44,4 @@ add_custom_target(
 GR_ADD_TEST(qa_wifi_dump ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_wifi_dump.py)
 GR_ADD_TEST(qa_generate_random_message ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_generate_random_message.py)
 GR_ADD_TEST(qa_capture_signal_on_tx ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_capture_signal_on_tx.py)
+GR_ADD_TEST(qa_packet_saving ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_packet_saving.py)
