@@ -6,12 +6,12 @@ templates:
   imports: from gnuradio import wireless_dump
   make: wireless_dump.packet_saving(${save_folder}, ${save_filename}, ${threshold}, ${num_save_pkt}, ${debug}, ${record})
   callbacks:
-  - self.set_save_folder(${save_folder})
-  - self.set_save_filename(${save_filename})
-  - self.set_threshold(${threshold})
-  - self.set_num_save_pkt(${num_save_pkt})
-  - self.set_debug(${debug})
-  - self.set_record(${record})
+  - set_save_folder(${save_folder})
+  - set_save_filename(${save_filename})
+  - set_threshold(${threshold})
+  - set_num_save_pkt(${num_save_pkt})
+  - set_debug(${debug})
+  - set_record(${record})
 #  Make one 'parameters' list entry for every parameter you want settable from the GUI.
 #     Keys include:
 #     * id (makes the value accessible as keyname, e.g. in the make entry)
