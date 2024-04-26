@@ -29,6 +29,7 @@ class packet_saving(gr.sync_block):
             name="packet_saving",
             in_sig=[np.complex64, np.complex64],
             out_sig=None)
+        self.init = False
         self.set_debug(debug)
         self.set_mod(mod)
         self.set_tx_pwr(tx_pwr)
@@ -41,7 +42,8 @@ class packet_saving(gr.sync_block):
 
         self.set_record(record)
 
-        self.update_save_filename()
+        self.update_save_filename(init=True)
+
 
     # ----------------------------------------------
     # Callback functions
@@ -97,11 +99,11 @@ class packet_saving(gr.sync_block):
     def set_threshold(self, threshold):
         self.threshold = threshold
 
-    def update_save_filename(self):
-        self.save_filename = f"{self.save_prefix}_{self.mod}_{self.tx_pwr}_{self.samp_rate_in_MHz}_{self.carrier_freq_in_MHz}_"
-        self.save_full_filename = f"{self.save_folder}{self.save_filename}"
-
-        print(f"Update to save to {self.save_full_filename}")
+    def update_save_filename(self, init=False):
+        if init:
+            self.save_filename = f"{self.save_prefix}_{self.mod}_{self.tx_pwr}_{self.samp_rate_in_MHz}_{self.carrier_freq_in_MHz}_"
+            self.save_full_filename = f"{self.save_folder}{self.save_filename}"
+            print(f"Update to save to {self.save_full_filename}")
 
     # ----------------------------------------------
     def work(self, input_items, output_items):
