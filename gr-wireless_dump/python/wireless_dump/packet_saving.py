@@ -61,7 +61,7 @@ class packet_saving(gr.sync_block):
             e_type, e_obj, e_tb = sys.exc_info()
             print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
 
-    def set_num_save_pkt(num_save_pkt):
+    def set_num_save_pkt(self, num_save_pkt):
         self.num_save_pkt = num_save_pkt
 
     def set_debug(self, debug):
