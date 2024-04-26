@@ -129,24 +129,27 @@ class packet_saving(gr.sync_block):
             while len(in0) > 0 and len(in1) > 0:
                 print(f"{len(in0) = }, {len(in1) = }")
                 if self.state == FIND_RAISING_EDGE:
+                    print(f"Trying to find a new packet.")
                     # Find a new packet
                     moving_avg_ret = self.get_moving_avg(in1)
                     above_list = self.where_over_threhsold(moving_avg_ret)
 
                     if len(above_list) == 0:
                         # Nothing is greater than the threshold
-                        # self.consume_each(len(in0))
+                        
                         self.consume(0, len(in0))
                         self.consume(1, len(in1))
+                        print(f"Nothing is greater than the threshold. consume({len(in0)})")
                         continue
 
                     r_edge = self.get_edges(above_list, edge=RAISING_EDGE)
 
                     if len(r_edge) == 0:
-                        # Nothing is greater than the threshold
+                        # Raising Edge is not detected
                         # self.consume_each(len(in0))
                         self.consume(0, len(in0))
                         self.consume(1, len(in1))
+                        print(f"Raising Edge is not detected. consume({len(in0)})")
                         continue
 
                     self.pkt_start = r_edge[0]
