@@ -115,7 +115,7 @@ class packet_saving(gr.sync_block):
         # Get raising edge and falling edge for the moving average curve
         # edge=1    : Find raising edge
         # edge=-1   : Find falling edge
-        ret_edge = np.where(above_list[1:] - above_list[:-1] == edge)[]
+        ret_edge = np.where(above_list[1:] - above_list[:-1] == edge)[0]
         return ret_edge
 
     # ----------------------------------------------
