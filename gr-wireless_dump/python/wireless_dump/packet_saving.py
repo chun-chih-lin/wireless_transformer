@@ -63,7 +63,7 @@ class packet_saving(gr.sync_block):
         print(f"Setting self.debug: {self.debug}")
 
     def set_save_folder(self, save_folder):
-        self.save_folder = f"{save_folder}{self.save_prefix}/"
+        self.save_folder = save_folder
         if not os.path.exists(self.save_folder):
             print(f"Directory {self.save_folder} does not exist. Create one.")
             os.makedirs(self.save_folder)
