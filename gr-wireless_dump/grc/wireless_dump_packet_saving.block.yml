@@ -1,11 +1,20 @@
 id: wireless_dump_packet_saving
 label: packet_saving
-category: '[wireless_dump]'
+category: '[Wireless Dump]'
 
 templates:
   imports: from gnuradio import wireless_dump
-  make: wireless_dump.packet_saving()
-
+  make: wireless_dump.packet_saving(${mod}, ${tx_pwr}, ${save_folder}, ${save_prefix}, ${carrier_freq}, ${samp_rate}, ${threshold}, ${debug}, ${record})
+  callbacks:
+  - self.set_debug(${debug})
+  - self.set_mod(${mod})
+  - self.set_tx_pwr(${tx_pwr})
+  - self.set_save_folder(${save_folder})
+  - self.set_save_prefix(${save_prefix})
+  - self.set_carrier_freq(${carrier_freq})
+  - self.set_samp_rate(${samp_rate})
+  - self.set_threshold(${threshold})
+  - self.set_record(${record})
 #  Make one 'parameters' list entry for every parameter you want settable from the GUI.
 #     Keys include:
 #     * id (makes the value accessible as keyname, e.g. in the make entry)

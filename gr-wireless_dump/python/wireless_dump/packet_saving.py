@@ -29,13 +29,13 @@ class packet_saving(gr.sync_block):
             in_sig=[np.complex64, np.complex64],
             out_sig=None)
         self.set_debug(debug)
-        self.sef_mod(mod)
-        self.sef_tx_pwr(tx_pwr)
-        self.sef_save_folder(save_folder)
-        self.sef_save_prefix(save_prefix)
-        self.sef_carrier_freq(carrier_freq)
-        self.sef_samp_rate(samp_rate)
-        self.sef_threshold(threshold)
+        self.set_mod(mod)
+        self.set_tx_pwr(tx_pwr)
+        self.set_save_folder(save_folder)
+        self.set_save_prefix(save_prefix)
+        self.set_carrier_freq(carrier_freq)
+        self.set_samp_rate(samp_rate)
+        self.set_threshold(threshold)
 
         self.set_record(record)
 
@@ -58,36 +58,36 @@ class packet_saving(gr.sync_block):
         self.debug = debug
         print(f"Setting self.debug: {self.debug}")
 
-    def sef_mod(self, mod):
+    def set_mod(self, mod):
         self.mod = mod
         self.update_save_filename()
 
-    def sef_tx_pwr(self, tx_pwr):
+    def set_tx_pwr(self, tx_pwr):
         self.tx_pwr = tx_pwr
         self.update_save_filename()
 
-    def sef_save_folder(self, save_folder):
+    def set_save_folder(self, save_folder):
         self.save_folder = save_folder
         if not os.path.exists(self.save_folder):
             print(f"Directory {self.save_folder} does not exist. Create one.")
             os.makedirs(self.save_folder)
         self.update_save_filename()
 
-    def sef_save_prefix(self, save_prefix):
+    def set_save_prefix(self, save_prefix):
         self.save_prefix = save_prefix
         self.update_save_filename()
 
-    def sef_carrier_freq(self, carrier_freq):
+    def set_carrier_freq(self, carrier_freq):
         self.carrier_freq = carrier_freq
         self.carrier_freq_in_MHz = int(self.carrier_freq/1e6)
         self.update_save_filename()
 
-    def sef_samp_rate(self, samp_rate):
+    def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
         self.samp_rate_in_MHz = int(self.samp_rate/1e6)
         self.update_save_filename()
 
-    def sef_threshold(self, threshold):
+    def set_threshold(self, threshold):
         self.threshold = threshold
 
     def update_save_filename(self):
@@ -107,7 +107,7 @@ class packet_saving(gr.sync_block):
             # thresold = in1.imag
 
             above_threshold = np.where(moving_avg_ret > self.threshold)
-            
+
 
             self.consume(0, len(in0))
             self.consume(1, len(in1))
