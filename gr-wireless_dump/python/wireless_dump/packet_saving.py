@@ -140,11 +140,14 @@ class packet_saving(gr.sync_block):
                     r_edge = self.get_edges(above_list, edge=RAISING_EDGE)
 
                     self.pkt_start = r_edge[0]
-                    self.state = FIND_FALLING_EDGE
+                    if self.record:
+                        self.state = FIND_FALLING_EDGE
 
                     self.consume_each([self.pkt_start, self.pkt_start])
                 else:
                     # Find the end of the packet
+                    moving_avg_ret = self.get_moving_avg(in1)
+                    above_list = self.where_over_threhsold(moving_avg_ret)
                     f_edge = self.get_edges(above_list, edge=FALLING_EDGE)
 
                     if len(f_edge) == 0:
