@@ -37,14 +37,14 @@ parameters:
 
 - id: carrier_freq
   label: Carrier Frequency
-  dtype: int
+  dtype: float
 
 - id: samp_rate
   label: Sample Rate
-  dtype: int
+  dtype: float
 
 - id: threshold
-  label: Threshol
+  label: Threshold
   dtype: float
 
 - id: record
