@@ -159,7 +159,7 @@ def main():
 
         for n_b in range(n_batch):
             save_batch_packets_name = f"{args.s}packets/B{n_b+1}-{n_batch}_{filename_prefix}.pkl"
-            print(f"{save_batch_packets_name = }")
+            
             if os.path.exists(save_batch_packets_name):
                 print(f"File {save_batch_packets_name} exists. Skip")
                 break
@@ -187,7 +187,7 @@ def main():
             n_pkt = packets.shape[0]
             print(f"Number of packet: {packets.shape[0]}, length: {packets.shape[1]}")
             
-
+            print(f"{save_batch_packets_name = }")
             packets.tofile(save_batch_packets_name)
             if n_pkt >= MAX_PACKET:
                 break
