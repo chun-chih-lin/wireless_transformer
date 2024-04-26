@@ -140,7 +140,11 @@ class packet_saving(gr.sync_block):
                         self.consume(1, len(in1))
                         print(f"Nothing is greater than the threshold. consume({len(in0)})")
                         continue
-                    print(f"First greater than threshold: {np.where(above_list == 1)[0][0]}")
+
+                    print("above_list: ")
+                    [print(x, end=' ') for x in above_list]
+                    print('\n')
+                    print(f"First greater than threshold: {np.where(above_list == 1)[0]}")
 
                     r_edge = self.get_edges(above_list, edge=RAISING_EDGE)
 
