@@ -4,7 +4,7 @@ category: '[Wireless Dump]'
 
 templates:
   imports: from gnuradio import wireless_dump
-  make: wireless_dump.packet_saving(${mod}, ${tx_pwr}, ${save_folder}, ${save_prefix}, ${carrier_freq}, ${samp_rate}, ${threshold}, ${num_save_pkt}, ${debug}, ${record})
+  make: wireless_dump.packet_saving(${mod}, ${tx_pwr}, ${save_folder}, ${save_prefix}, ${carrier_freq}, ${distance}, ${interference}, ${samp_rate}, ${threshold}, ${num_save_pkt}, ${debug}, ${record})
   callbacks:
   - self.set_debug(${debug})
   - self.set_mod(${mod})
@@ -12,6 +12,8 @@ templates:
   - self.set_save_folder(${save_folder})
   - self.set_save_prefix(${save_prefix})
   - self.set_carrier_freq(${carrier_freq})
+  - self.set_distance(${distance})
+  - self.set_interference(${interference})
   - self.set_samp_rate(${samp_rate})
   - self.set_threshold(${threshold})
   - self.set_num_save_pkt(${num_save_pkt})
@@ -40,10 +42,20 @@ parameters:
   label: Carrier Frequency
   dtype: float
 
+- id: distance
+  label: Distance
+  dtype: int
+  default: '1'
+
+- id: interference
+  label: Interference
+  dtype: int
+  default: '0'
+
 - id: samp_rate
   label: Sample Rate
   dtype: float
-  default: '0.005'
+  default: '5000000'
 
 - id: threshold
   label: Threshold

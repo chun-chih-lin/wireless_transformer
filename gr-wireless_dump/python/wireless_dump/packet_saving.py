@@ -20,6 +20,8 @@ class packet_saving(gr.sync_block):
                 save_folder, 
                 save_prefix, 
                 carrier_freq=2360e6, 
+                distance=1,
+                interference=0, 
                 samp_rate=5e6, 
                 threshold=0.005, 
                 num_save_pkt=20_000, 
@@ -38,6 +40,8 @@ class packet_saving(gr.sync_block):
         self.set_save_folder(save_folder)
         
         self.set_carrier_freq(carrier_freq)
+        self.set_distance(distance)
+        self.set_interference(interference)
         self.set_samp_rate(samp_rate)
         self.set_threshold(threshold)
         self.set_num_save_pkt(num_save_pkt)
@@ -94,6 +98,14 @@ class packet_saving(gr.sync_block):
         self.carrier_freq_in_MHz = int(self.carrier_freq/1e6)
         self.update_save_filename()
 
+    def set_distance(self, distance):
+        self.distance = distance
+        self.update_save_filename()
+        
+    def set_interference(self, interference):
+        self.interference = interference
+        self.update_save_filename()
+
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
         self.samp_rate_in_MHz = int(self.samp_rate/1e6)
@@ -104,7 +116,7 @@ class packet_saving(gr.sync_block):
 
     def update_save_filename(self):
         if self.init:
-            self.save_filename = f"{self.save_prefix}_{self.mod}_{self.tx_pwr}_{self.samp_rate_in_MHz}_{self.carrier_freq_in_MHz}.dat"
+            self.save_filename = f"{self.save_prefix}_{self.mod}_TP{self.tx_pwr}_D{self.distance}_SR{self.samp_rate_in_MHz}_CF{self.carrier_freq_in_MHz}.dat"
             self.save_full_filename = f"{self.save_folder}{self.save_filename}"
             print(f"Update to save to {self.save_full_filename}")
 
