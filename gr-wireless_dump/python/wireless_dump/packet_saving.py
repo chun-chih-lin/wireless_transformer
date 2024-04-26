@@ -22,6 +22,7 @@ class packet_saving(gr.sync_block):
                 carrier_freq=2360e6, 
                 samp_rate=5e6, 
                 threshold=0.005, 
+                num_save_pkt=20_000, 
                 debug=False, 
                 record=False):
         gr.sync_block.__init__(self,
@@ -36,6 +37,7 @@ class packet_saving(gr.sync_block):
         self.set_carrier_freq(carrier_freq)
         self.set_samp_rate(samp_rate)
         self.set_threshold(threshold)
+        self.set_num_save_pkt(num_save_pkt)
 
         self.set_record(record)
 
@@ -47,12 +49,17 @@ class packet_saving(gr.sync_block):
         try:
             if int(record) == 1:
                 self.record = True
+                # reset the recorded number of packets
+                self.recorded_pkt = 0
             else:
                 self.record = False
             print(f"Setting {self.record: }")
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
             print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
+
+    def set_num_save_pkt(num_save_pkt):
+        self.num_save_pkt = num_save_pkt
 
     def set_debug(self, debug):
         self.debug = debug
