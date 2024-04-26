@@ -1,5 +1,5 @@
 id: wireless_dump_packet_saving
-label: packet_saving
+label: Save Packets
 category: '[Wireless Dump]'
 
 templates:
@@ -71,7 +71,6 @@ inputs:
   domain: stream
   dtype: complex
 
-inputs:
 - label: in_avg
   domain: stream
   dtype: complex
