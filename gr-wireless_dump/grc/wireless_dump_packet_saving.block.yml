@@ -4,19 +4,13 @@ category: '[Wireless Dump]'
 
 templates:
   imports: from gnuradio import wireless_dump
-  make: wireless_dump.packet_saving(${mod}, ${tx_pwr}, ${save_folder}, ${save_prefix}, ${carrier_freq}, ${distance}, ${interference}, ${samp_rate}, ${threshold}, ${num_save_pkt}, ${debug}, ${record})
+  make: wireless_dump.packet_saving(${save_folder}, ${save_filename}, ${threshold}, ${num_save_pkt}, ${debug}, ${record})
   callbacks:
-  - self.set_debug(${debug})
-  - self.set_mod(${mod})
-  - self.set_tx_pwr(${tx_pwr})
   - self.set_save_folder(${save_folder})
-  - self.set_save_prefix(${save_prefix})
-  - self.set_carrier_freq(${carrier_freq})
-  - self.set_distance(${distance})
-  - self.set_interference(${interference})
-  - self.set_samp_rate(${samp_rate})
+  - self.set_save_filename(${save_filename})
   - self.set_threshold(${threshold})
   - self.set_num_save_pkt(${num_save_pkt})
+  - self.set_debug(${debug})
   - self.set_record(${record})
 #  Make one 'parameters' list entry for every parameter you want settable from the GUI.
 #     Keys include:
@@ -25,37 +19,11 @@ templates:
 #     * dtype (e.g. int, float, complex, byte, short, xxx_vector, ...)
 #     * default
 parameters:
-- id: mod
-  label: Modulation Name
-
-- id: tx_pwr
-  label: TX Power
-  dtype: float
-
 - id: save_folder
   label: Save Folder
 
-- id: save_prefix
-  label: Save Prefix
-
-- id: carrier_freq
-  label: Carrier Frequency
-  dtype: float
-
-- id: distance
-  label: Distance
-  dtype: int
-  default: '1'
-
-- id: interference
-  label: Interference
-  dtype: int
-  default: '0'
-
-- id: samp_rate
-  label: Sample Rate
-  dtype: float
-  default: '5000000'
+- id: save_filename
+  label: Save Filename
 
 - id: threshold
   label: Threshold
