@@ -136,6 +136,7 @@ class packet_saving(gr.sync_block):
                         self.consume_each([len(in0), len(in1)])
                         pass
 
+                    print(f"{len(above_list) = }")
                     r_edge = self.get_edges(above_list, edge=RAISING_EDGE)
 
                     self.pkt_start = r_edge[0]
