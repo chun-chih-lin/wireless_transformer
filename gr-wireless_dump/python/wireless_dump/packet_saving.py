@@ -42,7 +42,8 @@ class packet_saving(gr.sync_block):
 
         self.set_record(record)
 
-        self.update_save_filename(init=True)
+        self.init = True
+        self.update_save_filename()
 
 
     # ----------------------------------------------
@@ -99,8 +100,8 @@ class packet_saving(gr.sync_block):
     def set_threshold(self, threshold):
         self.threshold = threshold
 
-    def update_save_filename(self, init=False):
-        if init:
+    def update_save_filename(self):
+        if self.init:
             self.save_filename = f"{self.save_prefix}_{self.mod}_{self.tx_pwr}_{self.samp_rate_in_MHz}_{self.carrier_freq_in_MHz}_"
             self.save_full_filename = f"{self.save_folder}{self.save_filename}"
             print(f"Update to save to {self.save_full_filename}")
