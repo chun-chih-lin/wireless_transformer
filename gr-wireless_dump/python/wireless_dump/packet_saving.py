@@ -123,13 +123,65 @@ class packet_saving(gr.sync_block):
         ret = np.where(ret_edge > i)[0][0]
         return ret
 
+    def init_pkt_record(self):
+        self.rgtr_pkt_i = 0
+        self.pkt_s = 0
+        self.state = FIND_RAISING_EDGE
+        self.cur_pkt = None
+        pass
+
     # ----------------------------------------------
     def work(self, input_items, output_items):
         try:
             in0 = input_items[0]
             in1 = input_items[1]
 
+            mov_avg = in1.real
             
+            is_above_threshold = self.where_over_threhsold(mov_avg)
+
+            for i, is_above in enumerate(is_above_threshold):
+                if self.state == FIND_RAISING_EDGE:
+                    if is_above == 1:
+                        # FIND_RAISING_EDGE
+                        self.pkt_s = i
+                        self.state = FIND_FALLING_EDGE
+                        print("Found the start of a packet")
+                    else:
+                        print("Nothing found")
+                elif self.state == FIND_FALLING_EDGE:
+                    if is_above == 0:
+                        # FIND_FALLING_EDGE
+                        if i - self.pkt_s + self.rgtr_pkt_i > self.MIN_PKT_SIZE:
+                            print("Found the end of a packet")
+                            self.pkt_e = i
+                            if self.cur_pkt is None:
+                                print("A whole new packet.")
+                                self.cur_pkt = in0[self.pkt_s:self.pkt_e]
+                            else:
+                                print("Concatenate to a old sub-packet.")
+                                self.cur_pkt = np.concatenate(self.cur_pkt, in0[:self.pkt_e])
+                            
+                            # Save to registered array
+                            print("Save to collected packets")
+                            # Reset
+                            print("Reset the mode")
+                            self.init_pkt_record()
+                        elif i == len(in0):
+                            print("Nothing found as the end of a packet. Concatenate whole input.")
+                            self.cur_pkt = np.concatenate(self.cur_pkt, in0)
+                        else:
+                            print("Should NOT be here. [1]")
+                    else:
+                        print("Should NOT be here. [2]")
+                    pass
+
+
+
+
+
+            """
+
             i = 0
             while i < len(in0):
                 print("-"*50)
@@ -229,6 +281,7 @@ class packet_saving(gr.sync_block):
                         self.consume(0, len(in0))
                         self.consume(1, len(in1))
             print("Out-of-while")
+            """
 
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
