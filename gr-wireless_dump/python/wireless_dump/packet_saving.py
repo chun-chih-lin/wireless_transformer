@@ -165,12 +165,13 @@ class packet_saving(gr.sync_block):
     # ----------------------------------------------
     def work(self, input_items, output_items):
         try:
+            in0 = input_items[0]
+            in1 = input_items[1]
+
             if not self.record:
                 self.consume_each(len(in0))
                 return False
 
-            in0 = input_items[0]
-            in1 = input_items[1]
             mov_avg = in1.real
             is_above_threshold = self.where_over_threhsold(mov_avg)
             self.d_msg("-"*50)
