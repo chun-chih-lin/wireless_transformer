@@ -41,6 +41,7 @@ class packet_saving(gr.sync_block):
         self.set_num_save_pkt(num_save_pkt)
         self.set_record(record)
         self.MIN_PKT_SIZE = 100
+        self.PKT_LEN = 128
 
         self.init = True
         self.ttl_sample = 0
@@ -180,6 +181,14 @@ class packet_saving(gr.sync_block):
                             
                             # Save to registered array
                             print(f"Save to collected packets. len: {len(self.cur_pkt)}")
+
+                            trim_pkt = self.cur_pkt[200:]
+                            trim_num = int(trim_pkt.shape[0]/self.PKT_LEN)
+
+                            print(f"Shape after trim: {trim_pkt.shape}, Total: {trim_num} new sample")
+                            ttl_trim_pkt = trim_pkt[:trim_num*self.PKT_LEN]
+                            ttl_trim_pkt_set = ttl_trim_pkt.reshape((trim_num, self.PKT_LEN))
+                            print(f"{ttl_trim_pkt_set.shape = }")
 
                             # Reset
                             print("Reset the mode")
