@@ -43,6 +43,7 @@ class packet_saving(gr.sync_block):
         self.MIN_PKT_SIZE = 100
 
         self.init = True
+        self.ttl_sample = 0
 
         self.update_save_filename()
 
@@ -132,8 +133,6 @@ class packet_saving(gr.sync_block):
         self.cur_pkt = None
 
         self.stage = 0
-
-        self.ttl_sample = 0
         pass
 
     # ----------------------------------------------
@@ -146,6 +145,7 @@ class packet_saving(gr.sync_block):
             
             is_above_threshold = self.where_over_threhsold(mov_avg)
 
+            print(f"{in0.shape = }, {in1.shape = }")
             self.ttl_sample += len(in1)
 
             for i, is_above in enumerate(is_above_threshold):
