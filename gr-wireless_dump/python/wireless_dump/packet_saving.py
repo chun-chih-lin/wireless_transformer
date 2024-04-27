@@ -56,7 +56,7 @@ class packet_saving(gr.sync_block):
 
     def reset_parameters(self, hard_reset_record=None):
         print("Resetting all the parameters...")
-        if hard_reset_record is not None:
+        if hard_reset_record is not None and not self.debug:
             print(f"Hard reset record to: {hard_reset_record}")
             self.set_record(hard_reset_record)
 
