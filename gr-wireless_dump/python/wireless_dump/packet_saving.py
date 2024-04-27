@@ -196,7 +196,7 @@ class packet_saving(gr.sync_block):
                             if self.stage != 5:
                                 print(f"[{i}] Should NOT be here. [1]")
                                 self.stage = 5
-                    else
+                    else:
                         if i == len(in0):
                             print(f"[{self.ttl_sample+i}] End of Input. Still a raising wave.")
                             if self.cur_pkt is None:
