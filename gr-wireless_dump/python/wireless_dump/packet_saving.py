@@ -140,6 +140,7 @@ class packet_saving(gr.sync_block):
 
         trim_pkt = self.cur_pkt[200:]
 
+        print(f"({trim_pkt.shape = })")
         for i in range(trim_pkt):
             print(trim_pkt[i], end=', ')
         print('\n --------------')
