@@ -134,7 +134,7 @@ class packet_saving(gr.sync_block):
                     moving_avg_ret = self.get_moving_avg(in1)
                     above_list = self.where_over_threhsold(moving_avg_ret)
 
-                    if len(above_list) == 0:
+                    if len(np.where(above_list > 0)[0]) == 0:
                         # Nothing is greater than the threshold
                         self.consume(0, len(in0))
                         self.consume(1, len(in1))
