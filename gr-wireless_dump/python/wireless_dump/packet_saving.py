@@ -150,12 +150,11 @@ class packet_saving(gr.sync_block):
                         # FIND_RAISING_EDGE
                         self.pkt_s = i
                         self.state = FIND_FALLING_EDGE
-                        if self.stage != 0:
+                        if self.stage != 1:
                             print(f"[{i}] Found the start of a packet")
                             self.stage = 1
                     else:
-                        
-                        if self.stage != 1:
+                        if self.stage != 0:
                             print(f"[{i}] Nothing found")
                             self.stage = 0
                 elif self.state == FIND_FALLING_EDGE:
