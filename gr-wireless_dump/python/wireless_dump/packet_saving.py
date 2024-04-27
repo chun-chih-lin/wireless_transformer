@@ -120,7 +120,7 @@ class packet_saving(gr.sync_block):
         if len(ret_edge) == 0:
             return None
 
-        ret = np.where(ret_edge >= i)[0]
+        ret = np.where(ret_edge >= i)[0][0]
         return ret
 
     # ----------------------------------------------
