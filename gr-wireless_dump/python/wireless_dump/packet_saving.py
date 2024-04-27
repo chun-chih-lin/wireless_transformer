@@ -147,7 +147,9 @@ class packet_saving(gr.sync_block):
 
             print("-"*50)
             print(f"{in0.shape = }, {in1.shape = }")
-            self.ttl_sample += len(in1)
+
+            if self.ttl_sample + len(in1) > 16820 and self.ttl_sample + len(in1) < 20_000:
+                print(f"{is_above_threshold = }")
 
             for i, is_above in enumerate(is_above_threshold):
                 if self.state == FIND_RAISING_EDGE:
@@ -194,16 +196,18 @@ class packet_saving(gr.sync_block):
                             if self.stage != 5:
                                 print(f"[{i}] Should NOT be here. [1]")
                                 self.stage = 5
-                    elif i == len(in0):
-                        print(f"[{self.ttl_sample+i}] End of Input. Still a raising wave.")
-                        if self.cur_pkt is None:
-                            self.cur_pkt = in0[self.pkt_s:]
-                            print(f"[{self.ttl_sample+i}] Temperary record a new packet.")
-                        else:
-                            self.cur_pkt = np.concatenate(self.cur_pkt, in0)
-                            print(f"[{self.ttl_sample+i}] Concatenate to the eamperary packet.")
+                    else
+                        if i == len(in0):
+                            print(f"[{self.ttl_sample+i}] End of Input. Still a raising wave.")
+                            if self.cur_pkt is None:
+                                self.cur_pkt = in0[self.pkt_s:]
+                                print(f"[{self.ttl_sample+i}] Temperary record a new packet.")
+                            else:
+                                self.cur_pkt = np.concatenate(self.cur_pkt, in0)
+                                print(f"[{self.ttl_sample+i}] Concatenate to the eamperary packet.")
                     pass
 
+            self.ttl_sample += len(in1)
             print(f"{self.ttl_sample = }")
             self.consume_each(len(in0))
         except Exception as exp:
