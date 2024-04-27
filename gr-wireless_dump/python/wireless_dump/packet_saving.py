@@ -54,15 +54,14 @@ class packet_saving(gr.sync_block):
         if self.debug:
             print(msg)
 
-    def reset_parameters(self):
+    def reset_parameters(self, hard_reset_record=None):
         print("Resetting all the parameters...")
+        if hard_reset_record is not None:
+            print(f"Hard reset record to: {hard_reset_record}")
+            self.set_record(record)
+
         self.ttl_packets = None
-
-        self.cur_packet = None
-        self.pkt_start = None
-        self.pkt_end = None
-
-        self.state = FIND_RAISING_EDGE
+        self.init_pkt_record()
         print("Resetting Done.")
 
     # ----------------------------------------------
@@ -132,9 +131,37 @@ class packet_saving(gr.sync_block):
         self.pkt_s = 0
         self.state = FIND_RAISING_EDGE
         self.cur_pkt = None
-
         self.stage = 0
         pass
+
+    def save_to_ttl_packet(self):
+        # Save to registered array
+        print(f"Save to collected packets. len: {len(self.cur_pkt)}")
+
+        trim_pkt = self.cur_pkt[200:]
+        trim_num = int(trim_pkt.shape[0]/self.PKT_LEN)
+
+        print(f"Shape after trim: {trim_pkt.shape}, Total: {trim_num} new sample")
+        ttl_trim_pkt = trim_pkt[:trim_num*self.PKT_LEN]
+        ttl_trim_pkt_set = ttl_trim_pkt.reshape((trim_num, self.PKT_LEN))
+        print(f"{ttl_trim_pkt_set.shape = }")
+        expanded_trim_pkt = np.expand_dims(ttl_trim_pkt_set, axis=0)
+        if self.ttl_packets is None:
+            self.ttl_packets = expanded_trim_pkt
+        else:
+            self.ttl_packets = np.concatenate((self.ttl_packets, expanded_trim_pkt), axis=0)
+
+        if self.ttl_packets.shape[0] >= self.num_save_pkt:
+            print("Have enough samples! Save to file")
+            saved = self.ttl_packets[:self.num_save_pkt]
+            print(f"{saved.shape = }")
+            if self.record:
+                print(f"Saving to file: {self.save_full_filename}")
+
+            print("Resetting everything.")
+            self.reset_parameters(hard_reset_record=False)
+        else:
+            print(f"Current record samples: {self.ttl_packets.shape[0]}")
 
     # ----------------------------------------------
     def work(self, input_items, output_items):
@@ -179,16 +206,7 @@ class packet_saving(gr.sync_block):
                                     self.stage = 3
                                 self.cur_pkt = np.concatenate((self.cur_pkt, in0[:self.pkt_e]))
                             
-                            # Save to registered array
-                            print(f"Save to collected packets. len: {len(self.cur_pkt)}")
-
-                            trim_pkt = self.cur_pkt[200:]
-                            trim_num = int(trim_pkt.shape[0]/self.PKT_LEN)
-
-                            print(f"Shape after trim: {trim_pkt.shape}, Total: {trim_num} new sample")
-                            ttl_trim_pkt = trim_pkt[:trim_num*self.PKT_LEN]
-                            ttl_trim_pkt_set = ttl_trim_pkt.reshape((trim_num, self.PKT_LEN))
-                            print(f"{ttl_trim_pkt_set.shape = }")
+                            self.save_to_ttl_packet()
 
                             # Reset
                             print("Reset the mode")
