@@ -158,6 +158,7 @@ class packet_saving(gr.sync_block):
                     print("Already exists. Do not overwrite")
                 else:
                     print(f"Saving to file: {self.save_full_filename}")
+                    print(f"Save array shape: {self.ttl_packets.shape}")
                     self.ttl_packets.tofile(self.save_full_filename)
 
             print("Resetting everything.")
