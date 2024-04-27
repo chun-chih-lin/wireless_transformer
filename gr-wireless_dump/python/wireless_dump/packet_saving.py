@@ -112,12 +112,16 @@ class packet_saving(gr.sync_block):
     def get_moving_avg(self, ary):
         return ary.real
 
-    def get_edges(self, above_list, edge=1):
+    def get_edges(self, above_list, i, edge=1):
         # Get raising edge and falling edge for the moving average curve
         # edge=1    : Find raising edge
         # edge=-1   : Find falling edge
         ret_edge = np.where(above_list[1:] - above_list[:-1] == edge)[0]
-        return ret_edge
+        if len(ret_edge) == 0:
+            return None
+
+        ret = np.where(ret_edge >= i)[0]
+        return ret
 
     # ----------------------------------------------
     def work(self, input_items, output_items):
@@ -125,96 +129,92 @@ class packet_saving(gr.sync_block):
             in0 = input_items[0]
             in1 = input_items[1]
 
+            
             i = 0
             while i < len(in0):
                 print("-"*50)
                 print(f"{len(in0) = }, {len(in1) = }")
+
+                current_raw_wave = in0
+                current_moving_avg_wave = in1
+
+                moving_avg_ret = self.get_moving_avg(in1)
+                above_list = self.where_over_threhsold(moving_avg_ret)
+
                 if self.state == FIND_RAISING_EDGE:
                     print(f"Trying to find a new packet.")
                     # Find a new packet
-                    moving_avg_ret = self.get_moving_avg(in1)
-                    above_list = self.where_over_threhsold(moving_avg_ret)
-
                     if len(np.where(above_list > 0)[0]) == 0:
                         # Nothing is greater than the threshold
                         i += len(in0)
-
-                        self.consume(0, len(in0))
-                        self.consume(1, len(in1))
+                        self.consume_each(len(in0))
                         print(f"Nothing is greater than the threshold. consume({len(in0)})")
                         continue
 
-                    print(f"First greater than threshold: {np.where(above_list == 1)[0]}")
-                    r_edge = self.get_edges(above_list, edge=RAISING_EDGE)
+                    print(f"First greater than threshold: {np.where(above_list == 1)[0][0]}")
+                    r_edge_idx = self.get_edges(above_list, i, edge=RAISING_EDGE)
 
-                    if len(r_edge) == 0:
+                    if r_edge_idx is None:
                         # Raising Edge is not detected
-                        # self.consume_each(len(in0))
                         i += len(in0)
-                        self.consume(0, len(in0))
-                        self.consume(1, len(in1))
+                        self.consume_each(len(in0))
                         print(f"Raising Edge is not detected. consume({len(in0)})")
                         continue
 
-                    self.pkt_start = r_edge[0]
-                    if self.record:
-                        print("Find the Raising edge. Go to State 2.")
-                        self.state = FIND_FALLING_EDGE
-                        # self.consume_each(len(in0))
-                        i += len(in0)
-                        self.consume(0, len(in0))
-                        self.consume(1, len(in1))
-                    else:
-                        # self.consume_each(self.pkt_start)
-                        i += self.pkt_start
-                        self.consume(0, self.pkt_start)
-                        self.consume(1, self.pkt_start)
+                    self.pkt_start = r_edge_idx
+                    print(f"{self.pkt_start = }")
+                    print("Find the Raising edge. Go to State 2.")
+                    self.state = FIND_FALLING_EDGE
+                    # self.consume_each(len(in0))
+                    # i += self.pkt_start
+                    # self.consume(0, len(in0))
+                    # self.consume(1, len(in1))
                 else:
                     # Find the end of the packet
-                    moving_avg_ret = self.get_moving_avg(in1)
-                    above_list = self.where_over_threhsold(moving_avg_ret)
-                    f_edge = self.get_edges(above_list, edge=FALLING_EDGE)
+                    f_edge_idx = self.get_edges(above_list, i, edge=FALLING_EDGE)
 
-                    if len(f_edge) == 0:
+                    if f_edge_idx is None:
                         # Do not find any falling edge.
                         if self.cur_packet is None:
-                            self.cur_packet = in0
+                            self.cur_packet = in0[self.pkt_start:]
+                            self.pkt_start = 0
                         else:
                             self.cur_packet = np.concatenate((self.cur_packet, in0))
 
-                        # self.consume_each(len(in0))
                         i += len(in0)
-                        self.consume(0, len(in0))
-                        self.consume(1, len(in1))
+                        self.consume_each(len(in0))
                         continue
 
                     # Find at least one falling edge.
-                    k = 0
-                    while k < len(f_edge):
-                        if f_edge - self.r_edge >= self.MIN_PKT_SIZE:
-                            self.pkt_end = f_edge[k]        
-                            break
-                        k += 1
+                    while f_edge_idx - self.pkt_start <= self.MIN_PKT_SIZE:
+                        print(f"{f_edge_idx} - {self.pkt_start} <= {self.MIN_PKT_SIZE}. Search for the next.")
+                        f_edge_idx = self.get_edges(above_list, i+f_edge_idx, edge=FALLING_EDGE)
                         pass
 
                     if self.pkt_end is not None:
-
                         # get a complete packet
-                        self.cur_packet = in0[:self.pkt_end]
+                        rest_pkt = in0[self.pkt_start:self.pkt_end]
+                        if self.cur_packet is None:
+                            self.cur_packet = rest_pkt
+                        else:
+                            self.cur_packet = np.concatenate((self.cur_packet, rest_pkt))
                         
+                        # Expand the simension of the complete packet.
                         cur_packet = np.expand_dims(self.cur_packet, axis=0)
 
+                        # Save to total packets
                         if self.ttl_packets is None:
                             self.ttl_packets = cur_packet
                         else:
                             self.ttl_packets = np.concatenate((self.ttl_packets, cur_packet), axis=0)
-
+                        # Check if the number of packet is enough
                         if self.ttl_packets.shape[0] >= self.num_save_pkt:
                             print(f"Saving packet into file {self.save_full_filename}")
                             self.ttl_packets.tofile(self.save_full_filename)
                             print(f"Reset the ttl_packet to None.")
                             self.ttl_packets = None
 
+                        # resetting parameters
                         self.cur_packet = None
                         self.pkt_start = None
                         self.pkt_end = None
@@ -233,7 +233,6 @@ class packet_saving(gr.sync_block):
                         self.consume(0, len(in0))
                         self.consume(1, len(in1))
             print("Out-of-while")
-            print("-"*50)
 
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
