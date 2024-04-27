@@ -159,8 +159,9 @@ class packet_saving(gr.sync_block):
                             print(f"[{self.ttl_sample+i}] Found the start of a packet")
                             self.stage = 1
                     else:
-                        print(f"[{self.ttl_sample+i}] Nothing found")
-                        self.stage = 0
+                        if self.state != 0:
+                            print(f"[{self.ttl_sample+i}] Nothing found")
+                            self.stage = 0
                 elif self.state == FIND_FALLING_EDGE:
                     if is_above == 0:
                         # FIND_FALLING_EDGE
