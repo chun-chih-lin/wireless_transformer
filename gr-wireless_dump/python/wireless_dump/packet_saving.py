@@ -145,11 +145,10 @@ class packet_saving(gr.sync_block):
         ttl_trim_pkt = trim_pkt[:trim_num*self.PKT_LEN]
         ttl_trim_pkt_set = ttl_trim_pkt.reshape((trim_num, self.PKT_LEN))
         print(f"{ttl_trim_pkt_set.shape = }")
-        expanded_trim_pkt = np.expand_dims(ttl_trim_pkt_set, axis=0)
         if self.ttl_packets is None:
-            self.ttl_packets = expanded_trim_pkt
+            self.ttl_packets = ttl_trim_pkt_set
         else:
-            self.ttl_packets = np.concatenate((self.ttl_packets, expanded_trim_pkt), axis=0)
+            self.ttl_packets = np.concatenate((self.ttl_packets, ttl_trim_pkt_set), axis=0)
 
         if self.ttl_packets.shape[0] >= self.num_save_pkt:
             print("Have enough samples! Save to file")
