@@ -58,7 +58,7 @@ class packet_saving(gr.sync_block):
         print("Resetting all the parameters...")
         if hard_reset_record is not None:
             print(f"Hard reset record to: {hard_reset_record}")
-            self.set_record(record)
+            self.set_record(hard_reset_record)
 
         self.ttl_packets = None
         self.init_pkt_record()
@@ -175,6 +175,11 @@ class packet_saving(gr.sync_block):
             print("-"*50)
             # print(f"{in0.shape = }, {in1.shape = }")
 
+            if not self.record:
+                self.consume_each(len(in0))
+                return 0
+
+            
             for i, is_above in enumerate(is_above_threshold):
                 if self.state == FIND_RAISING_EDGE:
                     if is_above == 1:
