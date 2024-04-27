@@ -199,7 +199,7 @@ class packet_saving(gr.sync_block):
                     if is_above == 0:
                         # FIND_FALLING_EDGE
                         if i - self.pkt_s + self.rgtr_pkt_i > self.MIN_PKT_SIZE:
-                            self.d_msg("Found the end of a packet")
+                            self.d_msg(f"[{self.ttl_sample+i}] Found the end of a packet")
                             self.pkt_e = i
                             if self.cur_pkt is None:
                                 if self.stage != 2:
