@@ -127,6 +127,7 @@ class packet_saving(gr.sync_block):
 
             i = 0
             while i < len(in0):
+                print("-"*50)
                 print(f"{len(in0) = }, {len(in1) = }")
                 if self.state == FIND_RAISING_EDGE:
                     print(f"Trying to find a new packet.")
@@ -143,11 +144,7 @@ class packet_saving(gr.sync_block):
                         print(f"Nothing is greater than the threshold. consume({len(in0)})")
                         continue
 
-                    print("above_list: ")
-                    [print(x, end=' ') for x in above_list]
-                    print('\n')
                     print(f"First greater than threshold: {np.where(above_list == 1)[0]}")
-
                     r_edge = self.get_edges(above_list, edge=RAISING_EDGE)
 
                     if len(r_edge) == 0:
@@ -235,6 +232,8 @@ class packet_saving(gr.sync_block):
                         i += len(in0)
                         self.consume(0, len(in0))
                         self.consume(1, len(in1))
+            print("Out-of-while")
+            print("-"*50)
 
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
