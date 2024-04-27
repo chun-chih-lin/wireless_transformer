@@ -40,7 +40,7 @@ class packet_saving(gr.sync_block):
         self.set_threshold(threshold)
         self.set_num_save_pkt(num_save_pkt)
         self.set_record(record)
-        self.MIN_PKT_SIZE = 100
+        self.MIN_PKT_SIZE = 328
         self.PKT_LEN = 128
 
         self.init = True
@@ -158,6 +158,7 @@ class packet_saving(gr.sync_block):
             if self.record:
                 if os.path.exists(self.save_full_filename):
                     print("Already exists. Do not overwrite")
+                    self.ttl_packets.tofile(self.save_full_filename)
                 else:
                     print(f"Saving to file: {self.save_full_filename}")
                     print(f"Save array shape: {self.ttl_packets.shape}")
