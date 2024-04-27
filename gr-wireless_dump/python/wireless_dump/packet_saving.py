@@ -130,6 +130,8 @@ class packet_saving(gr.sync_block):
         self.pkt_s = 0
         self.state = FIND_RAISING_EDGE
         self.cur_pkt = None
+
+        self.stage = 0
         pass
 
     # ----------------------------------------------
@@ -148,9 +150,14 @@ class packet_saving(gr.sync_block):
                         # FIND_RAISING_EDGE
                         self.pkt_s = i
                         self.state = FIND_FALLING_EDGE
-                        print("Found the start of a packet")
+                        if self.stage != 0:
+                            print(f"[{i}] Found the start of a packet")
+                            self.stage = 1
                     else:
-                        print("Nothing found")
+                        
+                        if self.stage != 1:
+                            print(f"[{i}] Nothing found")
+                            self.stage = 0
                 elif self.state == FIND_FALLING_EDGE:
                     if is_above == 0:
                         # FIND_FALLING_EDGE
@@ -158,10 +165,14 @@ class packet_saving(gr.sync_block):
                             print("Found the end of a packet")
                             self.pkt_e = i
                             if self.cur_pkt is None:
-                                print("A whole new packet.")
+                                if self.stage != 2:
+                                    print(f"[{i}] A whole new packet.")
+                                    self.stage = 2
                                 self.cur_pkt = in0[self.pkt_s:self.pkt_e]
                             else:
-                                print("Concatenate to a old sub-packet.")
+                                if self.stage != 3:
+                                    print(f"[{i}] Concatenate to a old sub-packet.")
+                                    self.stage = 3
                                 self.cur_pkt = np.concatenate(self.cur_pkt, in0[:self.pkt_e])
                             
                             # Save to registered array
@@ -170,12 +181,18 @@ class packet_saving(gr.sync_block):
                             print("Reset the mode")
                             self.init_pkt_record()
                         elif i == len(in0):
-                            print("Nothing found as the end of a packet. Concatenate whole input.")
+                            if self.stage != 4:
+                                print(f"[{i}] Nothing found as the end of a packet. Concatenate whole input.")
+                                self.stage = 4
                             self.cur_pkt = np.concatenate(self.cur_pkt, in0)
                         else:
-                            print("Should NOT be here. [1]")
+                            if self.stage != 5:
+                                print(f"[{i}] Should NOT be here. [1]")
+                                self.stage = 5
                     else:
-                        print("Is still a raising wave.")
+                        if self.stage != 6:
+                            print(f"[{i}] Is still a raising wave.")
+                            self.stage = 6
                     pass
 
             self.consume_each(len(in0))
