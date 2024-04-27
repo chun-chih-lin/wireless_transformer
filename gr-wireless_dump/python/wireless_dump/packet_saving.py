@@ -60,6 +60,7 @@ class packet_saving(gr.sync_block):
             print(f"Hard reset record to: {hard_reset_record}")
             self.set_record(hard_reset_record)
 
+        self.progress = 0
         self.ttl_packets = None
         self.init_pkt_record()
         print("Resetting Done.")
@@ -132,8 +133,6 @@ class packet_saving(gr.sync_block):
         self.state = FIND_RAISING_EDGE
         self.cur_pkt = None
         self.stage = 0
-
-        self.progress = 0
         pass
 
     def save_to_ttl_packet(self):
@@ -161,7 +160,7 @@ class packet_saving(gr.sync_block):
 
         current_percentage = int(self.ttl_packets.shape[0]/self.num_save_pkt*10)
         if current_percentage == self.progress + 1:
-            print(f"Progress: {current_percentage*100}%...")
+            print(f"Progress: {self.ttl_packets.shape[0]}/{self.num_save_pkt} = {current_percentage*100}%...")
             self.progress += 1
 
         if self.ttl_packets.shape[0] >= self.num_save_pkt:
