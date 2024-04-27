@@ -141,9 +141,9 @@ class packet_saving(gr.sync_block):
         trim_pkt = self.cur_pkt[200:]
 
         print(f"({trim_pkt.shape = })")
-        for i in range(len(trim_pkt)):
-            print(trim_pkt[i], end=', ')
-        print('\n --------------')
+        # for i in range(len(trim_pkt)):
+        #     print(trim_pkt[i], end=', ')
+        # print('\n --------------')
 
         trim_num = int(trim_pkt.shape[0]/self.PKT_LEN)
 
