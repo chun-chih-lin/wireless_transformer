@@ -176,7 +176,7 @@ class packet_saving(gr.sync_block):
                         print("Should NOT be here. [2]")
                     pass
 
-
+            self.consume_each(len(in0))
 
 
 
