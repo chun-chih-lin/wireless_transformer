@@ -156,7 +156,7 @@ class packet_saving(gr.sync_block):
                         self.pkt_s = i
                         self.state = FIND_FALLING_EDGE
                         if self.stage != 1:
-                            print(f"[{i}] Found the start of a packet")
+                            print(f"[{self.ttl_sample+i}] Found the start of a packet")
                             self.stage = 1
                     else:
                         if self.stage != 0:
@@ -170,12 +170,12 @@ class packet_saving(gr.sync_block):
                             self.pkt_e = i
                             if self.cur_pkt is None:
                                 if self.stage != 2:
-                                    print(f"[{i}] A whole new packet.")
+                                    print(f"[{self.ttl_sample+i}] A whole new packet.")
                                     self.stage = 2
                                 self.cur_pkt = in0[self.pkt_s:self.pkt_e]
                             else:
                                 if self.stage != 3:
-                                    print(f"[{i}] Concatenate to a old sub-packet.")
+                                    print(f"[{self.ttl_sample+i}] Concatenate to a old sub-packet.")
                                     self.stage = 3
                                 self.cur_pkt = np.concatenate(self.cur_pkt, in0[:self.pkt_e])
                             
@@ -196,7 +196,7 @@ class packet_saving(gr.sync_block):
                                 self.stage = 5
                     else:
                         if self.stage != 6:
-                            print(f"[{i}] Is still a raising wave.")
+                            print(f"[{self.ttl_sample+i}] Is still a raising wave.")
                             self.stage = 6
                     pass
 
