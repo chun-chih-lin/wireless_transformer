@@ -147,7 +147,7 @@ class packet_saving(gr.sync_block):
             is_above_threshold = self.where_over_threhsold(mov_avg)
 
             print("-"*50)
-            print(f"{in0.shape = }, {in1.shape = }")
+            # print(f"{in0.shape = }, {in1.shape = }")
 
             for i, is_above in enumerate(is_above_threshold):
                 if self.state == FIND_RAISING_EDGE:
@@ -214,7 +214,7 @@ class packet_saving(gr.sync_block):
                     pass
 
             self.ttl_sample += len(in1)
-            print(f"{self.ttl_sample = }")
+            # print(f"{self.ttl_sample = }")
             self.consume_each(len(in0))
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
