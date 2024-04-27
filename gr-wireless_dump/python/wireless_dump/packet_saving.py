@@ -145,6 +145,7 @@ class packet_saving(gr.sync_block):
             
             is_above_threshold = self.where_over_threhsold(mov_avg)
 
+            print("-"*50)
             print(f"{in0.shape = }, {in1.shape = }")
             self.ttl_sample += len(in1)
 
