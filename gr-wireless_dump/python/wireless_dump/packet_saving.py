@@ -152,7 +152,9 @@ class packet_saving(gr.sync_block):
 
         if self.ttl_packets.shape[0] >= self.num_save_pkt:
             print("Have enough samples! Save to file")
-            self.d_msg(f"{self.ttl_packets[:self.num_save_pkt].shape = }")
+            
+            self.ttl_packets = self.ttl_packets[:self.num_save_pkt]
+            self.d_msg(f"{self.ttl_packets.shape = }")
             if self.record:
                 if os.path.exists(self.save_full_filename):
                     print("Already exists. Do not overwrite")
