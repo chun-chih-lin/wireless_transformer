@@ -166,7 +166,7 @@ class packet_saving(gr.sync_block):
                         self.consume(1, len(in1))
                     else:
                         # self.consume_each(self.pkt_start)
-                        i += len(self.pkt_start)
+                        i += self.pkt_start
                         self.consume(0, self.pkt_start)
                         self.consume(1, self.pkt_start)
                 else:
