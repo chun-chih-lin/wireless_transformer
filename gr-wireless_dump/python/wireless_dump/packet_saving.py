@@ -46,6 +46,8 @@ class packet_saving(gr.sync_block):
 
         self.update_save_filename()
 
+        self.init_pkt_record()
+
     def d_msg(self, msg):
         if self.debug:
             print(msg)
@@ -173,7 +175,7 @@ class packet_saving(gr.sync_block):
                         else:
                             print("Should NOT be here. [1]")
                     else:
-                        print("Should NOT be here. [2]")
+                        print("Is still a raising wave.")
                     pass
 
             self.consume_each(len(in0))
