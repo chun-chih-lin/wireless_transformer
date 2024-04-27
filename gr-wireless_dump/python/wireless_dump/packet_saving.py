@@ -159,9 +159,9 @@ class packet_saving(gr.sync_block):
             self.ttl_packets = np.concatenate((self.ttl_packets, ttl_trim_pkt_set), axis=0)
 
 
-        current_percentage = self.ttl_packets.shape[0]/self.num_save_pkt*10
-        if int(current_percentage) == self.progress + 1:
-            print(f"Progress: {current_percentage*10}%...")
+        current_percentage = int(self.ttl_packets.shape[0]/self.num_save_pkt*10)
+        if current_percentage == self.progress + 1:
+            print(f"Progress: {current_percentage*100}%...")
             self.progress += 1
 
         if self.ttl_packets.shape[0] >= self.num_save_pkt:
