@@ -132,6 +132,8 @@ class packet_saving(gr.sync_block):
         self.state = FIND_RAISING_EDGE
         self.cur_pkt = None
         self.stage = 0
+
+        self.progress = 0
         pass
 
     def save_to_ttl_packet(self):
@@ -155,6 +157,12 @@ class packet_saving(gr.sync_block):
             self.ttl_packets = ttl_trim_pkt_set
         else:
             self.ttl_packets = np.concatenate((self.ttl_packets, ttl_trim_pkt_set), axis=0)
+
+
+        current_percentage = self.ttl_packets.shape[0]/self.num_save_pkt*10
+        if int(current_percentage) == self.progress + 1:
+            print(f"Progress: {current_percentage*10}%...")
+            self.progress += 1
 
         if self.ttl_packets.shape[0] >= self.num_save_pkt:
             print("Have enough samples! Save to file")
