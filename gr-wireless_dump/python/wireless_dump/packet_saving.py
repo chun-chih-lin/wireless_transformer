@@ -179,7 +179,7 @@ class packet_saving(gr.sync_block):
                                 if self.stage != 3:
                                     print(f"[{self.ttl_sample+i}] Concatenate to a old sub-packet.")
                                     self.stage = 3
-                                self.cur_pkt = np.concatenate(self.cur_pkt, in0[:self.pkt_e])
+                                self.cur_pkt = np.concatenate((self.cur_pkt, in0[:self.pkt_e]))
                             
                             # Save to registered array
                             print(f"Save to collected packets. len: {len(self.cur_pkt)}")
@@ -191,7 +191,7 @@ class packet_saving(gr.sync_block):
                             if self.stage != 4:
                                 print(f"[{i}] Nothing found as the end of a packet. Concatenate whole input.")
                                 self.stage = 4
-                            self.cur_pkt = np.concatenate(self.cur_pkt, in0)
+                            self.cur_pkt = np.concatenate((self.cur_pkt, in0))
                         else:
                             if self.stage != 5:
                                 print(f"[{i}] Should NOT be here. [1]")
@@ -203,7 +203,7 @@ class packet_saving(gr.sync_block):
                                 self.cur_pkt = in0[self.pkt_s:]
                                 print(f"[{self.ttl_sample+i}] Temperary record a new packet.")
                             else:
-                                self.cur_pkt = np.concatenate(self.cur_pkt, in0)
+                                self.cur_pkt = np.concatenate((self.cur_pkt, in0))
                                 print(f"[{self.ttl_sample+i}] Concatenate to the eamperary packet.")
                     pass
 
