@@ -136,15 +136,15 @@ class packet_saving(gr.sync_block):
 
     def save_to_ttl_packet(self):
         # Save to registered array
-        print(f"Save to collected packets. len: {len(self.cur_pkt)}")
+        self.d_msg(f"Save to collected packets. len: {len(self.cur_pkt)}")
 
         trim_pkt = self.cur_pkt[200:]
         trim_num = int(trim_pkt.shape[0]/self.PKT_LEN)
 
-        print(f"Shape after trim: {trim_pkt.shape}, Total: {trim_num} new sample")
+        self.d_msg(f"Shape after trim: {trim_pkt.shape}, Total: {trim_num} new sample")
         ttl_trim_pkt = trim_pkt[:trim_num*self.PKT_LEN]
         ttl_trim_pkt_set = ttl_trim_pkt.reshape((trim_num, self.PKT_LEN))
-        print(f"{ttl_trim_pkt_set.shape = }")
+        self.d_msg(f"{ttl_trim_pkt_set.shape = }")
         if self.ttl_packets is None:
             self.ttl_packets = ttl_trim_pkt_set
         else:
@@ -153,14 +153,14 @@ class packet_saving(gr.sync_block):
         if self.ttl_packets.shape[0] >= self.num_save_pkt:
             print("Have enough samples! Save to file")
             saved = self.ttl_packets[:self.num_save_pkt]
-            print(f"{saved.shape = }")
+            self.d_msg(f"{saved.shape = }")
             if self.record:
                 print(f"Saving to file: {self.save_full_filename}")
 
             print("Resetting everything.")
             self.reset_parameters(hard_reset_record=False)
         else:
-            print(f"Current record samples: {self.ttl_packets.shape[0]}")
+            self.d_msg(f"Current record samples: {self.ttl_packets.shape[0]}")
 
     # ----------------------------------------------
     def work(self, input_items, output_items):
@@ -172,14 +172,12 @@ class packet_saving(gr.sync_block):
             
             is_above_threshold = self.where_over_threhsold(mov_avg)
 
-            print("-"*50)
-            # print(f"{in0.shape = }, {in1.shape = }")
+            self.d_msg("-"*50)
 
             if not self.record:
                 self.consume_each(len(in0))
                 return 0
 
-            
             for i, is_above in enumerate(is_above_threshold):
                 if self.state == FIND_RAISING_EDGE:
                     if is_above == 1:
@@ -187,52 +185,52 @@ class packet_saving(gr.sync_block):
                         self.pkt_s = i
                         self.state = FIND_FALLING_EDGE
                         if self.stage != 1:
-                            print(f"[{self.ttl_sample+i}] Found the start of a packet")
+                            self.d_msg(f"[{self.ttl_sample+i}] Found the start of a packet")
                             self.stage = 1
                     else:
                         if self.state != 0:
-                            print(f"[{self.ttl_sample+i}] Nothing found")
+                            self.d_msg(f"[{self.ttl_sample+i}] Nothing found")
                             self.stage = 0
                 elif self.state == FIND_FALLING_EDGE:
                     if is_above == 0:
                         # FIND_FALLING_EDGE
                         if i - self.pkt_s + self.rgtr_pkt_i > self.MIN_PKT_SIZE:
-                            print("Found the end of a packet")
+                            self.d_msg("Found the end of a packet")
                             self.pkt_e = i
                             if self.cur_pkt is None:
                                 if self.stage != 2:
-                                    print(f"[{self.ttl_sample+i}] A whole new packet.")
+                                    self.d_msg(f"[{self.ttl_sample+i}] A whole new packet.")
                                     self.stage = 2
                                 self.cur_pkt = in0[self.pkt_s:self.pkt_e]
                             else:
                                 if self.stage != 3:
-                                    print(f"[{self.ttl_sample+i}] Concatenate to a old sub-packet.")
+                                    self.d_msg(f"[{self.ttl_sample+i}] Concatenate to a old sub-packet.")
                                     self.stage = 3
                                 self.cur_pkt = np.concatenate((self.cur_pkt, in0[:self.pkt_e]))
                             
                             self.save_to_ttl_packet()
 
                             # Reset
-                            print("Reset the mode")
+                            self.d_msg("Reset the mode")
                             self.init_pkt_record()
                         elif i == len(is_above_threshold) - 1:
                             if self.stage != 4:
-                                print(f"[{i}] Nothing found as the end of a packet. Concatenate whole input.")
+                                self.d_msg(f"[{i}] Nothing found as the end of a packet. Concatenate whole input.")
                                 self.stage = 4
                             self.cur_pkt = np.concatenate((self.cur_pkt, in0))
                         else:
                             if self.stage != 5:
-                                print(f"[{i}] Should NOT be here. [1]")
+                                self.d_msg(f"[{i}] Should NOT be here. [1]")
                                 self.stage = 5
                     else:
                         if i == len(is_above_threshold) - 1:
-                            print(f"[{self.ttl_sample+i}] End of Input. Still a raising wave.")
+                            self.d_msg(f"[{self.ttl_sample+i}] End of Input. Still a raising wave.")
                             if self.cur_pkt is None:
                                 self.cur_pkt = in0[self.pkt_s:]
-                                print(f"[{self.ttl_sample+i}] Temperary record a new packet.")
+                                self.d_msg(f"[{self.ttl_sample+i}] Temperary record a new packet.")
                             else:
                                 self.cur_pkt = np.concatenate((self.cur_pkt, in0))
-                                print(f"[{self.ttl_sample+i}] Concatenate to the eamperary packet.")
+                                self.d_msg(f"[{self.ttl_sample+i}] Concatenate to the eamperary packet.")
                     pass
 
             self.ttl_sample += len(in1)
