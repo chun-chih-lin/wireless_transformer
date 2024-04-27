@@ -120,7 +120,7 @@ class packet_saving(gr.sync_block):
         if len(ret_edge) == 0:
             return None
 
-        ret = np.where(ret_edge >= i)[0][0]
+        ret = np.where(ret_edge > i)[0][0]
         return ret
 
     # ----------------------------------------------
@@ -162,13 +162,9 @@ class packet_saving(gr.sync_block):
                         continue
 
                     self.pkt_start = r_edge_idx
-                    print(f"{self.pkt_start = }")
-                    print("Find the Raising edge. Go to State 2.")
+                    print(f"Find the Raising edge: {self.pkt_start}. Go to State 2.")
                     self.state = FIND_FALLING_EDGE
-                    # self.consume_each(len(in0))
-                    # i += self.pkt_start
-                    # self.consume(0, len(in0))
-                    # self.consume(1, len(in1))
+
                 else:
                     # Find the end of the packet
                     f_edge_idx = self.get_edges(above_list, i, edge=FALLING_EDGE)
