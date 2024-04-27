@@ -134,11 +134,16 @@ class packet_saving(gr.sync_block):
         self.stage = 0
         pass
 
-    def save_to_ttl_packet(self):
+    def  (self):
         # Save to registered array
         self.d_msg(f"Save to collected packets. len: {len(self.cur_pkt)}")
 
         trim_pkt = self.cur_pkt[200:]
+
+        for i in range(trim_pkt):
+            print(trim_pkt[i], end=', ')
+        print('\n --------------')
+
         trim_num = int(trim_pkt.shape[0]/self.PKT_LEN)
 
         self.d_msg(f"Shape after trim: {trim_pkt.shape}, Total: {trim_num} new sample")
@@ -162,10 +167,6 @@ class packet_saving(gr.sync_block):
                 else:
                     print(f"Saving to file: {self.save_full_filename}")
                     print(f"Save array shape: {self.ttl_packets.shape}")
-
-                    for i in range(self.ttl_packets.shape[0]):
-                        print(self.ttl_packets[i])
-                        print('-'*15)
 
                     self.ttl_packets.tofile(self.save_full_filename)
 
