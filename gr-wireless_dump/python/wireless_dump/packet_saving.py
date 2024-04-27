@@ -159,9 +159,8 @@ class packet_saving(gr.sync_block):
                             print(f"[{self.ttl_sample+i}] Found the start of a packet")
                             self.stage = 1
                     else:
-                        if self.stage != 0:
-                            print(f"[{i}] Nothing found")
-                            self.stage = 0
+                        print(f"[{self.ttl_sample+i}] Nothing found")
+                        self.stage = 0
                 elif self.state == FIND_FALLING_EDGE:
                     if is_above == 0:
                         # FIND_FALLING_EDGE
@@ -194,10 +193,14 @@ class packet_saving(gr.sync_block):
                             if self.stage != 5:
                                 print(f"[{i}] Should NOT be here. [1]")
                                 self.stage = 5
-                    else:
-                        if self.stage != 6:
-                            print(f"[{self.ttl_sample+i}] Is still a raising wave.")
-                            self.stage = 6
+                    elif i == len(in0):
+                        print(f"[{self.ttl_sample+i}] End of Input. Still a raising wave.")
+                        if self.cur_pkt is None:
+                            self.cur_pkt = in0[self.pkt_s:]
+                            print(f"[{self.ttl_sample+i}] Temperary record a new packet.")
+                        else:
+                            self.cur_pkt = np.concatenate(self.cur_pkt, in0)
+                            print(f"[{self.ttl_sample+i}] Concatenate to the eamperary packet.")
                     pass
 
             print(f"{self.ttl_sample = }")
