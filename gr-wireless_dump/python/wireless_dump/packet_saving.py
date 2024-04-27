@@ -206,8 +206,8 @@ class packet_saving(gr.sync_block):
                             self.d_msg(f"[{self.ttl_sample+i}] Nothing found")
                             self.stage = 0
                 elif self.state == FIND_FALLING_EDGE:
-                    if is_above == 0:
-                        # FIND_FALLING_EDGE
+                    # ----------------------------------------
+                    if is_above == 0: # FIND_FALLING_EDGE
                         if i - self.pkt_s + self.rgtr_pkt_i > self.MIN_PKT_SIZE:
                             # It is long enough
                             self.d_msg(f"[{self.ttl_sample+i}] Found the end of a packet")
@@ -221,16 +221,16 @@ class packet_saving(gr.sync_block):
                                 if self.stage != 3:
                                     self.d_msg(f"[{self.ttl_sample+i}] Concatenate to a old sub-packet.")
                                     self.stage = 3
-                                self.rgtr_pkt_i += len(in0[:self.pkt_e])
-                                self.cur_pkt = np.concatenate((self.cur_pkt, in0[:self.pkt_e]))
+                                self.rgtr_pkt_i += len(in0[self.pkt_s:self.pkt_e])
+                                self.cur_pkt = np.concatenate((self.cur_pkt, in0[self.pkt_s:self.pkt_e]))
                             
                             self.save_to_ttl_packet()
 
                             # Reset
                             self.d_msg("Reset the mode")
                             self.init_pkt_record()
-                        elif i == len(is_above_threshold) - 1:
-                            # Not long enough and meet the end of input
+                        # -------------------------
+                        elif i == len(is_above_threshold) - 1: # Not long enough and meet the end of input
                             if self.stage != 4:
                                 self.d_msg(f"[{i}] Nothing found as the end of a packet. Concatenate whole input.")
                                 self.stage = 4
@@ -238,22 +238,23 @@ class packet_saving(gr.sync_block):
                             if self.cur_pkt is None:
                                 self.cur_pkt = in0[self.pkt_s:]
                             else:
-                                self.rgtr_pkt_i += len(in0[self.pkt_s:])
                                 self.cur_pkt = np.concatenate((self.cur_pkt, in0[self.pkt_s:]))
+                            self.rgtr_pkt_i += len(in0[self.pkt_s:])
                         else:
                             if self.stage != 5:
                                 self.d_msg(f"[{i}] Should NOT be here. [1]")
                                 self.stage = 5
-                    else:
-                        if i == len(is_above_threshold) - 1:
+                    # ----------------------------------------
+                    else: # still is a high curve
+                        if i == len(is_above_threshold) - 1: # Meet the end of the input
                             self.d_msg(f"[{self.ttl_sample+i}] End of Input. Still a raising wave.")
                             if self.cur_pkt is None:
                                 self.cur_pkt = in0[self.pkt_s:]
                                 self.d_msg(f"[{self.ttl_sample+i}] Temperary record a new packet.")
                             else:
-                                self.rgtr_pkt_i += len(in0)
-                                self.cur_pkt = np.concatenate((self.cur_pkt, in0))
+                                self.cur_pkt = np.concatenate((self.cur_pkt, in0[self.pkt_s:]))
                                 self.d_msg(f"[{self.ttl_sample+i}] Concatenate to the eamperary packet.")
+                            self.rgtr_pkt_i += len(in0[self.pkt_s:])
                     pass
 
             self.ttl_sample += len(in1)
