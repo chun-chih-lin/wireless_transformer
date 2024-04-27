@@ -148,9 +148,6 @@ class packet_saving(gr.sync_block):
             print("-"*50)
             print(f"{in0.shape = }, {in1.shape = }")
 
-            if self.ttl_sample + len(in1) > 16820 and self.ttl_sample + len(in1) < 20_000:
-                print(f"{is_above_threshold = }")
-
             for i, is_above in enumerate(is_above_threshold):
                 if self.state == FIND_RAISING_EDGE:
                     if is_above == 1:
@@ -187,7 +184,7 @@ class packet_saving(gr.sync_block):
                             # Reset
                             print("Reset the mode")
                             self.init_pkt_record()
-                        elif i == len(in0):
+                        elif i == len(is_above_threshold) - 1:
                             if self.stage != 4:
                                 print(f"[{i}] Nothing found as the end of a packet. Concatenate whole input.")
                                 self.stage = 4
@@ -197,7 +194,7 @@ class packet_saving(gr.sync_block):
                                 print(f"[{i}] Should NOT be here. [1]")
                                 self.stage = 5
                     else:
-                        if i == len(in0):
+                        if i == len(is_above_threshold) - 1:
                             print(f"[{self.ttl_sample+i}] End of Input. Still a raising wave.")
                             if self.cur_pkt is None:
                                 self.cur_pkt = in0[self.pkt_s:]
