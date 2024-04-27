@@ -134,7 +134,7 @@ class packet_saving(gr.sync_block):
         self.stage = 0
         pass
 
-    def  (self):
+    def save_to_ttl_packet(self):
         # Save to registered array
         self.d_msg(f"Save to collected packets. len: {len(self.cur_pkt)}")
 
