@@ -152,10 +152,10 @@ class packet_saving(gr.sync_block):
 
         if self.ttl_packets.shape[0] >= self.num_save_pkt:
             print("Have enough samples! Save to file")
-            saved = self.ttl_packets[:self.num_save_pkt]
-            self.d_msg(f"{saved.shape = }")
+            self.d_msg(f"{self.ttl_packets[:self.num_save_pkt].shape = }")
             if self.record:
                 print(f"Saving to file: {self.save_full_filename}")
+                self.ttl_packets.tofile(self.save_full_filename, dtype=np.complex64)
 
             print("Resetting everything.")
             self.reset_parameters(hard_reset_record=False)
@@ -165,18 +165,15 @@ class packet_saving(gr.sync_block):
     # ----------------------------------------------
     def work(self, input_items, output_items):
         try:
-            in0 = input_items[0]
-            in1 = input_items[1]
-
-            mov_avg = in1.real
-            
-            is_above_threshold = self.where_over_threhsold(mov_avg)
-
-            self.d_msg("-"*50)
-
             if not self.record:
                 self.consume_each(len(in0))
-                return 0
+                return False
+
+            in0 = input_items[0]
+            in1 = input_items[1]
+            mov_avg = in1.real
+            is_above_threshold = self.where_over_threhsold(mov_avg)
+            self.d_msg("-"*50)
 
             for i, is_above in enumerate(is_above_threshold):
                 if self.state == FIND_RAISING_EDGE:
