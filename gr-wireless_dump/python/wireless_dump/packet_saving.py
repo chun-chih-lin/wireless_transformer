@@ -282,7 +282,7 @@ class packet_saving(gr.sync_block):
                             # Do nothing.
                             pass
 
-                    else # It seems to be an end of packet.
+                    else: # It seems to be an end of packet.
                         if i - self.pkt_s + self.rgtr_pkt_i < self.MIN_PKT_SIZE: 
                             # It is not long enough
                             if i == len(is_above_threshold) - 1: 
