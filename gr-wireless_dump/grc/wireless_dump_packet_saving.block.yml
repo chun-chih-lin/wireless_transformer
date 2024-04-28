@@ -47,7 +47,7 @@ parameters:
 
 - id: tx_pwr
   label: TX Power
-  dtype: int
+  dtype: float
 
 - id: carrier_freq
   label: Carrier Frequency
