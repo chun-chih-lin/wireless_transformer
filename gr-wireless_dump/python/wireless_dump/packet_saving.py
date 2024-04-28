@@ -224,7 +224,7 @@ class packet_saving(gr.sync_block):
             if self.record:
                 if os.path.exists(self.save_full_filename):
                     print("Already exists. Do not overwrite")
-                    # self.ttl_packets.tofile(self.save_full_filename)
+                    self.ttl_packets.tofile(self.save_full_filename)
                 else:
                     print(f"Saving to file: {self.save_full_filename}")
                     print(f"Save array shape: {self.ttl_packets.shape}")
