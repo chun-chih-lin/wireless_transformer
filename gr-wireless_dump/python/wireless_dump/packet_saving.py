@@ -138,7 +138,7 @@ class packet_saving(gr.sync_block):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = int(samp_rate/1e6)
-        self.MIN_PKT_SIZE = int(328/self.samp_rate*5)
+        self.MIN_PKT_SIZE = int(328/20*self.samp_rate)
         print(f"Updating samp_rate to {self.samp_rate}, MIN_PKT_SIZE: {self.MIN_PKT_SIZE}")
         self.update_save_filename()
 
