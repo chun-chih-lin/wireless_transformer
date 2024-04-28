@@ -57,7 +57,7 @@ class packet_saving(gr.sync_block):
         self.set_num_save_pkt(num_save_pkt)
         self.set_record(record)
         self.set_overwrite(overwrite)
-        self.MIN_PKT_SIZE = 328
+        self.MIN_PKT_SIZE = int(328/self.samp_rate*5)
         self.PKT_LEN = 128
 
         self.init = True
