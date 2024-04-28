@@ -32,7 +32,8 @@ class packet_saving(gr.sync_block):
                 threshold=0.005, 
                 num_save_pkt=20_000, 
                 debug=False, 
-                record=False):
+                record=False, 
+                overwrite=False):
         gr.sync_block.__init__(self,
             name="packet_saving",
             in_sig=[np.complex64, np.complex64],
@@ -55,6 +56,7 @@ class packet_saving(gr.sync_block):
         self.set_threshold(threshold)
         self.set_num_save_pkt(num_save_pkt)
         self.set_record(record)
+        self.set_overwrite(overwrite)
         self.MIN_PKT_SIZE = 328
         self.PKT_LEN = 128
 
@@ -102,6 +104,10 @@ class packet_saving(gr.sync_block):
     def set_debug(self, debug):
         self.debug = debug
         print(f"Setting self.debug: {self.debug}")
+
+    def set_overwrite(self, overwrite):
+        self.overwrite = overwrite
+        print(f"Setting self.overwrite: {self.overwrite}")
 
     def set_save_folder(self, save_folder):
         self.save_folder = save_folder
@@ -222,9 +228,8 @@ class packet_saving(gr.sync_block):
             self.ttl_packets = self.ttl_packets[:self.num_save_pkt]
             self.d_msg(f"{self.ttl_packets.shape = }")
             if self.record:
-                if os.path.exists(self.save_full_filename):
+                if os.path.exists(self.save_full_filename) and not self.overwrite:
                     print("Already exists. Do not overwrite")
-                    self.ttl_packets.tofile(self.save_full_filename)
                 else:
                     print(f"Saving to file: {self.save_full_filename}")
                     print(f"Save array shape: {self.ttl_packets.shape}")
