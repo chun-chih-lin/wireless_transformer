@@ -139,6 +139,7 @@ class packet_saving(gr.sync_block):
     def set_samp_rate(self, samp_rate):
         self.samp_rate = int(samp_rate/1e6)
         self.MIN_PKT_SIZE = int(328/20*self.samp_rate)
+        self.OMIT_HEADER_SIZE = int(160/20*self.samp_rate)
         print(f"Updating samp_rate to {self.samp_rate}, MIN_PKT_SIZE: {self.MIN_PKT_SIZE}")
         self.update_save_filename()
 
@@ -194,7 +195,7 @@ class packet_saving(gr.sync_block):
         # Save to registered array
         self.d_msg(f"Save to collected packets. len: {len(self.cur_pkt)}")
 
-        trim_pkt = self.cur_pkt[200:]
+        trim_pkt = self.cur_pkt[self.OMIT_HEADER_SIZE:]
         trim_num = int(trim_pkt.shape[0]/self.PKT_LEN)
 
         self.d_msg(f"Shape after trim: {trim_pkt.shape}, Total: {trim_num} new sample")
