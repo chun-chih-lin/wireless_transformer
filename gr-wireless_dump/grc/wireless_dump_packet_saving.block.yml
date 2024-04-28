@@ -51,7 +51,7 @@ parameters:
 
 - id: carrier_freq
   label: Carrier Frequency
-  dtype: int
+  dtype: float
 
 - id: interference
   label: Interference
@@ -60,7 +60,7 @@ parameters:
 
 - id: samp_rate
   label: Sample Rate
-  dtype: int
+  dtype: float
 
 - id: threshold
   label: Threshold
