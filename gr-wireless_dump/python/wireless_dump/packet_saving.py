@@ -57,7 +57,6 @@ class packet_saving(gr.sync_block):
         self.set_num_save_pkt(num_save_pkt)
         self.set_record(record)
         self.set_overwrite(overwrite)
-        self.MIN_PKT_SIZE = int(328/self.samp_rate*5)
         self.PKT_LEN = 128
 
         self.init = True
@@ -139,7 +138,8 @@ class packet_saving(gr.sync_block):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = int(samp_rate/1e6)
-        print(f"Updating samp_rate to {self.samp_rate}")
+        self.MIN_PKT_SIZE = int(328/self.samp_rate*5)
+        print(f"Updating samp_rate to {self.samp_rate}, MIN_PKT_SIZE: {self.MIN_PKT_SIZE}")
         self.update_save_filename()
 
     def set_carrier_freq(self, carrier_freq):
