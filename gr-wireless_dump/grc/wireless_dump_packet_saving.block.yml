@@ -4,10 +4,19 @@ category: '[Wireless Dump]'
 
 templates:
   imports: from gnuradio import wireless_dump
-  make: wireless_dump.packet_saving(${save_folder}, ${save_filename}, ${threshold}, ${num_save_pkt}, ${debug}, ${record})
+  make: wireless_dump.packet_saving(${save_folder}, ${save_prefix}, ${save_mod}, ${tx_pwr}, ${distance}, ${samp_rate}, ${carrier_freq}, ${interference}, ${threshold}, ${num_save_pkt}, ${debug}, ${record})
   callbacks:
   - set_save_folder(${save_folder})
-  - set_save_filename(${save_filename})
+
+  # filename: prefix + mod + tx_pwr + dis + samp_rate + fc + inter
+  - set_save_prefix(${save_prefix})
+  - set_save_mod(${save_mod})
+  - set_tx_pwr(${tx_pwr})
+  - set_distance(${distance})
+  - set_samp_rate(${samp_rate})
+  - set_carrier_freq(${carrier_freq})
+  - set_interference(${interference})
+  
   - set_threshold(${threshold})
   - set_num_save_pkt(${num_save_pkt})
   - set_debug(${debug})
@@ -22,8 +31,36 @@ parameters:
 - id: save_folder
   label: Save Folder
 
-- id: save_filename
-  label: Save Filename
+# - id: save_filename
+#   label: Save Filename
+
+- id: save_prefix
+  label: Save Prefix
+
+- id: save_mod
+  label: Modulation
+
+- id: distance
+  label: Distance
+  dtype: int
+  default: '1'
+
+- id: tx_pwr
+  label: TX Power
+  dtype: int
+
+- id: carrier_freq
+  label: Carrier Frequency
+  dtype: int
+
+- id: interference
+  label: Interference
+  dtype: int
+  default: '0'
+
+- id: samp_rate
+  label: Sample Rate
+  dtype: int
 
 - id: threshold
   label: Threshold

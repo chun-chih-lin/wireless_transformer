@@ -22,7 +22,13 @@ class packet_saving(gr.sync_block):
     """
     def __init__(self, 
                 save_folder, 
-                save_filename, 
+                save_prefix, 
+                save_mod,
+                tx_pwr,
+                distance=1, 
+                samp_rate=5e6,
+                carrier_freq=2360e6,
+                interference=0, 
                 threshold=0.005, 
                 num_save_pkt=20_000, 
                 debug=False, 
@@ -35,7 +41,16 @@ class packet_saving(gr.sync_block):
         self.init = False
 
         self.set_debug(debug)
-        self.set_save_filename(save_filename)
+        # self.set_save_filename(save_filename)
+
+        self.set_save_prefix(save_prefix)
+        self.set_save_mod(save_mod)
+        self.set_distance(distance)
+        self.set_tx_pwr(tx_pwr)
+        self.set_carrier_freq(carrier_freq)
+        self.set_interference(interference)
+        self.set_samp_rate(samp_rate)
+
         self.set_save_folder(save_folder)
         self.set_threshold(threshold)
         self.set_num_save_pkt(num_save_pkt)
@@ -55,7 +70,7 @@ class packet_saving(gr.sync_block):
             print(msg)
 
     def reset_parameters(self, hard_reset_record=None):
-        print("Resetting all the parameters...")
+        print("==== Resetting all the parameters...")
         if hard_reset_record is not None and not self.debug:
             print(f"Hard reset record to: {hard_reset_record}")
             self.set_record(hard_reset_record)
@@ -95,18 +110,56 @@ class packet_saving(gr.sync_block):
             os.makedirs(self.save_folder)
         self.update_save_filename()
 
-    def set_save_filename(self, save_filename):
-        self.save_filename = save_filename
+    # def set_save_filename(self, save_filename):
+    #     self.save_filename = save_filename
+    #     self.update_save_filename()
+
+    # ----------------------------------------
+    def set_save_prefix(self, save_prefix):
+        self.save_prefix = save_prefix
+        print(f"Updating save_prefix to {self.save_prefix}")
         self.update_save_filename()
 
+    def set_save_mod(self, save_mod):
+        self.save_mod = save_mod
+        print(f"Updating save_mod to {self.save_mod}")
+        self.update_save_filename()
+
+    def set_tx_pwr(self, tx_pwr):
+        self.tx_pwr = tx_pwr
+        print(f"Updating tx_pwr to {self.tx_pwr}")
+        self.update_save_filename()
+
+    def set_distance(self, distance):
+        self.distance = distance
+        print(f"Updating distance to {self.distance}")
+        self.update_save_filename()
+
+    def set_samp_rate(self, samp_rate):
+        self.samp_rate = int(samp_rate/1e6)
+        print(f"Updating samp_rate to {self.samp_rate}")
+        self.update_save_filename()
+
+    def set_carrier_freq(self, carrier_freq):
+        self.carrier_freq = int(carrier_freq/1e6)
+        print(f"Updating carrier_freq to {self.carrier_freq}")
+        self.update_save_filename()
+
+    def set_interference(self, interference):
+        self.interference = interference
+        print(f"Updating interference to {self.interference}")
+        self.update_save_filename()
+
+    # ----------------------------------------
     def set_threshold(self, threshold):
         self.threshold = threshold
         print(f"Setting self.threshold: {self.threshold}")
 
     def update_save_filename(self):
         if self.init:
+            self.save_filename = f"{self.save_prefix}_{self.save_mod}_TP{self.tx_pwr}_D{self.distance}_SR{self.samp_rate}_CF{self.carrier_freq}_I{self.interference}.dat"
             self.save_full_filename = f"{self.save_folder}{self.save_filename}"
-            print(f"Update to save to {self.save_full_filename}")
+            print(f"==== Update to save to {self.save_full_filename}")
             self.reset_parameters()
 
     # ----------------------------------------------
@@ -160,7 +213,7 @@ class packet_saving(gr.sync_block):
 
         current_percentage = int(self.ttl_packets.shape[0]/self.num_save_pkt*10)
         if current_percentage == self.progress + 1:
-            print(f"Progress: {self.ttl_packets.shape[0]}/{self.num_save_pkt} = {current_percentage*100}%...")
+            print(f"Progress: {self.ttl_packets.shape[0]}/{self.num_save_pkt} = {current_percentage*10}%...")
             self.progress += 1
 
         if self.ttl_packets.shape[0] >= self.num_save_pkt:
