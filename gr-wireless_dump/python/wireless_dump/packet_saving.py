@@ -266,55 +266,93 @@ class packet_saving(gr.sync_block):
                             self.stage = 0
                 elif self.state == FIND_FALLING_EDGE:
                     # ----------------------------------------
-                    if is_above == 0: # FIND_FALLING_EDGE
-                        if i - self.pkt_s + self.rgtr_pkt_i > self.MIN_PKT_SIZE:
+                    if is_above == 1: # It is a high
+                        if i == len(is_above_threshold) - 1: 
+                            # Meeting the end of input, and it is still high
+                            sub_wf = in0[self.pkt_s:]
+                            if self.cur_pkt is None:
+                                self.cur_pkt = sub_wf
+                                self.d_msg(f"[{self.ttl_sample+i}] Metting the end of input. Temperary record a new packet.")
+                            else:
+                                self.cur_pkt = np.concatenate((self.cur_pkt, sub_wf))
+                                self.d_msg(f"[{self.ttl_sample+i}] Metting the end of input. Concatenate to the eamperary packet.")
+                            self.rgtr_pkt_i += len(sub_wf)
+                        else:
+                            # It is still high and in the middle of the input
+                            # Do nothing.
+                            pass
+
+                    else # It seems to be an end of packet.
+                        if i - self.pkt_s + self.rgtr_pkt_i < self.MIN_PKT_SIZE: 
+                            # It is not long enough
+                            if i == len(is_above_threshold) - 1: 
+                                # It is not long enough but meet the end of input
+                                sub_wf = in0[self.pkt_s:]
+                                if self.cur_pkt is None:
+                                    self.cur_pkt = sub_wf
+                                    self.d_msg(f"[{self.ttl_sample+i}] Metting the end of input. Temperary record a new packet.")
+                                else:
+                                    self.cur_pkt = np.concatenate((self.cur_pkt, sub_wf))
+                                    self.d_msg(f"[{self.ttl_sample+i}] Metting the end of input. Concatenate to the eamperary packet.")
+                                self.rgtr_pkt_i += len(sub_wf)
+                            else:
+                                # It is not long enough and in the middle of the input.
+                                # Do nothing.
+                                pass
+                        elif i - self.pkt_s + self.rgtr_pkt_i > self.MIN_PKT_SIZE: 
                             # It is long enough
+                            sub_wf = in0[self.pkt_s:i]
+
                             self.d_msg(f"[{self.ttl_sample+i}] Found the end of a packet")
-                            self.pkt_e = i
                             if self.cur_pkt is None:
                                 if self.stage != 2:
-                                    self.d_msg(f"[{self.ttl_sample+i}] A whole new packet.")
+                                    self.d_msg(f"[{self.ttl_sample+i}] A whole new packet. {len(sub_wf)}")
                                     self.stage = 2
-                                self.cur_pkt = in0[self.pkt_s:self.pkt_e]
+
+                                self.cur_pkt = sub_wf
                             else:
                                 if self.stage != 3:
-                                    self.d_msg(f"[{self.ttl_sample+i}] Concatenate to a old sub-packet.")
+                                    self.d_msg(f"[{self.ttl_sample+i}] Concatenate to a old sub-packet. {len(self.cur_pkt)} + {len(sub_wf)}]")
                                     self.stage = 3
-                                self.cur_pkt = np.concatenate((self.cur_pkt, in0[self.pkt_s:self.pkt_e]))
 
-                            self.rgtr_pkt_i += len(in0[self.pkt_s:self.pkt_e])
-                            
+                                self.cur_pkt = np.concatenate((self.cur_pkt, sub_wf))
+                            self.rgtr_pkt_i += len(sub_wf)
+
                             self.save_to_ttl_packet()
 
                             # Reset
                             self.d_msg("Reset the mode")
                             self.init_pkt_record()
-                        # -------------------------
-                        elif i == len(is_above_threshold) - 1: # Not long enough and meet the end of input
-                            if self.stage != 4:
-                                self.d_msg(f"[{i}] Nothing found as the end of a packet. Concatenate whole input.")
-                                self.stage = 4
-
-                            if self.cur_pkt is None:
-                                self.cur_pkt = in0[self.pkt_s:]
-                            else:
-                                self.cur_pkt = np.concatenate((self.cur_pkt, in0[self.pkt_s:]))
-                            self.rgtr_pkt_i += len(in0[self.pkt_s:])
-                        else:
-                            if self.stage != 5:
-                                self.d_msg(f"[{i}] Should NOT be here. [1]")
-                                self.stage = 5
-                    # ----------------------------------------
-                    else: # still is a high curve
-                        if i == len(is_above_threshold) - 1: # Meet the end of the input
-                            self.d_msg(f"[{self.ttl_sample+i}] End of Input. Still a raising wave.")
-                            if self.cur_pkt is None:
-                                self.cur_pkt = in0[self.pkt_s:]
-                                self.d_msg(f"[{self.ttl_sample+i}] Temperary record a new packet.")
-                            else:
-                                self.cur_pkt = np.concatenate((self.cur_pkt, in0[self.pkt_s:]))
-                                self.d_msg(f"[{self.ttl_sample+i}] Concatenate to the eamperary packet.")
-                            self.rgtr_pkt_i += len(in0[self.pkt_s:])
+                    #     # -------------------------
+                    #     elif i == len(is_above_threshold) - 1: # Not long enough and meet the end of input
+                    #         sub_wf = in0[self.pkt_s:]
+                    #         if self.cur_pkt is None:
+                    #             if self.stage != 4:
+                    #                 self.d_msg(f"[{i}] Nothing found as the end of a packet. Create a new sub-packet. {len(self.cur_pkt)} + {len(sub_wf)}")
+                    #                 self.stage = 4    
+                    #             self.cur_pkt = sub_wf
+                    #         else:
+                    #             if self.stage != 5:
+                    #                 self.d_msg(f"[{i}] Nothing found as the end of a packet. Concatenate whole input. {len(self.cur_pkt)} + {len(sub_wf)}")
+                    #                 self.stage = 5
+                    #             self.cur_pkt = np.concatenate((self.cur_pkt, sub_wf))
+                    #         self.rgtr_pkt_i += len(sub_wf)
+                    #     else:
+                    #         if self.stage != 6:
+                    #             self.d_msg(f"[{i}] Should NOT be here. [1]")
+                    #             self.stage = 6
+                    # # ----------------------------------------
+                    # else: # still is a high curve
+                    #     if i == len(is_above_threshold) - 1: # Meet the end of the input
+                    #         sub_wf = in0[self.pkt_s:]
+                    #         self.d_msg(f"[{self.ttl_sample+i}] End of Input. Still a raising wave.")
+                    #         if self.cur_pkt is None:
+                    #             self.cur_pkt = sub_wf
+                    #             self.d_msg(f"[{self.ttl_sample+i}] Temperary record a new packet.")
+                    #         else:
+                    #             self.cur_pkt = np.concatenate((self.cur_pkt, sub_wf))
+                    #             self.d_msg(f"[{self.ttl_sample+i}] Concatenate to the eamperary packet.")
+                    #         self.rgtr_pkt_i += len(sub_wf)
                     pass
 
             self.ttl_sample += len(in1)
