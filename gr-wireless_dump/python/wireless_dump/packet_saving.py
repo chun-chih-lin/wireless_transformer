@@ -253,7 +253,7 @@ class packet_saving(gr.sync_block):
                         self.pkt_s = i
                         self.state = FIND_FALLING_EDGE
                     #     if self.stage != 1:
-                    #         self.d_msg(f"[{self.ttl_sample+i}] Found the start of a packet")
+                        self.d_msg(f"[{self.ttl_sample+i}] Found the start of a packet")
                     #         self.stage = 1
                     # else:
                     #     if self.state != 0:
