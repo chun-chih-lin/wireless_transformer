@@ -91,7 +91,7 @@ class packet_saving(gr.sync_block):
             else:
                 self.record = False
                 self.reset_parameters()
-            print(f"Setting {self.record: }")
+            print(f"Setting Record to {self.record: }")
         except Exception as exp:
             e_type, e_obj, e_tb = sys.exc_info()
             print(f'Exception: {exp}. At line {e_tb.tb_lineno}')
@@ -217,7 +217,7 @@ class packet_saving(gr.sync_block):
             self.progress += 1
 
         if self.ttl_packets.shape[0] >= self.num_save_pkt:
-            print("Have enough samples! Save to file")
+            print(f"Have enough samples! Save to file: {self.save_full_filename}")
             
             self.ttl_packets = self.ttl_packets[:self.num_save_pkt]
             self.d_msg(f"{self.ttl_packets.shape = }")
