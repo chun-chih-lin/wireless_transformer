@@ -280,8 +280,9 @@ class packet_saving(gr.sync_block):
                                 if self.stage != 3:
                                     self.d_msg(f"[{self.ttl_sample+i}] Concatenate to a old sub-packet.")
                                     self.stage = 3
-                                self.rgtr_pkt_i += len(in0[self.pkt_s:self.pkt_e])
                                 self.cur_pkt = np.concatenate((self.cur_pkt, in0[self.pkt_s:self.pkt_e]))
+
+                            self.rgtr_pkt_i += len(in0[self.pkt_s:self.pkt_e])
                             
                             self.save_to_ttl_packet()
 
