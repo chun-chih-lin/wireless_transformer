@@ -63,15 +63,17 @@ class Record_Signal(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.tx_power = tx_power = "-20"
-        self.save_mod = save_mod = "WIFI-BPSK"
-        self.samp_rate = samp_rate = 20e6
+        self.tx_power = tx_power = "-10"
+        self.save_prefix = save_prefix = "Dataset_EIB_room328_to_Hallway"
+        self.save_mod = save_mod = "RAND"
+        self.samp_rate = samp_rate = 5e6
+        self.interference = interference = 1
+        self.distance = distance = 5
         self.carrier_freq = carrier_freq = 2360e6
-        self.save_prefix = save_prefix = "Dataset_diff_samprate/"
         self.save_folder = save_folder = "/home/chunchi/Desktop/wireless_transformer/records/"
-        self.save_filename = save_filename = save_mod + "." + tx_power + ".S" + str(int(samp_rate/1e6)) + "." + str(int(carrier_freq/1e6)) + ".dat"
-        self.ttl_save_sample = ttl_save_sample = int(samp_rate/10)
-        self.save_full_filename = save_full_filename = save_folder + save_prefix + save_filename
+        self.save_filename = save_filename = "Non_process_" + save_prefix + "_" +  save_mod + "_TP" + tx_power + "_D" + str(distance) + "_SR" + str(int(samp_rate/1e6)) + "_CF" + str(int(carrier_freq/1e6)) + "_I" + str(interference) + ".dat"
+        self.ttl_save_sample = ttl_save_sample = 20e3
+        self.save_full_filename = save_full_filename = save_folder + save_prefix + "/" + save_filename
         self.sample_per_input = sample_per_input = 128
         self.gain_db = gain_db = 30
         self.gain = gain = .65
@@ -148,9 +150,23 @@ class Record_Signal(gr.top_block, Qt.QWidget):
 
         self._qtgui_time_sink_x_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_time_sink_x_0_win)
+        self._interference_range = qtgui.Range(0, 1, 1, 1, 200)
+        self._interference_win = qtgui.RangeWidget(self._interference_range, self.set_interference, "Interference", "counter_slider", int, QtCore.Qt.Horizontal)
+        self.top_grid_layout.addWidget(self._interference_win, 2, 3, 1, 1)
+        for r in range(2, 3):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(3, 4):
+            self.top_grid_layout.setColumnStretch(c, 1)
         self._gain_range = qtgui.Range(0, 1.0, 0.01, .65, 200)
         self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._gain_win)
+        self._distance_range = qtgui.Range(5, 15, 5, 5, 200)
+        self._distance_win = qtgui.RangeWidget(self._distance_range, self.set_distance, "Distance", "counter_slider", int, QtCore.Qt.Horizontal)
+        self.top_grid_layout.addWidget(self._distance_win, 1, 0, 1, 3)
+        for r in range(1, 2):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(0, 3):
+            self.top_grid_layout.setColumnStretch(c, 1)
         self.blocks_head_0 = blocks.head(gr.sizeof_gr_complex*1, (int(ttl_save_sample*sample_per_input)))
         self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_gr_complex*1, save_full_filename, False)
         self.blocks_file_sink_0.set_unbuffered(False)
@@ -177,53 +193,67 @@ class Record_Signal(gr.top_block, Qt.QWidget):
 
     def set_tx_power(self, tx_power):
         self.tx_power = tx_power
-        self.set_save_filename(self.save_mod + "." + self.tx_power + ".S" + str(int(self.samp_rate/1e6)) + "." + str(int(self.carrier_freq/1e6)) + ".dat")
-
-    def get_save_mod(self):
-        return self.save_mod
-
-    def set_save_mod(self, save_mod):
-        self.save_mod = save_mod
-        self.set_save_filename(self.save_mod + "." + self.tx_power + ".S" + str(int(self.samp_rate/1e6)) + "." + str(int(self.carrier_freq/1e6)) + ".dat")
-
-    def get_samp_rate(self):
-        return self.samp_rate
-
-    def set_samp_rate(self, samp_rate):
-        self.samp_rate = samp_rate
-        self.set_save_filename(self.save_mod + "." + self.tx_power + ".S" + str(int(self.samp_rate/1e6)) + "." + str(int(self.carrier_freq/1e6)) + ".dat")
-        self.set_ttl_save_sample(int(self.samp_rate/10))
-        self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
-        self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
-
-    def get_carrier_freq(self):
-        return self.carrier_freq
-
-    def set_carrier_freq(self, carrier_freq):
-        self.carrier_freq = carrier_freq
-        self.set_save_filename(self.save_mod + "." + self.tx_power + ".S" + str(int(self.samp_rate/1e6)) + "." + str(int(self.carrier_freq/1e6)) + ".dat")
-        self.uhd_usrp_source_0.set_center_freq(self.carrier_freq, 0)
+        self.set_save_filename("Non_process_" + self.save_prefix + "_" +  self.save_mod + "_TP" + self.tx_power + "_D" + str(self.distance) + "_SR" + str(int(self.samp_rate/1e6)) + "_CF" + str(int(self.carrier_freq/1e6)) + "_I" + str(self.interference) + ".dat")
 
     def get_save_prefix(self):
         return self.save_prefix
 
     def set_save_prefix(self, save_prefix):
         self.save_prefix = save_prefix
-        self.set_save_full_filename(self.save_folder + self.save_prefix + self.save_filename)
+        self.set_save_filename("Non_process_" + self.save_prefix + "_" +  self.save_mod + "_TP" + self.tx_power + "_D" + str(self.distance) + "_SR" + str(int(self.samp_rate/1e6)) + "_CF" + str(int(self.carrier_freq/1e6)) + "_I" + str(self.interference) + ".dat")
+        self.set_save_full_filename(self.save_folder + self.save_prefix + "/" + self.save_filename)
+
+    def get_save_mod(self):
+        return self.save_mod
+
+    def set_save_mod(self, save_mod):
+        self.save_mod = save_mod
+        self.set_save_filename("Non_process_" + self.save_prefix + "_" +  self.save_mod + "_TP" + self.tx_power + "_D" + str(self.distance) + "_SR" + str(int(self.samp_rate/1e6)) + "_CF" + str(int(self.carrier_freq/1e6)) + "_I" + str(self.interference) + ".dat")
+
+    def get_samp_rate(self):
+        return self.samp_rate
+
+    def set_samp_rate(self, samp_rate):
+        self.samp_rate = samp_rate
+        self.set_save_filename("Non_process_" + self.save_prefix + "_" +  self.save_mod + "_TP" + self.tx_power + "_D" + str(self.distance) + "_SR" + str(int(self.samp_rate/1e6)) + "_CF" + str(int(self.carrier_freq/1e6)) + "_I" + str(self.interference) + ".dat")
+        self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
+        self.uhd_usrp_source_0.set_samp_rate(self.samp_rate)
+
+    def get_interference(self):
+        return self.interference
+
+    def set_interference(self, interference):
+        self.interference = interference
+        self.set_save_filename("Non_process_" + self.save_prefix + "_" +  self.save_mod + "_TP" + self.tx_power + "_D" + str(self.distance) + "_SR" + str(int(self.samp_rate/1e6)) + "_CF" + str(int(self.carrier_freq/1e6)) + "_I" + str(self.interference) + ".dat")
+
+    def get_distance(self):
+        return self.distance
+
+    def set_distance(self, distance):
+        self.distance = distance
+        self.set_save_filename("Non_process_" + self.save_prefix + "_" +  self.save_mod + "_TP" + self.tx_power + "_D" + str(self.distance) + "_SR" + str(int(self.samp_rate/1e6)) + "_CF" + str(int(self.carrier_freq/1e6)) + "_I" + str(self.interference) + ".dat")
+
+    def get_carrier_freq(self):
+        return self.carrier_freq
+
+    def set_carrier_freq(self, carrier_freq):
+        self.carrier_freq = carrier_freq
+        self.set_save_filename("Non_process_" + self.save_prefix + "_" +  self.save_mod + "_TP" + self.tx_power + "_D" + str(self.distance) + "_SR" + str(int(self.samp_rate/1e6)) + "_CF" + str(int(self.carrier_freq/1e6)) + "_I" + str(self.interference) + ".dat")
+        self.uhd_usrp_source_0.set_center_freq(self.carrier_freq, 0)
 
     def get_save_folder(self):
         return self.save_folder
 
     def set_save_folder(self, save_folder):
         self.save_folder = save_folder
-        self.set_save_full_filename(self.save_folder + self.save_prefix + self.save_filename)
+        self.set_save_full_filename(self.save_folder + self.save_prefix + "/" + self.save_filename)
 
     def get_save_filename(self):
         return self.save_filename
 
     def set_save_filename(self, save_filename):
         self.save_filename = save_filename
-        self.set_save_full_filename(self.save_folder + self.save_prefix + self.save_filename)
+        self.set_save_full_filename(self.save_folder + self.save_prefix + "/" + self.save_filename)
 
     def get_ttl_save_sample(self):
         return self.ttl_save_sample

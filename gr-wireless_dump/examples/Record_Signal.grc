@@ -90,6 +90,27 @@ blocks:
     coordinate: [608, 52.0]
     rotation: 0
     state: enabled
+- name: distance
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 1, 0, 1, 3
+    label: Distance
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: '5'
+    step: '5'
+    stop: '15'
+    value: '5'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [64, 284.0]
+    rotation: 0
+    state: enabled
 - name: gain
   id: variable_qtgui_range
   parameters:
@@ -132,6 +153,27 @@ blocks:
     coordinate: [216, 132.0]
     rotation: 0
     state: enabled
+- name: interference
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 2, 3, 1, 1
+    label: Interference
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: '0'
+    step: '1'
+    stop: '1'
+    value: '1'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [64, 156.0]
+    rotation: 0
+    state: enabled
 - name: samp_rate
   id: variable
   parameters:
@@ -155,7 +197,7 @@ blocks:
     bus_structure: null
     coordinate: [712, 180.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: samp_rate
   id: variable
   parameters:
@@ -167,7 +209,7 @@ blocks:
     bus_structure: null
     coordinate: [712, 244.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: sample_per_input
   id: variable
   parameters:
@@ -184,8 +226,9 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: save_mod + "." + tx_power + ".S" + str(int(samp_rate/1e6)) + "." + str(int(carrier_freq/1e6))
-      + ".dat"
+    value: '"Non_process_" + save_prefix + "_" +  save_mod + "_TP" + tx_power + "_D"
+      + str(distance) + "_SR" + str(int(samp_rate/1e6)) + "_CF" + str(int(carrier_freq/1e6))
+      + "_I" + str(interference) + ".dat"'
   states:
     bus_sink: false
     bus_source: false
@@ -209,7 +252,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: save_folder + save_prefix + save_filename
+    value: save_folder + save_prefix + "/" + save_filename
   states:
     bus_sink: false
     bus_source: false
@@ -432,7 +475,7 @@ blocks:
     bus_structure: null
     coordinate: [624, 540.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: save_mod
   id: variable
   parameters:
@@ -480,12 +523,12 @@ blocks:
     bus_structure: null
     coordinate: [1320, 172.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: save_prefix
   id: variable
   parameters:
     comment: ''
-    value: '"Dataset_diff_samprate/"'
+    value: '"Dataset_EIB_room328_to_Hallway"'
   states:
     bus_sink: false
     bus_source: false
@@ -504,7 +547,7 @@ blocks:
     bus_structure: null
     coordinate: [920, 532.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: ttl_save_sample
   id: variable
   parameters:
@@ -516,7 +559,7 @@ blocks:
     bus_structure: null
     coordinate: [1040, 532.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: tx_power
   id: variable
   parameters:
@@ -526,7 +569,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1112, 724.0]
+    coordinate: [1320, 588.0]
     rotation: 0
     state: disabled
 - name: tx_power
@@ -538,7 +581,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1200, 724.0]
+    coordinate: [1408, 588.0]
     rotation: 0
     state: disabled
 - name: tx_power
@@ -550,7 +593,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1200, 660.0]
+    coordinate: [1408, 524.0]
     rotation: 0
     state: disabled
 - name: tx_power
@@ -562,7 +605,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1112, 660.0]
+    coordinate: [1320, 524.0]
     rotation: 0
     state: disabled
 - name: tx_power
@@ -574,7 +617,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1416, 612.0]
+    coordinate: [1408, 324.0]
     rotation: 0
     state: disabled
 - name: tx_power
@@ -586,7 +629,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1328, 676.0]
+    coordinate: [1320, 388.0]
     rotation: 0
     state: disabled
 - name: tx_power
@@ -598,7 +641,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1416, 676.0]
+    coordinate: [1408, 388.0]
     rotation: 0
     state: disabled
 - name: tx_power
@@ -610,9 +653,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1328, 612.0]
+    coordinate: [1320, 324.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: tx_power
   id: variable
   parameters:
@@ -622,9 +665,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1328, 548.0]
+    coordinate: [1320, 260.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: tx_power
   id: variable
   parameters:
@@ -634,7 +677,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1416, 548.0]
+    coordinate: [1408, 260.0]
     rotation: 0
     state: disabled
 - name: tx_power
@@ -646,7 +689,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1200, 596.0]
+    coordinate: [1408, 460.0]
     rotation: 0
     state: disabled
 - name: tx_power
@@ -658,7 +701,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1112, 596.0]
+    coordinate: [1320, 460.0]
     rotation: 0
     state: disabled
 - name: blocks_file_sink_0
