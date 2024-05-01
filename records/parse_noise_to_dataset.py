@@ -45,6 +45,7 @@ def get_noise_files_from_source():
 
             if data.shape[0] < PKT_NUM*PKT_SIZE:
                 data = np.concatenate((data, data))
+                data = data[:PKT_NUM*PKT_SIZE]
 
             print(f"{data.shape = }")
             num_pkt = int(data.shape[0]/PKT_SIZE)
