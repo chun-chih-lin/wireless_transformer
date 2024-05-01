@@ -111,12 +111,15 @@ def pack_to_tar_gz(prefix, full_list_of_file, inter):
     full_list = " ".join(full_list_of_file)
 
     cmd = f"{tar_cmd} {full_list}"
+    print("="*10)
     print(f"{cmd = }")
     # Pack into a tar file
     # os.system(cmd)
     
     # compress to a gzip file
     gz_cmd = f"gzip {full_tar_filename}"
+    print("="*10)
+    print(f"{gz_cmd = }")
     # os.system(gz_cmd)
     pass
 
