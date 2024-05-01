@@ -85,7 +85,7 @@ def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
     full_pickle_name = f"{args.s}{pickle_name}"
     print(f"Will be Saved to pickle file: {full_pickle_name}")
 
-    input_cmd = False
+    input_cmd = "N"
     if not args.y:
         input_cmd = input("Is everything looking right and confirm save to file? [y/N]")
 
