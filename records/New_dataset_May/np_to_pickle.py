@@ -83,7 +83,16 @@ def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
     print(f"Total label size: {dataset_dict['Y'].shape}")
     pickle_name = get_pickle_filename(prefix, tx_pwr, dis, samp_rate, inter)
     full_pickle_name = f"{args.s}{pickle_name}"
-    print(f"Save to pickle file: {full_pickle_name}")
+    print(f"Will be Saved to pickle file: {full_pickle_name}")
+
+    input_cmd = input("Is everything looking right and confirm save to file? [y/N]")
+    if input_cmd.upper() == "Y":
+        print("Saving...")
+        with open(full_pickle_name, 'wb') as f:
+            pickle.dump(dataset_dict, f)
+        print("Saved.")
+    else:
+        print("Abort.")
     pass
 
 # -------------------------------------------------
@@ -108,9 +117,8 @@ def main():
         for dis in DIS:
             for samp_rate in SAMP_RATE:
                 for tx_pwr in TX_PWR:
+                    print('\n------------------------------')
                     packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter)
-                    exit()
-
 
 if __name__ == '__main__':
     main()
