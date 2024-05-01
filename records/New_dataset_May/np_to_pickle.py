@@ -105,7 +105,7 @@ def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
 
 def pack_to_tar_gz(prefix, full_list_of_file):
     tar_filename = f"{prefix}.tar"
-    tar_cmd = f"tar -cvf {args.}{tar_filename}"
+    tar_cmd = f"tar -cvf {args.s}{tar_filename}"
     
     full_list = " ".join(full_list_of_file)
 
