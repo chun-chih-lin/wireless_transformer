@@ -45,8 +45,8 @@ def get_noise_files_from_source():
             print(f"{data.shape = }")
             num_pkt = int(data.shape[0]/PKT_SIZE)
 
-            save_np = data.reshape((num_pkt, PKT_SIZE))
-            print(f"{save_np.shape =}")
+            # save_np = data.reshape((num_pkt, PKT_SIZE))
+            # print(f"{save_np.shape =}")
 
             print(f"Save to {save_filename}")
             pass
