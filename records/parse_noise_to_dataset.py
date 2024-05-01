@@ -23,8 +23,8 @@ print(f"{SAVE_TP = }")
 def get_filename(prefix, comb):
     return f"Non_process_{prefix}_RAND_TP{TP}_D{comb[0]}_SR{comb[1]}_CF{CF}_I{comb[2]}.dat"
 
-def get_save_filename(prefix, comb):
-    return f"{prefix}_RAND_TP{TP}_D{comb[0]}_SR{comb[1]}_CF{CF}_I{comb[2]}.dat"
+def get_save_filename(prefix, tp, comb):
+    return f"{prefix}_RAND_TP{tp}_D{comb[0]}_SR{comb[1]}_CF{CF}_I{comb[2]}.dat"
 
 def get_noise_files_from_source():
 
@@ -41,8 +41,7 @@ def get_noise_files_from_source():
         print(f"Checking {full_filename}...")
         if os.path.exists(full_filename):
             print("Success")
-            save_filename = get_save_filename(prefix, comb)
-            full_save_filename = f"{args.s}{save_filename}"
+            
             data = np.fromfile(full_filename, dtype=np.complex64)
 
             if data.shape[0] < PKT_NUM*PKT_SIZE:
@@ -53,8 +52,11 @@ def get_noise_files_from_source():
             num_pkt = int(data.shape[0]/PKT_SIZE)
             save_np = data.reshape((num_pkt, PKT_SIZE))
             print(f"{save_np.shape =}")
-            # save_np.tofile(full_save_filename)
-            print(f"Saved to {full_save_filename}")
+            for tp in SAVE_TP:
+                save_filename = get_save_filename(prefix, tp, comb)
+                full_save_filename = f"{args.s}{save_filename}"
+                # save_np.tofile(full_save_filename)
+                print(f"Saved to {full_save_filename}")
             pass
         else:
             print("Failed!!!")
