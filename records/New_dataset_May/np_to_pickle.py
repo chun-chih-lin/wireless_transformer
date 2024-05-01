@@ -131,7 +131,7 @@ def main():
                 for tx_pwr in TX_PWR:
                     print('\n------------------------------')
                     full_pickle_name = packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter)
-                    ttl_full_pickle_name.append(ttl_full_pickle_name)
+                    ttl_full_pickle_name.append(full_pickle_name)
     print(f"{ttl_full_pickle_name = }")
 
 if __name__ == '__main__':
