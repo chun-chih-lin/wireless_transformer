@@ -40,6 +40,7 @@ def get_best(filename):
     print(f"{data.shape = }")
     n_pkt = int(data.shape[0]/PKT_SIZE)
     data = data.reshape((n_pkt, PKT_SIZE))
+    print(f"{data.shape = }")
     mean_data = np.mean(data)
     print(f"{mean_data.shape = }")
     return data
