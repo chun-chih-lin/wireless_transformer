@@ -63,7 +63,7 @@ def main():
 
     for inter in INTER:
         for dis in DIS:
-            for samp_rate in DAMPE_RATE:
+            for samp_rate in SAMP_RATE:
                 for tx_pwr in TX_PWR:
                     packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter)
                     exit()
