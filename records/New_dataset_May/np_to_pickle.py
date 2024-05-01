@@ -2,7 +2,7 @@ import numpy as np
 import sys, os
 import itertools
 import _pickle as pickle
-
+import zgip
 import argparse
 
 parser = argparse.ArgumentParser(description='save torch experience file to npy.')
@@ -54,6 +54,12 @@ def get_best(filename):
     return data[best_idx, :]
 
 def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
+    pickle_name = get_pickle_filename(prefix, tx_pwr, dis, samp_rate, inter)
+    full_pickle_name = f"{args.s}{pickle_name}"
+    if os.path.exist(full_pickle_name):
+        print(f"{full_pickle_name} already exits. Abort.")
+        return full_pickle_name
+
     X, Y = None, None
     for (mod_name, mod_idx) in zip(MOD_LIST, MOD_IDX):
         filename = get_filename(prefix, [mod_name, tx_pwr, dis, samp_rate, inter])
@@ -81,8 +87,7 @@ def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
     }
     print(f"Total data size: {dataset_dict['X'].shape}")
     print(f"Total label size: {dataset_dict['Y'].shape}")
-    pickle_name = get_pickle_filename(prefix, tx_pwr, dis, samp_rate, inter)
-    full_pickle_name = f"{args.s}{pickle_name}"
+    
     print(f"Will be Saved to pickle file: {full_pickle_name}")
 
     input_cmd = "N"
@@ -96,6 +101,9 @@ def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
         print("Saved.")
     else:
         print("Abort.")
+    return full_pickle_name
+
+def packet_to_bz():
     pass
 
 # -------------------------------------------------
@@ -116,12 +124,15 @@ def main():
     if not check_succ:
         exit()
 
+    ttl_full_pickle_name = []
     for inter in INTER:
         for dis in DIS:
             for samp_rate in SAMP_RATE:
                 for tx_pwr in TX_PWR:
                     print('\n------------------------------')
-                    packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter)
+                    full_pickle_name = packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter)
+                    ttl_full_pickle_name.append(ttl_full_pickle_name)
+    print(f"{ttl_full_pickle_name = }")
 
 if __name__ == '__main__':
     main()
