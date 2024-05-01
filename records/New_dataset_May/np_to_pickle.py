@@ -49,9 +49,11 @@ def get_best(filename):
 
     idx_list = [x for x in range(mean_data.shape[0])]
 
-    z = [x for _, x in sorted(zip(mean_data, idx_list))]
-    z = z[0:PKT_NUM]
-    print(z)
+    best_idx = [x for _, x in sorted(zip(mean_data, idx_list))]
+    best_idx = best_idx[0:PKT_NUM]
+    print(best_idx)
+    print(data[best_idx, :].shape)
+    return 
 
 
 def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
