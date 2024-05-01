@@ -55,7 +55,7 @@ def get_noise_files_from_source():
             for tp in SAVE_TP:
                 save_filename = get_save_filename(prefix, tp, comb)
                 full_save_filename = f"{args.s}{save_filename}"
-                # save_np.tofile(full_save_filename)
+                save_np.tofile(full_save_filename)
                 print(f"Saved to {full_save_filename}")
             pass
         else:
