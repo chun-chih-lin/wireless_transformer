@@ -32,8 +32,6 @@ def get_noise_files_from_source():
 
     for comb in combinations:
         filename = get_filename(prefix, comb)
-
-        
         full_filename = f"{args.s}{filename}"
 
         print("-"*50)
@@ -41,6 +39,7 @@ def get_noise_files_from_source():
         if os.path.exists(full_filename):
             print("Success")
             save_filename = get_save_filename(prefix, comb)
+            full_save_filename = f"{args.s}{save_filename}"
             data = np.fromfile(full_filename, dtype=np.complex64)
 
             if data.shape[0] < PKT_NUM*PKT_SIZE:
@@ -49,14 +48,10 @@ def get_noise_files_from_source():
 
             print(f"{data.shape = }")
             num_pkt = int(data.shape[0]/PKT_SIZE)
-
-            
-
-
-            # save_np = data.reshape((num_pkt, PKT_SIZE))
-            # print(f"{save_np.shape =}")
-
-            print(f"Save to {save_filename}")
+            save_np = data.reshape((num_pkt, PKT_SIZE))
+            print(f"{save_np.shape =}")
+            # save_np.tofile(full_save_filename)
+            print(f"Saved to {full_save_filename}")
             pass
         else:
             print("Failed!!!")
