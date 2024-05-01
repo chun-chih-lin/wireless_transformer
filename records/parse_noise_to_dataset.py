@@ -14,6 +14,8 @@ SR = [5, 20]
 INTER = [0, 1]
 CF = 2360
 
+PKT_SIZE = 128
+
 def get_filename(prefix, comb):
     return f"Non_process_{prefix}_RAND_TP{TP}_D{comb[0]}_SR{comb[1]}_CF{CF}_I{comb[2]}.dat"
 
@@ -39,12 +41,18 @@ def get_noise_files_from_source():
         if os.path.exists(full_filename):
             print("Success")
             save_filename = get_save_filename(prefix, comb)
-            
+            data = np.fromfile(full_filename, dtype=np.complex64)
+            print(f"{data.shape = }")
+            num_pkt = int(data.shape[0]/PKT_SIZE)
+
+            save_np = data.reshape((num_pkt, PKT_SIZE))
+            print(f"{save_np.shape =}")
+
             print(f"Save to {save_filename}")
             pass
         else:
+            print("Failed!!!")
             print(f"{full_filename} is not exist.")
-
     pass
 
 def main():
