@@ -19,8 +19,8 @@ SAMP_RATE = [5, 20]
 CF = 2360
 INTER = [0, 1]
 
+# -------------------------------------------------
 def get_filename(prefix, comb):
-    
     mod_name = comb[0]
     tx_pwr = comb[1]
     dis = comb[2]
@@ -28,18 +28,46 @@ def get_filename(prefix, comb):
     inter = comb[4]
     return f"{prefix}_{mod_name}_TP{tx_pwr}_D{dis}_SR{samp_rate}_CF{CF}_I{inter}.dat"
 
+# -------------------------------------------------
+def get_best(filename):
+    data = np.fromfile(filename, dtype=np.complex64)
+    mean_data = np.mean(data)
+    print(f"{mean_data.shape = }")
+    return data
+
+def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
+    for (mod_name, mod_idx) in zip(MOD_LIST, MOD_IDX):
+        filename = get_filename(prefix, [mod_name, tx_pwr, dis, samp_rate, inter])
+        full_filename = f"{args.s}{filename}"
+        best_data = get_best(full_filename)
+        break
+    pass
+
+# -------------------------------------------------
 def main():
     prefix = args.s.split('/')[1]
 
     combinations = itertools.product(MOD_LIST, TX_PWR, DIS, SAMP_RATE, INTER)
+
+    check_succ = True
+
     for comb in combinations:
         filename = get_filename(prefix, list(comb))
         full_filename = f"{args.s}{filename}"
-        if os.path.exists(full_filename):
-            print(f"{full_filename} Success!")
-        else:
+        if not os.path.exists(full_filename):
             print(f"{full_filename} Failed!")
-    pass
+            check_succ = False
+
+    if not check_succ:
+        exit()
+
+    for inter in INTER:
+        for dis in DIS:
+            for samp_rate in DAMPE_RATE:
+                for tx_pwr in TX_PWR:
+                    packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter)
+                    exit()
+
 
 if __name__ == '__main__':
     main()
