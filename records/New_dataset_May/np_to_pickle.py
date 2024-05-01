@@ -74,11 +74,13 @@ def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
         else:
             X = np.concatenate((X, _X))
             Y = np.concatenate((Y, _Y))
-        break
+
     dataset_dict = {
         "X": X,
         "Y": Y
     }
+    print(f"Total data size: {dataset_dict['X'].shape}")
+    print(f"Total label size: {dataset_dict['Y'].shape}")
     pickle_name = get_pickle_filename(prefix, tx_pwr, dis, samp_rate, inter)
     full_pickle_name = f"{args.s}{pickle_name}"
     print(f"Save to pickle file: {full_pickle_name}")
