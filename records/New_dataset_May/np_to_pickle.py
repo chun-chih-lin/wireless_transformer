@@ -2,7 +2,7 @@ import numpy as np
 import sys, os
 import itertools
 import _pickle as pickle
-import zgip
+import gzip
 import argparse
 
 parser = argparse.ArgumentParser(description='save torch experience file to npy.')
