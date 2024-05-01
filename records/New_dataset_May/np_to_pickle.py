@@ -43,7 +43,16 @@ def get_best(filename):
     print(f"{data.shape = }")
     mean_data = np.mean(data, axis=1)
     print(f"{mean_data.shape = }")
-    return data
+    
+    if mean_data.shape[0] == PKT_NUM:
+        return data
+
+    idx_list = [x for x in range(mean_data.shape[0])]
+
+    z = [x for _, x in sorted(zip(mean_data, idx_list))]
+    z = [0:PKT_NUM]
+    print(z)
+
 
 def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
     for (mod_name, mod_idx) in zip(MOD_LIST, MOD_IDX):
