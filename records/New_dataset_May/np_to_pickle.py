@@ -34,7 +34,7 @@ def get_filename(prefix, comb):
 # -------------------------------------------------
 def get_best(filename):
     data = np.fromfile(open(filename), dtype=np.complex64)
-    print(f"{mean_data.shape = }")
+    print(f"{data.shape = }")
     mean_data = np.mean(data)
     print(f"{mean_data.shape = }")
     return data
