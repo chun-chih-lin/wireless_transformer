@@ -12,6 +12,7 @@ args = parser.parse_args()
 
 
 def main():
+    print("Main")
     pass
 
 if __name__ == '__main__':
