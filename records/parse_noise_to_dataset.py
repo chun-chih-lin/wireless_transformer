@@ -17,6 +17,9 @@ CF = 2360
 PKT_SIZE = 128
 PKT_NUM = 20_000
 
+SAVE_TP = [x for x in range(-10, 10, 5)]
+print(f"{SAVE_TP = }")
+
 def get_filename(prefix, comb):
     return f"Non_process_{prefix}_RAND_TP{TP}_D{comb[0]}_SR{comb[1]}_CF{CF}_I{comb[2]}.dat"
 
