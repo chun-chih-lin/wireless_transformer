@@ -85,8 +85,11 @@ def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
     full_pickle_name = f"{args.s}{pickle_name}"
     print(f"Will be Saved to pickle file: {full_pickle_name}")
 
-    input_cmd = input("Is everything looking right and confirm save to file? [y/N]")
-    if input_cmd.upper() == "Y":
+    input_cmd = False
+    if not args.y:
+        input_cmd = input("Is everything looking right and confirm save to file? [y/N]")
+
+    if input_cmd.upper() == "Y" or args.y:
         print("Saving...")
         with open(full_pickle_name, 'wb') as f:
             pickle.dump(dataset_dict, f)
