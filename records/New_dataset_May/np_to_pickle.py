@@ -50,7 +50,7 @@ def get_best(filename):
     idx_list = [x for x in range(mean_data.shape[0])]
 
     z = [x for _, x in sorted(zip(mean_data, idx_list))]
-    z = [0:PKT_NUM]
+    z = z[0:PKT_NUM]
     print(z)
 
 
