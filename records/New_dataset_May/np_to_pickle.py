@@ -22,6 +22,9 @@ SAMP_RATE = [5, 20]
 CF = 2360
 INTER = [0, 1]
 
+PKT_SIZE = 128
+PKT_NUM = 20_000
+
 # -------------------------------------------------
 def get_filename(prefix, comb):
     mod_name = comb[0]
@@ -35,6 +38,8 @@ def get_filename(prefix, comb):
 def get_best(filename):
     data = np.fromfile(open(filename), dtype=np.complex64)
     print(f"{data.shape = }")
+    n_pkt = int(data.shape[0]/PKT_SIZE)
+    data = data.reshape((n_pkt, PKT_SIZE))
     mean_data = np.mean(data)
     print(f"{mean_data.shape = }")
     return data
