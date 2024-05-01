@@ -64,11 +64,11 @@ class Record_Signal(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.tx_power = tx_power = "-10"
-        self.save_prefix = save_prefix = "Dataset_EIB_room328_to_Hallway"
+        self.save_prefix = save_prefix = "Dataset_EIB_3F_Hallway_0430"
         self.save_mod = save_mod = "RAND"
         self.samp_rate = samp_rate = 5e6
-        self.interference = interference = 1
-        self.distance = distance = 5
+        self.interference = interference = 0
+        self.distance = distance = 15
         self.carrier_freq = carrier_freq = 2360e6
         self.save_folder = save_folder = "/home/chunchi/Desktop/wireless_transformer/records/"
         self.save_filename = save_filename = "Non_process_" + save_prefix + "_" +  save_mod + "_TP" + tx_power + "_D" + str(distance) + "_SR" + str(int(samp_rate/1e6)) + "_CF" + str(int(carrier_freq/1e6)) + "_I" + str(interference) + ".dat"
@@ -150,7 +150,7 @@ class Record_Signal(gr.top_block, Qt.QWidget):
 
         self._qtgui_time_sink_x_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_time_sink_x_0_win)
-        self._interference_range = qtgui.Range(0, 1, 1, 1, 200)
+        self._interference_range = qtgui.Range(0, 1, 1, 0, 200)
         self._interference_win = qtgui.RangeWidget(self._interference_range, self.set_interference, "Interference", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._interference_win, 2, 3, 1, 1)
         for r in range(2, 3):
@@ -160,7 +160,7 @@ class Record_Signal(gr.top_block, Qt.QWidget):
         self._gain_range = qtgui.Range(0, 1.0, 0.01, .65, 200)
         self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._gain_win)
-        self._distance_range = qtgui.Range(5, 15, 5, 5, 200)
+        self._distance_range = qtgui.Range(5, 15, 5, 15, 200)
         self._distance_win = qtgui.RangeWidget(self._distance_range, self.set_distance, "Distance", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._distance_win, 1, 0, 1, 3)
         for r in range(1, 2):
