@@ -105,12 +105,19 @@ def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
 
 def pack_to_tar_gz(prefix, full_list_of_file):
     tar_filename = f"{prefix}.tar"
-    tar_cmd = f"tar -cvf {args.s}{tar_filename}"
+    full_tar_filename = {args.s}{tar_filename}
+    tar_cmd = f"tar -cvf {full_tar_filename}"
     
     full_list = " ".join(full_list_of_file)
 
     cmd = f"{tar_cmd} {full_list}"
     print(f"{cmd = }")
+    # Pack into a tar file
+    os.system(cmd)
+    
+    # compress to a gzip file
+    gz_cmd = f"gzip {full_tar_filename}"
+    os.system(gz_cmd)
     pass
 
 # -------------------------------------------------
