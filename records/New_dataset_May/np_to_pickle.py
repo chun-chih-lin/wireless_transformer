@@ -56,7 +56,7 @@ def get_best(filename):
 def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
     pickle_name = get_pickle_filename(prefix, tx_pwr, dis, samp_rate, inter)
     full_pickle_name = f"{args.s}{pickle_name}"
-    if os.path.exist(full_pickle_name):
+    if os.path.exists(full_pickle_name):
         print(f"{full_pickle_name} already exits. Abort.")
         return full_pickle_name
 
