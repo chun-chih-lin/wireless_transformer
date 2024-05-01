@@ -10,6 +10,9 @@ parser.add_argument('-s', help='source torch experience file directory.', requir
 parser.add_argument('-y', help='Yes to all', default=False, action='store_true')
 args = parser.parse_args()
 
+if os.system('clear') != 0:
+    os.system('cls')
+
 MOD_LIST = ["WIFI-BPSK", "WIFI-QPSK", "WIFI-16QAM", "WIFI-64QAM", "ZIGBEE-OQPSK", "BT-GFSK-LE1M", "BT-GFSK-LE2M", "BT-GFSK-S2Coding", "BT-GFSK-S2Coding", "RAND"]
 MOD_IDX = [x for x in range(len(MOD_LIST))]
 
@@ -30,7 +33,8 @@ def get_filename(prefix, comb):
 
 # -------------------------------------------------
 def get_best(filename):
-    data = np.fromfile(filename, dtype=np.complex64)
+    data = np.fromfile(open(filename), dtype=np.complex64)
+    print(f"{mean_data.shape = }")
     mean_data = np.mean(data)
     print(f"{mean_data.shape = }")
     return data

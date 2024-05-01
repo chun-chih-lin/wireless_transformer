@@ -42,7 +42,7 @@ def get_noise_files_from_source():
         if os.path.exists(full_filename):
             print("Success")
             
-            data = np.fromfile(full_filename, dtype=np.complex64)
+            data = np.fromfile(open(full_filename), dtype=np.complex64)
 
             if data.shape[0] < PKT_NUM*PKT_SIZE:
                 data = np.concatenate((data, data))
