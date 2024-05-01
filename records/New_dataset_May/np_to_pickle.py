@@ -33,7 +33,7 @@ def main():
 
     combinations = itertools.product(MOD_LIST, TX_PWR, DIS, SAMP_RATE, INTER)
     for comb in combinations:
-        filename = get_filename(list(comb))
+        filename = get_filename(prefix, list(comb))
         full_filename = f"{args.s}{filename}"
         if os.path.exists(full_filename):
             print(f"{full_filename} Success!")
