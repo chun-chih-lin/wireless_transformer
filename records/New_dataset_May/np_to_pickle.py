@@ -103,8 +103,8 @@ def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
         print("Abort.")
     return full_pickle_name
 
-def pack_to_tar_gz(prefix, full_list_of_file):
-    tar_filename = f"{prefix}.tar"
+def pack_to_tar_gz(prefix, full_list_of_file, inter):
+    tar_filename = f"{prefix}_I{inter}.tar"
     full_tar_filename = f"{args.s}{tar_filename}"
     tar_cmd = f"tar -cvf {full_tar_filename}"
     
@@ -113,11 +113,11 @@ def pack_to_tar_gz(prefix, full_list_of_file):
     cmd = f"{tar_cmd} {full_list}"
     print(f"{cmd = }")
     # Pack into a tar file
-    os.system(cmd)
+    # os.system(cmd)
     
     # compress to a gzip file
     gz_cmd = f"gzip {full_tar_filename}"
-    os.system(gz_cmd)
+    # os.system(gz_cmd)
     pass
 
 # -------------------------------------------------
@@ -138,15 +138,15 @@ def main():
     if not check_succ:
         exit()
 
-    ttl_full_pickle_name = []
     for inter in INTER:
+        ttl_full_pickle_name = []
         for dis in DIS:
             for samp_rate in SAMP_RATE:
                 for tx_pwr in TX_PWR:
                     print('\n------------------------------')
                     full_pickle_name = packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter)
                     ttl_full_pickle_name.append(full_pickle_name)
-    pack_to_tar_gz(prefix, ttl_full_pickle_name)
+        pack_to_tar_gz(prefix, ttl_full_pickle_name, inter)
 
 
 if __name__ == '__main__':
