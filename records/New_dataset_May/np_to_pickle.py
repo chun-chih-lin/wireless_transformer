@@ -34,15 +34,15 @@ def get_filename(prefix, comb):
     inter = comb[4]
     return f"{prefix}_{mod_name}_TP{tx_pwr}_D{dis}_SR{samp_rate}_CF{CF}_I{inter}.dat"
 
+def get_pickle_filename(prefix, tx_pwr, dis, samp_rate, inter):
+    return f"{prefix}_TP{tx_pwr}_D{dis}_SR{samp_rate}_CF{CF}_I{inter}.pkl"
+
 # -------------------------------------------------
 def get_best(filename):
     data = np.fromfile(open(filename), dtype=np.complex64)
-    print(f"{data.shape = }")
     n_pkt = int(data.shape[0]/PKT_SIZE)
     data = data.reshape((n_pkt, PKT_SIZE))
-    print(f"{data.shape = }")
     mean_data = np.mean(data, axis=1)
-    print(f"{mean_data.shape = }")
     
     if mean_data.shape[0] == PKT_NUM:
         return data
@@ -51,17 +51,36 @@ def get_best(filename):
 
     best_idx = [x for _, x in sorted(zip(mean_data, idx_list))]
     best_idx = best_idx[0:PKT_NUM]
-    print(best_idx)
-    print(data[best_idx, :].shape)
-    return 
-
+    return data[best_idx, :]
 
 def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
+    X, Y = None, None
     for (mod_name, mod_idx) in zip(MOD_LIST, MOD_IDX):
         filename = get_filename(prefix, [mod_name, tx_pwr, dis, samp_rate, inter])
         full_filename = f"{args.s}{filename}"
-        best_data = get_best(full_filename)
+        _X_c = get_best(full_filename)
+
+        _Y = np.array(mod_idx for x in range(_X_c.shape[0]))
+        _X_i = np.expand_dims(np.real(_X_c), axis=1)
+        _X_q = np.expand_dims(np.imag(_X_c), axis=1)
+        _X = np.concatenate((_X_i, _X_q), axis=1)
+
+        print(f"Save {mod_name} with label: {mod_idx}. Data size: {_X.shape}, label size: {_Y.shape}")
+
+        if X is None and Y is None:
+            X = _X
+            Y = _Y
+        else:
+            X = np.concatenate((X, _X))
+            Y = np.concatenate((Y, _Y))
         break
+    dataset_dict = {
+        "X": X,
+        "Y": Y
+    }
+    pickle_name = get_pickle_filename(prefix, tx_pwr, dis, samp_rate, inter)
+    full_pickle_name = f"{args.s}{pickle_name}"
+    print(f"Save to pickle file: {full_pickle_name}")
     pass
 
 # -------------------------------------------------
