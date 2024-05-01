@@ -61,7 +61,7 @@ def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
         _X_c = get_best(full_filename)
         print(f"{_X_c.shape = }")
 
-        _Y = np.array(mod_idx for x in range(_X_c.shape[0]))
+        _Y = np.array([mod_idx for x in range(_X_c.shape[0])])
         _X_i = np.expand_dims(np.real(_X_c), axis=1)
         _X_q = np.expand_dims(np.imag(_X_c), axis=1)
         _X = np.concatenate((_X_i, _X_q), axis=1)
