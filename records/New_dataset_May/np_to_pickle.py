@@ -1,3 +1,9 @@
+"""
+cd ./New_dataset_May
+python np_to_pickle.py -s ./Dataset_EIB_Outdoor/ -y
+"""
+
+
 import numpy as np
 import sys, os
 import itertools
@@ -87,9 +93,7 @@ def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
     }
     print(f"Total data size: {dataset_dict['X'].shape}")
     print(f"Total label size: {dataset_dict['Y'].shape}")
-    
     print(f"Will be Saved to pickle file: {full_pickle_name}")
-
     input_cmd = "N"
     if not args.y:
         input_cmd = input("Is everything looking right and confirm save to file? [y/N]")
@@ -106,6 +110,9 @@ def packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter):
 def pack_to_tar_bz2(prefix, full_list_of_file, samp_rate, inter):
     tar_filename = f"{prefix}_SR{samp_rate}_I{inter}.tar"
     full_tar_filename = f"{args.s}{tar_filename}"
+    if os.path.exists(full_tar_filename):
+        print(f"{full_tar_filename} is already exists. Abort.")
+        return
     tar_cmd = f"tar -cvf {full_tar_filename}"
     
     full_list = " ".join(full_list_of_file)
@@ -150,7 +157,6 @@ def main():
                     full_pickle_name = packet_to_pickle(prefix, tx_pwr, dis, samp_rate, inter)
                     ttl_full_pickle_name.append(full_pickle_name)
             pack_to_tar_bz2(prefix, ttl_full_pickle_name, samp_rate, inter)
-
 
 if __name__ == '__main__':
     main()
