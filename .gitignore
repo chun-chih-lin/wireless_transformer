@@ -9,7 +9,7 @@ __pycache__/
 
 ~$*.pptx
 
-./records/Matlab/*.np
+records/Matlab/*.np
 IgnoreMAT*/
 RML2016.10a*/
 Dataset*/
