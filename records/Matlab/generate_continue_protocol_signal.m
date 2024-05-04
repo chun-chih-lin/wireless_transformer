@@ -50,7 +50,7 @@ close all
 % plot(imag(waveOQPSK))
 % xlim([0, 200])
 
-num_bpsk_data = 2;
+num_bpsk_data = 25;
 
 nonHT_BPSK_cfg = wlanNonHTConfig(...
     "ChannelBandwidth", "CBW20", ...
