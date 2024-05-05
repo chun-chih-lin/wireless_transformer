@@ -20,10 +20,10 @@ def main():
     QAM16_wave = QAM16_wave_dict["nonHT_16QAM_waveform"].astype(np.complex64)
     QAM64_wave = QAM64_wave_dict["nonHT_64QAM_waveform"].astype(np.complex64)
 
-    BPSK_wave.tofile("BPSK_data_only.np")
-    QPSK_wave.tofile("QPSK_data_only.np")
-    QAM16_wave.tofile("16QAM_data_only.np")
-    QAM64_wave.tofile("64QAM_data_only.np")
+    BPSK_wave.tofile("BPSK_data_only.dat")
+    QPSK_wave.tofile("QPSK_data_only.dat")
+    QAM16_wave.tofile("16QAM_data_only.dat")
+    QAM64_wave.tofile("64QAM_data_only.dat")
     pass
 
 if __name__ == '__main__':
