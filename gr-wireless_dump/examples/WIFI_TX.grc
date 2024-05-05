@@ -85,6 +85,18 @@ blocks:
     coordinate: [1072, 16]
     rotation: 0
     state: enabled
+- name: filename
+  id: variable
+  parameters:
+    comment: ''
+    value: '"/home/chunchi/Desktop/replayable_" + mod_name + ".dat"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1072, 476.0]
+    rotation: 0
+    state: enabled
 - name: freq
   id: variable_qtgui_chooser
   parameters:
@@ -179,7 +191,7 @@ blocks:
     start: '1'
     step: '1'
     stop: '1000'
-    value: '10'
+    value: '1'
     widget: counter_slider
   states:
     bus_sink: false
@@ -218,6 +230,36 @@ blocks:
     coordinate: [808, 16]
     rotation: 0
     state: enabled
+- name: mod_name
+  id: variable_qtgui_chooser
+  parameters:
+    comment: ''
+    gui_hint: ''
+    label: ''
+    label0: ''
+    label1: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    labels: '["BPSK", "QPSK", "16QAM", "64QAM"]'
+    num_opts: '0'
+    option0: '0'
+    option1: '1'
+    option2: '2'
+    option3: '3'
+    option4: '4'
+    options: '["BPSK", "QPSK", "16QAM", "64QAM"]'
+    orient: Qt.QHBoxLayout
+    type: string
+    value: '"BPSK"'
+    widget: radio_buttons
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [832, 396.0]
+    rotation: 0
+    state: enabled
 - name: num_message
   id: variable_qtgui_range
   parameters:
@@ -229,7 +271,7 @@ blocks:
     rangeType: int
     start: '1'
     step: '1'
-    stop: '20000'
+    stop: '50000'
     value: '10'
     widget: counter_slider
   states:
@@ -263,7 +305,7 @@ blocks:
     start: '0'
     step: '1'
     stop: '1500'
-    value: '10'
+    value: '1500'
     widget: counter_slider
   states:
     bus_sink: false
@@ -335,6 +377,24 @@ blocks:
     coordinate: [928, 16]
     rotation: 0
     state: enabled
+- name: blocks_file_sink_0
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: ''
+    file: filename
+    type: complex
+    unbuffered: 'False'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1280, 460.0]
+    rotation: 0
+    state: disabled
 - name: blocks_message_strobe_0_0
   id: blocks_message_strobe
   parameters:
@@ -867,6 +927,7 @@ connections:
 - [blocks_message_strobe_0_0, strobe, ieee802_11_mac_0, app in]
 - [blocks_multiply_const_vxx_0, '0', foo_packet_pad2_0, '0']
 - [blocks_vector_source_x_0, '0', wifi_phy_hier_0, '0']
+- [foo_packet_pad2_0, '0', blocks_file_sink_0, '0']
 - [foo_packet_pad2_0, '0', qtgui_time_sink_x_0, '0']
 - [foo_packet_pad2_0, '0', uhd_usrp_sink_0_0, '0']
 - [ieee802_11_mac_0, phy out, wifi_phy_hier_0, mac_in]
