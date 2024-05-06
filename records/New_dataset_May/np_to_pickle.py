@@ -19,7 +19,7 @@ args = parser.parse_args()
 if os.system('clear') != 0:
     os.system('cls')
 
-MOD_LIST = ["WIFI-BPSK", "WIFI-QPSK", "WIFI-16QAM", "WIFI-64QAM", "ZIGBEE-OQPSK", "BT-GFSK-LE1M", "BT-GFSK-LE2M", "BT-GFSK-S2Coding", "BT-GFSK-S2Coding", "RAND"]
+MOD_LIST = ["WIFI-BPSK", "WIFI-QPSK", "WIFI-16QAM", "WIFI-64QAM", "ZIGBEE-OQPSK", "BT-GFSK-LE1M", "BT-GFSK-LE2M", "BT-GFSK-S2Coding", "BT-GFSK-S8Coding", "RAND"]
 MOD_IDX = [x for x in range(len(MOD_LIST))]
 
 TX_PWR = [-10, -5, 0, 5]
