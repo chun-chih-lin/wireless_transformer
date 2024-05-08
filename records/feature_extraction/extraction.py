@@ -44,13 +44,12 @@ NUM_MOD_SAMPLE=20_000
 SIZE_PER_DATA=128
 
 TTL_N_MOD = 9
-YES_FOR_ALL=False
+YES_FOR_ALL=args.y
 
 MOD_NAME = ["WIFI-BPSK", "WIFI-QPSK", "WIFI-16QAM", "WIFI-64QAM", "ZIGBEE-OQPSK", "BT-GFSK-LE1M", "BT-GFSK-LE2M", "BT-GFSK-S2Coding", "Noise"]
 MOD_COLOR=['tab:blue', 'tab:brown', 'tab:cyan', 'tab:green', \
            'tab:purple', 'tab:red', 'tab:pink', 'tab:orange', 'black']
-# MOD_LINE=['', '', '', '', \
-#           '', '', '', '']
+
 LINEWIDTH=1.2
 
 RAW_FEATURE_LABEL = 0
@@ -75,6 +74,9 @@ def get_singla_data(data):
 
 # Feature Extraction
 def extract_features(data):
+
+    save_pkl_name = f"{args.source_folder}{args.pattern}/{args.filename.split('.')[0]}-Time-Freq.pkl"
+    print(f"Will save to: {save_pkl_name}")
     # Main feature extraction code
 
     if False:
