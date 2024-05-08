@@ -50,7 +50,7 @@ close all
 % plot(imag(waveOQPSK))
 % xlim([0, 200])
 
-num_bpsk_data = 50;
+num_bpsk_data = 1;
 
 nonHT_BPSK_cfg = wlanNonHTConfig(...
     "ChannelBandwidth", "CBW20", ...
@@ -151,23 +151,40 @@ size(nonHT_16QAM_waveform, 1)
 size(nonHT_64QAM_waveform, 1)
 
 
-save("BPSK_data_only.mat", 'nonHT_BPSK_waveform')
-save("QPSK_data_only.mat", 'nonHT_QPSK_waveform')
-save("16QAM_data_only.mat", 'nonHT_16QAM_waveform')
-save("64QAM_data_only.mat", 'nonHT_64QAM_waveform')
+% save("BPSK_data_only.mat", 'nonHT_BPSK_waveform')
+% save("QPSK_data_only.mat", 'nonHT_QPSK_waveform')
+% save("16QAM_data_only.mat", 'nonHT_16QAM_waveform')
+% save("64QAM_data_only.mat", 'nonHT_64QAM_waveform')
 
 
 
-% 
-% n_sym = 100;
-% s = 100*80 + 1;
-% e = s + 63;
-% 
-% BPSK_fft_ret = fftshift(fft(nonHT_BPSK_waveform(s:e)));
-% QPSK_fft_ret = fftshift(fft(nonHT_QPSK_waveform(s:e)));
-% QAM16_fft_ret = fftshift(fft(nonHT_16QAM_waveform(s:e)));
-% QAM64_fft_ret = fftshift(fft(nonHT_64QAM_waveform(s:e)));
-% 
+
+n_sym = 1;
+s = 100*80 + 1;
+e = s + 63;
+
+plt_nonHT_BPSK_waveform = nonHT_BPSK_waveform(s:e);
+plt_nonHT_QPSK_waveform = nonHT_QPSK_waveform(s:e);
+plt_nonHT_16QAM_waveform = nonHT_16QAM_waveform(s:e);
+plt_nonHT_64QAM_waveform = nonHT_64QAM_waveform(s:e);
+
+BPSK_fft_ret = fftshift(fft(plt_nonHT_BPSK_waveform));
+QPSK_fft_ret = fftshift(fft(plt_nonHT_QPSK_waveform));
+QAM16_fft_ret = fftshift(fft(plt_nonHT_16QAM_waveform));
+QAM64_fft_ret = fftshift(fft(plt_nonHT_64QAM_waveform));
+
+BPSK_pilot = [BPSK_fft_ret(12), BPSK_fft_ret(26), BPSK_fft_ret(40), BPSK_fft_ret(54)]
+QPSK_pilot = [QPSK_fft_ret(12), QPSK_fft_ret(26), QPSK_fft_ret(40), QPSK_fft_ret(54)];
+QAM16_pilot = [QAM16_fft_ret(12), QAM16_fft_ret(26), QAM16_fft_ret(40), QAM16_fft_ret(54)];
+QAM64_pilot = [QAM64_fft_ret(12), QAM64_fft_ret(26), QAM64_fft_ret(40), QAM64_fft_ret(54)];
+
+
+x = 1
+h = exp(j*pi/3)
+y = x*h
+hh = x/y
+xx = hh*y
+
 % figure()
 % subplot(2, 2, 1)
 % plot(real(BPSK_fft_ret))
