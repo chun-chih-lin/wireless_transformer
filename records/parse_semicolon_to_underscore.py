@@ -19,10 +19,12 @@ def main():
         # print(f"{full_folder_path = }")
         filenames = os.listdir(full_folder_path)
         for filename in filenames:
-            print(f"{filename = }")
+            # print(f"{filename = }")
             new_filename = filename.replace(":", "_")
-            print(f"{new_filename = }")
-            print('.'*10)
+            # print(f"{new_filename = }")
+            # print('.'*10)
+            full_filename = f"{full_folder_path}/{new_filename}"
+            print(f"{full_filename = }")
 
 
     pass
