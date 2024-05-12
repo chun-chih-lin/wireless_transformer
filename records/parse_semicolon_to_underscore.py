@@ -14,7 +14,7 @@ def main():
     folders = os.listdir(args.source_folder)
     
     for folder in folders:
-        print(f"{folders = }")
+        print(f"{folder = }")
 
     pass
 
