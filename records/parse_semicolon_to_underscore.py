@@ -23,9 +23,12 @@ def main():
             new_filename = filename.replace(":", "_")
             # print(f"{new_filename = }")
             # print('.'*10)
-            full_filename = f"{full_folder_path}/{new_filename}"
-            print(f"{full_filename = }")
-
+            old_full_filename = f"{full_folder_path}/{filename}"
+            new_full_filename = f"{full_folder_path}/{new_filename}"
+            print(f"{old_full_filename = }")
+            print(f"{new_full_filename = }")
+            # os.rename()
+            break
 
     pass
 
