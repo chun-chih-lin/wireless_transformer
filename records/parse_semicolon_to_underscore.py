@@ -28,8 +28,6 @@ def main():
             print(f"{old_full_filename = }")
             print(f"{new_full_filename = }")
             os.rename(old_full_filename, new_full_filename)
-            exit()
-
     pass
 
 
