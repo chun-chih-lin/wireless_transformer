@@ -14,8 +14,13 @@ def main():
     folders = os.listdir(args.source_folder)
     
     for folder in folders:
+        print('-'*20)
         full_folder_path = f"{args.source_folder}{folder}"
         print(f"{full_folder_path = }")
+        filenames = os.listdir(full_folder_path)
+        for filename in filenames:
+            print(f"{filenames = }")
+
 
     pass
 
