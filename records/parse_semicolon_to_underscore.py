@@ -12,7 +12,9 @@ args = parser.parse_args()
 
 def main():
     folders = os.listdir(args.source_folder)
-    print(f"{folders = }")
+    
+    for folder in folders:
+        print(f"{folders = }")
 
     pass
 
