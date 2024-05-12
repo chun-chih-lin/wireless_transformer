@@ -27,8 +27,8 @@ def main():
             new_full_filename = f"{full_folder_path}/{new_filename}"
             print(f"{old_full_filename = }")
             print(f"{new_full_filename = }")
-            # os.rename()
-            break
+            os.rename(old_full_filename, new_full_filename)
+            exit()
 
     pass
 
