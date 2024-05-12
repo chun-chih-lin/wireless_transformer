@@ -19,7 +19,7 @@ def main():
         print(f"{full_folder_path = }")
         filenames = os.listdir(full_folder_path)
         for filename in filenames:
-            print(f"{filenames = }")
+            print(f"{filename = }")
 
 
     pass
