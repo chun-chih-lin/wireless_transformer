@@ -63,6 +63,10 @@ if os.name == "nt":
 if os.system("clear") != 0:
     os.system("cls")
 
+print("="*50)
+print(f"{INSPECT = }")
+print("="*50)
+
 # =================================================
 def get_singla_data(data):
     indent = 10
@@ -79,7 +83,9 @@ def extract_features(data):
     print(f"Will save to: {save_pkl_name}")
     # Main feature extraction code
 
-    if False:
+    plt.rcParams['image.cmap'] = 'hot'
+
+    if INSPECT:
         process_ary, process_label = get_singla_data(data)
     else:
         process_ary = data['X']

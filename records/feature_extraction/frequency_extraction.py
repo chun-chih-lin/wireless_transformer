@@ -80,21 +80,25 @@ def inspect_freq(freq_ret, ret_label, ret_mod, show=False):
         label = ret_label[pkt_i]
         mod_name = ret_mod[label]
 
-        plt.figure(pkt_i)
-        fig, axs = plt.subplots(2, 1)
-        axs[0].matshow(np.abs(freq_ret[pkt_i, :, :]))
-        for indent in range(freq_ret.shape[1]):
-            axs[1].plot(np.real(freq_ret[pkt_i, indent, :]), 
-                        np.imag(freq_ret[pkt_i, indent, :]), 
-                        linestyle='None', 
-                        markersize=4, 
-                        marker='o', 
-                        markerfacecolor='none', 
-                        color=colors[indent])
-        axs[1].set_aspect('equal')
-        axs[1].set_xlim(-axis_lim, axis_lim)
-        axs[1].set_ylim(-axis_lim, axis_lim)
-        # plt.matshow(np.abs(freq_ret[pkt_i, :, :]))
-        plt.title(f"Freq: {mod_name}")
+        fig, ax = plt.subplots()
+        ax.matshow(np.abs(freq_ret[pkt_i, :, :]))
+        ax.set_axis_off()
+        plt.savefig(f"{mod_name}-freq.png",bbox_inches='tight')
+
+        # plt.figure(pkt_i)
+        # fig, axs = plt.subplots(2, 1)
+        # axs[0].matshow(np.abs(freq_ret[pkt_i, :, :]))
+        # for indent in range(freq_ret.shape[1]):
+        #     axs[1].plot(np.real(freq_ret[pkt_i, indent, :]), 
+        #                 np.imag(freq_ret[pkt_i, indent, :]), 
+        #                 linestyle='None', 
+        #                 markersize=4, 
+        #                 marker='o', 
+        #                 markerfacecolor='none', 
+        #                 color=colors[indent])
+        # axs[1].set_aspect('equal')
+        # axs[1].set_xlim(-axis_lim, axis_lim)
+        # axs[1].set_ylim(-axis_lim, axis_lim)
+        # plt.title(f"Freq: {mod_name}")
     plt.show()
     pass

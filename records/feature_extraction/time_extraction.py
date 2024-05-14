@@ -68,7 +68,11 @@ def inspect_time(time_ret, ret_label, ret_mod, show=False):
     for pkt_i in range(num_pkt):
         label = ret_label[pkt_i]
         mod_name = ret_mod[label]
+
+        fig, ax = plt.subplots()
         plt.figure(pkt_i)
-        plt.matshow(np.abs(time_ret[pkt_i, :, :]))
+        ax.matshow(np.abs(time_ret[pkt_i, :, :]))
+        # ax.set_axis_off()
+        # plt.savefig(f"{mod_name}-time.png",bbox_inches='tight')
         plt.title(f"Time: {mod_name}")
     plt.show()
