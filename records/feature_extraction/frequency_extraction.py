@@ -83,7 +83,7 @@ def inspect_freq(freq_ret, ret_label, ret_mod, show=False):
         fig, ax = plt.subplots()
         ax.matshow(np.abs(freq_ret[pkt_i, :, :]))
         ax.set_axis_off()
-        plt.savefig(f"{mod_name}-freq.png",bbox_inches='tight')
+        # plt.savefig(f"{mod_name}-freq.png",bbox_inches='tight')
 
         # plt.figure(pkt_i)
         # fig, axs = plt.subplots(2, 1)
