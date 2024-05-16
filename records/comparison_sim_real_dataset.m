@@ -15,17 +15,22 @@ global result_folder_name
 result_folder_name = "./results/";
 
 simu_mod_list = ["PAM4", "BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "CPFSK", "GFSK", "AM-SSB", "AM-DSB", "WBFM"];
-simu_mod_list = ["PAM4", "QAM64", "AM-SSB"];
+% simu_mod_list = ["AM-DSB", "AM-SSB", "WBFM", "QAM16"];
+simu_mod_list = ["WBFM"];
 simu_snr_list = (-20:2:18);
 
 real_mod_list = ["PAM4", "BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "CPFSK", "GFSK", "AM-SSB", "AM-DSB", "WBFM"];
-real_mod_list = ["PAM4", "QAM64", "AM-SSB"];
+real_mod_list = ["AM-DSB", "AM-SSB", "WBFM"];
 
-line_width = 1;
+line_width = 1.5;
+lgd_font_size = 10;
+lbl_font_size = 11;
 s_curve_position = [100, 100, 500, 150];
 r_curve_position = [100, 500, 500, 150];
 
-color_line = ["#0000FF", "#FF0000"];
+color_line = ["#0072BD", "#77AC30"];
+color_face = color_line;
+% color_line = ["#111111", "#EE0000"];
 
 save_fig = 0;
 set(0,'DefaultFigureVisible','on')
@@ -33,8 +38,8 @@ if save_fig
     set(0,'DefaultFigureVisible','off')
 end
 
-for snr = [2]
 for mod_i = 1:length(simu_mod_list)
+for snr = [4]
     mod = simu_mod_list(mod_i)
     [s_data, r_data] = get_data(mod, snr);
 
@@ -44,7 +49,7 @@ for mod_i = 1:length(simu_mod_list)
 
     %% Analysis the Low Frequency fading
     
-    color_face = ['b', 'r'];
+    
     FaceAlpha = .1;
 
     s_rand_i = randi([1, size(s_data, 1)], 1, 1);
@@ -81,6 +86,8 @@ for mod_i = 1:length(simu_mod_list)
 
     ylim_v = max([max(abs(s_r_mean), [], 'all'), max(abs(s_i_mean), [], 'all'), ...
                   max(abs(r_r_mean), [], 'all'), max(abs(r_i_mean), [], 'all')]);
+    ylim_s_v = max([max(abs(s_r_var), [], 'all'), max(abs(s_i_var), [], 'all')]);
+    ylim_r_v = max([max(abs(r_r_var), [], 'all'), max(abs(r_i_var), [], 'all')]);
     
     s_lowpass_title = strcat(s_title, ".lowpass");
     r_lowpass_title = strcat(r_title, ".lowpass");
@@ -89,71 +96,121 @@ for mod_i = 1:length(simu_mod_list)
     r_sample_title = strcat(r_title, ".sample");
 
     s_rand_i = randi([1, size(s_data, 1)], 1, 1);
-    simu_samp_fig = figure();
-    plot(real(s_sig(s_rand_i, :)), 'Color', color_line(1));
+
+    simu_samp_fig = figure('Name', s_sample_title, 'NumberTitle', 'off');
+    plot(real(s_sig(s_rand_i, :)), ...
+        'Color', color_line(1), ...
+        'LineWidth', line_width);
     hold on
-    plot(imag(s_sig(s_rand_i, :)), 'Color', color_line(2));
+    plot(imag(s_sig(s_rand_i, :)), ...
+        'Color', color_line(2), ...
+        'LineWidth', line_width);
+
     xlim([1, size(s_r_mean, 2)])
     set(gca, 'Xticklabel', []);
-    legend("I", "Q", "NumColumns", 2)
+    set(gca, 'Yticklabel', []);
+    ax = gca(simu_samp_fig);
+    ax.YAxis.FontSize = lbl_font_size;
+    % legend("I", "Q", "NumColumns", 2)
     simu_samp_fig.Position = s_curve_position;
 
     r_rand_i = randi([1, size(r_data, 1)], 1, 1);
-    real_samp_fig = figure();
-    plot(real(r_sig(r_rand_i, :)), 'Color', color_line(1));
+    real_samp_fig = figure('Name', r_sample_title, 'NumberTitle', 'off');
+    plot(real(r_sig(r_rand_i, :)), ...
+        'Color', color_line(1), ...
+        'LineWidth', line_width);
     hold on
-    plot(imag(r_sig(r_rand_i, :)), 'Color', color_line(2));
+    plot(imag(r_sig(r_rand_i, :)), ...
+        'Color', color_line(2), ...
+        'LineWidth', line_width);
+
     xlim([1, size(r_r_mean, 2)])
     set(gca, 'Xticklabel', []);
-    legend("I", "Q", "NumColumns", 2)
+    set(gca, 'Yticklabel', []);
+    ax = gca(real_samp_fig);
+    ax.YAxis.FontSize = lbl_font_size;
+    % legend("I", "Q", "NumColumns", 2)
     real_samp_fig.Position = r_curve_position;
 
-    % save_figure(simu_samp_fig, s_sample_title)
-    % save_figure(real_samp_fig, r_sample_title)
-
-    if 1
-        continue
+    
+    if save_fig
+        save_figure(simu_samp_fig, s_sample_title)
+        save_figure(real_samp_fig, r_sample_title)
     end
 
-    lowpass_simu_fig = figure();
-    p1 = plot(s_r_mean, 'Color', color_line(1));
+
+    %% Lowpass Result
+    if 0
+
+    ylim_v_max = max([max(s_r_mean, [], 'all'), max(s_i_mean, [], 'all'), ...
+                      max(r_r_mean, [], 'all'), max(r_i_mean, [], 'all')]);
+    ylim_v_min = min([min(s_r_mean, [], 'all'), min(s_i_mean, [], 'all'), ...
+                      min(r_r_mean, [], 'all'), min(r_i_mean, [], 'all')]);
+
+
+    lowpass_simu_fig = figure('Name', s_lowpass_title, 'NumberTitle', 'off');
+    p1 = plot(s_r_mean, 'Color', color_line(1), 'LineWidth', line_width);
     hold on
-    p3 = patch([1:size(s_r_mean, 2), size(s_r_mean, 2):-1:1], [s_r_mean + s_r_var, s_r_mean(end:-1:1) - s_r_var(end:-1:1)], ...
-        color_face(1), 'EdgeColor', 'none', 'FaceAlpha', FaceAlpha);
+    p3 = patch([1:size(s_r_mean, 2), size(s_r_mean, 2):-1:1], ...
+               [s_r_mean + s_r_var, s_r_mean(end:-1:1) - s_r_var(end:-1:1)], ...
+                'r', 'FaceColor', color_face(1), ...
+                'EdgeColor', 'none', 'FaceAlpha', FaceAlpha);
     hold on
-    p2 = plot(s_i_mean, 'Color', color_line(2));
+    p2 = plot(s_i_mean, 'Color', color_line(2), 'LineWidth', line_width);
     hold on
-    p4 = patch([1:size(s_r_mean, 2), size(s_r_mean, 2):-1:1], [s_i_mean + s_i_var, s_i_mean(end:-1:1) - s_i_var(end:-1:1)], ...
-        color_face(2), 'EdgeColor', 'none', 'FaceAlpha', FaceAlpha);
+    p4 = patch([1:size(s_r_mean, 2), size(s_r_mean, 2):-1:1], ...
+               [s_i_mean + s_i_var, s_i_mean(end:-1:1) - s_i_var(end:-1:1)], ...
+                'r', 'FaceColor', color_face(2), ...
+                'EdgeColor', 'none', 'FaceAlpha', FaceAlpha);
     xlim([1, size(s_r_mean, 2)])
-    ylim([-5*ylim_v, 5*ylim_v])
-    legend([p1, p2, p3, p4], {"I-Avg.", "Q-Avg.", "I-Var.", "Q-Var."}, "NumColumns", 2)
+    ylim([5*ylim_v_min, 5*ylim_v_max])
+    ax = gca(lowpass_simu_fig);
+    ax.YAxis.FontSize = lbl_font_size;
+    legend([p1, p2, p3, p4], {"I-Mean.", "Q-Mean.", "I-Var.", "Q-Var."}, ...
+        "NumColumns", 4, ...
+        'FontSize', lgd_font_size, ...
+        'Location', 'Best')
 
     % title(s_lowpass_title, Interpreter="none")
     set(gca, 'Xticklabel', []);
     lowpass_simu_fig.Position = s_curve_position;
 
 
-    lowpass_real_fig = figure();
-    p1 = plot(r_r_mean, 'Color', color_line(1));
+    lowpass_real_fig = figure('Name', r_lowpass_title, 'NumberTitle', 'off');
+    p1 = plot(r_r_mean, 'Color', color_line(1), 'LineWidth', line_width);
     hold on
-    p3 = patch([1:size(r_r_mean, 2), size(r_r_mean, 2):-1:1], [r_r_mean + r_r_var, r_r_mean(end:-1:1) - r_r_var(end:-1:1)], ...
-        color_face(1), 'EdgeColor', 'none', 'FaceAlpha', FaceAlpha);
+    p3 = patch([1:size(r_r_mean, 2), size(r_r_mean, 2):-1:1], ...
+               [r_r_mean + r_r_var, r_r_mean(end:-1:1) - r_r_var(end:-1:1)], ...
+                'r', 'FaceColor', color_face(1), ...
+                'EdgeColor', 'none', 'FaceAlpha', FaceAlpha);
     hold on
-    p2 = plot(r_i_mean, 'Color', color_line(2));
+    p2 = plot(r_i_mean, 'Color', color_line(2), 'LineWidth', line_width);
     hold on
-    p4 = patch([1:size(r_r_mean, 2), size(r_r_mean, 2):-1:1], [r_i_mean + r_i_var, r_i_mean(end:-1:1) - r_i_var(end:-1:1)], ...
-        color_face(2), 'EdgeColor', 'none', 'FaceAlpha', FaceAlpha);
+    p4 = patch([1:size(r_r_mean, 2), size(r_r_mean, 2):-1:1], ...
+               [r_i_mean + r_i_var, r_i_mean(end:-1:1) - r_i_var(end:-1:1)], ...
+                'r', 'FaceColor', color_face(2), ...
+                'EdgeColor', 'none', 'FaceAlpha', FaceAlpha);
     xlim([1, size(r_r_mean, 2)])
-    ylim([-5*ylim_v, 5*ylim_v])
-    legend([p1, p2, p3, p4], {"I-Avg.", "Q-Avg.", "I-Var.", "Q-Var."}, "NumColumns", 2)
+    ylim([5*ylim_v_min, 5*ylim_v_max])
+    ax = gca(lowpass_real_fig);
+    ax.YAxis.FontSize = lbl_font_size;
+    legend([p1, p2, p3, p4], {"I-Mean.", "Q-Mean.", "I-Var.", "Q-Var."}, ...
+        "NumColumns", 4, ...
+        'FontSize', lgd_font_size, ...
+        'Location', 'Best')
 
     % title(r_lowpass_title, Interpreter="none")
     set(gca, 'Xticklabel', []);
     lowpass_real_fig.Position = r_curve_position;
+
+
+    if save_fig
+        save_figure(lowpass_simu_fig, s_lowpass_title)
+        save_figure(lowpass_real_fig, r_lowpass_title)
+    end
+    end
     
-    % save_figure(lowpass_simu_fig, s_lowpass_title)
-    % save_figure(lowpass_real_fig, r_lowpass_title)
+    
 
     %% Plot Together
     % t_fig = figure();
@@ -194,7 +251,7 @@ for mod_i = 1:length(simu_mod_list)
     end
 
     %% Plot Separated
-    s_fig = figure();
+    s_fig = figure('Name', s_title, 'NumberTitle', 'off');
     for i = 1:2
         plot(squeeze(s_data(1, i, :)), ...
             'LineWidth', line_width, ...
@@ -202,12 +259,14 @@ for mod_i = 1:length(simu_mod_list)
         hold on
     end
     xlim([1 size(s_data, 3)])
-    ylim([-0.02, 0.02])
+    ylim([-1, 1])
     s_fig.Position = s_curve_position;
-    set(gca, 'Xticklabel', [], 'YTickLabel', []);
-    title(s_title, Interpreter="none")
+    set(gca, 'Xticklabel', []);
+    ax = gca(s_fig);
+    ax.YAxis.FontSize = lbl_font_size;
+    % title(s_title, Interpreter="none")
 
-    r_fig = figure();
+    r_fig = figure('Name', r_title, 'NumberTitle', 'off');
     for i = 1:2
         plot(squeeze(r_data(1, i, :)), ...
             'LineWidth', line_width, ...
@@ -217,8 +276,10 @@ for mod_i = 1:length(simu_mod_list)
     xlim([1 size(r_data, 3)])
     ylim([-1, 1])
     r_fig.Position = r_curve_position;
-    set(gca, 'Xticklabel', [], 'YTickLabel', []);
-    title(r_title, Interpreter="none")
+    set(gca, 'Xticklabel', []);
+    ax = gca(r_fig);
+    ax.YAxis.FontSize = lbl_font_size;
+    % title(r_title, Interpreter="none")
     
     if save_fig
         save_figure(s_fig, s_title)
