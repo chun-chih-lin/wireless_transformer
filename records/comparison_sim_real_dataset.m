@@ -16,7 +16,7 @@ result_folder_name = "./results/";
 
 simu_mod_list = ["PAM4", "BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "CPFSK", "GFSK", "AM-SSB", "AM-DSB", "WBFM"];
 % simu_mod_list = ["AM-DSB", "AM-SSB", "WBFM", "QAM16"];
-simu_mod_list = ["WBFM"];
+simu_mod_list = ["WBFM", "AM-DSB", "QAM16"];
 simu_snr_list = (-20:2:18);
 
 real_mod_list = ["PAM4", "BPSK", "QPSK", "8PSK", "QAM16", "QAM64", "CPFSK", "GFSK", "AM-SSB", "AM-DSB", "WBFM"];
@@ -25,21 +25,21 @@ real_mod_list = ["AM-DSB", "AM-SSB", "WBFM"];
 line_width = 1.5;
 lgd_font_size = 10;
 lbl_font_size = 11;
-s_curve_position = [100, 100, 500, 150];
-r_curve_position = [100, 500, 500, 150];
+s_curve_position = [100, 100, 700, 110];
+r_curve_position = [100, 500, 700, 110];
 
 color_line = ["#0072BD", "#77AC30"];
 color_face = color_line;
 % color_line = ["#111111", "#EE0000"];
 
-save_fig = 0;
+save_fig = 1;
 set(0,'DefaultFigureVisible','on')
 if save_fig
     set(0,'DefaultFigureVisible','off')
 end
 
 for mod_i = 1:length(simu_mod_list)
-for snr = [4]
+for snr = [0]
     mod = simu_mod_list(mod_i)
     [s_data, r_data] = get_data(mod, snr);
 
@@ -48,12 +48,7 @@ for snr = [4]
 
 
     %% Analysis the Low Frequency fading
-    
-    
     FaceAlpha = .1;
-
-    s_rand_i = randi([1, size(s_data, 1)], 1, 1);
-    r_rand_i = randi([1, size(r_data, 1)], 1, 1);
 
     s_lp_matrix = zeros(size(s_data, 1), size(s_data, 3));
     r_lp_matrix = zeros(size(r_data, 1), size(r_data, 3));
@@ -95,6 +90,9 @@ for snr = [4]
     s_sample_title = strcat(s_title, ".sample");
     r_sample_title = strcat(r_title, ".sample");
 
+    % s_sample_title = strcat(s_title, ".sample.noAxis");
+    % r_sample_title = strcat(r_title, ".sample.noAxis");
+
     s_rand_i = randi([1, size(s_data, 1)], 1, 1);
 
     simu_samp_fig = figure('Name', s_sample_title, 'NumberTitle', 'off');
@@ -107,10 +105,11 @@ for snr = [4]
         'LineWidth', line_width);
 
     xlim([1, size(s_r_mean, 2)])
-    set(gca, 'Xticklabel', []);
-    set(gca, 'Yticklabel', []);
+    set(gca, 'Xticklabel', [], 'Yticklabel', []);
     ax = gca(simu_samp_fig);
     ax.YAxis.FontSize = lbl_font_size;
+    % set(get(ax, "XAxis"), 'Visible', 'off')
+    % set(get(ax, "YAxis"), 'Visible', 'off')
     % legend("I", "Q", "NumColumns", 2)
     simu_samp_fig.Position = s_curve_position;
 
@@ -125,14 +124,14 @@ for snr = [4]
         'LineWidth', line_width);
 
     xlim([1, size(r_r_mean, 2)])
-    set(gca, 'Xticklabel', []);
-    set(gca, 'Yticklabel', []);
+    set(gca, 'Xticklabel', [], 'Yticklabel', []);
     ax = gca(real_samp_fig);
     ax.YAxis.FontSize = lbl_font_size;
+    % set(get(ax, "XAxis"), 'Visible', 'off')
+    % set(get(ax, "YAxis"), 'Visible', 'off')
     % legend("I", "Q", "NumColumns", 2)
     real_samp_fig.Position = r_curve_position;
 
-    
     if save_fig
         save_figure(simu_samp_fig, s_sample_title)
         save_figure(real_samp_fig, r_sample_title)
