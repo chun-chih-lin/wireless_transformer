@@ -11,14 +11,14 @@ set(0,'DefaultFigureVisible','on')
 ttl_waveform = get_all_signals();
 ttl_waveform_name = fieldnames(ttl_waveform);
 
-fig = figure();
-plot(ttl_waveform.am_d)
-hold on
-plot(ttl_waveform.am_l)
-hold on
+% fig = figure();
+% plot(ttl_waveform.am_d)
+% hold on
+% plot(ttl_waveform.am_l)
+% hold on
 
 
-if 1
+if 0
     return
 end
 
@@ -117,7 +117,7 @@ for n_mod = 1:numel(ttl_waveform_name)
         title("Constellation")
 
         
-        break
+        % break
     end
 
     sgtitle(mod_name, Interpreter="none")
@@ -126,7 +126,7 @@ for n_mod = 1:numel(ttl_waveform_name)
     save_filename = strcat("DFT_", mod_name, "_Shifted_", num2str(step), '.png');
     % saveas(fig, strcat('./results/DFT/', save_filename))
 
-    % break
+    break
 end
 
 
