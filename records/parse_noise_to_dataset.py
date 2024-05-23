@@ -28,7 +28,9 @@ def get_save_filename(prefix, tp, comb):
 
 def get_noise_files_from_source():
 
+    print(f"{args.s = }")
     prefix = args.s.split("/")[1]
+    # prefix = args.s.split("\\")[2]
     print(f"{prefix = }")
 
     combinations = itertools.product(DIS, SR, INTER)
