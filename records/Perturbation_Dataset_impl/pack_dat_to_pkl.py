@@ -10,15 +10,15 @@ if os.system("clear") != 0:
     os.system("cls")
 
 
-BPSK_FILENAME="ch_Wi-Fi_BPSK.dat"
-QPSK_FILENAME="ch_Wi-Fi_QPSK.dat"
-QAM16_FILENAME="ch_Wi-Fi_16QAM.dat"
-QAM64_FILENAME="ch_Wi-Fi_64QAM.dat"
+# BPSK_FILENAME="ch_Wi-Fi_BPSK.dat"
+# QPSK_FILENAME="ch_Wi-Fi_QPSK.dat"
+# QAM16_FILENAME="ch_Wi-Fi_16QAM.dat"
+# QAM64_FILENAME="ch_Wi-Fi_64QAM.dat"
 
-# BPSK_FILENAME="ori_Wi-Fi_BPSK.dat"
-# QPSK_FILENAME="ori_Wi-Fi_QPSK.dat"
-# QAM16_FILENAME="ori_Wi-Fi_16QAM.dat"
-# QAM64_FILENAME="ori_Wi-Fi_64QAM.dat"
+BPSK_FILENAME="ori_Wi-Fi_BPSK.dat"
+QPSK_FILENAME="ori_Wi-Fi_QPSK.dat"
+QAM16_FILENAME="ori_Wi-Fi_16QAM.dat"
+QAM64_FILENAME="ori_Wi-Fi_64QAM.dat"
 
 FILENAMES=[BPSK_FILENAME, QPSK_FILENAME, QAM16_FILENAME, QAM64_FILENAME]
 MOD_LIST=[2, 4, 16, 64]
