@@ -26,8 +26,15 @@ ORI_DATA_FILENAME="modulation_4_ori.pkl"
 CLEAN_DATA_FILENAME="modulation_4_wo_perturbation.pkl"
 CLEAN_01_DATA_FILENAME="modulation_4_wo_perturbation_n01.pkl"
 CLEAN_02_DATA_FILENAME="modulation_4_wo_perturbation_n02.pkl"
-PERT_DATA_FILENAME="modulation_4_w_perturbation.npy"
-PERT_DATA_INDEX="modulation_4_w_perturbation_index.npy"
+
+# PERT_DATA_FILENAME="modulation_4_w_perturbation.npy"
+# PERT_DATA_INDEX="modulation_4_w_perturbation_index.npy"
+
+# PERT_DATA_FILENAME="modulation_4_w_perturbation_0.1.npy"
+# PERT_DATA_INDEX="modulation_4_w_perturbation_0.1_index.npy"
+
+PERT_DATA_FILENAME="modulation_4_w_perturbation_0.5.npy"
+PERT_DATA_INDEX="modulation_4_w_perturbation_0.5_index.npy"
 
 CH_FILENAMES=[CH_BPSK_FILENAME, CH_QPSK_FILENAME, CH_QAM16_FILENAME, CH_QAM64_FILENAME]
 ORI_FILENAMES=[ORI_BPSK_FILENAME, ORI_QPSK_FILENAME, ORI_QAM16_FILENAME, ORI_QAM64_FILENAME]
@@ -42,7 +49,7 @@ def get_index():
 
 def get_clean_data():
     index = get_index()
-    with open(CLEAN_02_DATA_FILENAME, 'rb') as f:
+    with open(CLEAN_DATA_FILENAME, 'rb') as f:
         data = pickle.load(f, encoding='latin1')
     return data['X'][index, :, :], data['Y'][index]
 

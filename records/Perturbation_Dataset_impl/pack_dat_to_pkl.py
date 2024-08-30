@@ -48,7 +48,7 @@ SAMPLE_PKT=3921
 SYMBOL_LEN=80
 SYMBOL_CP=16
 
-NOISE_AMP=0.2
+NOISE_AMP=0.05
 
 REMOVE_CP_IDX = [i for i in range(SYMBOL_CP, SYMBOL_LEN)] + [i for i in range(SYMBOL_CP+SYMBOL_LEN, 2*SYMBOL_LEN)]
 # ---------------------------------------------------------------------
@@ -133,49 +133,49 @@ def main():
 
     plot_flag = True
 
-    # for filename, mod, mod_i in zip(ORI_FILENAMES, MOD_LIST, LABEL_LIST):
-    #     data = load_dat(filename)
+    if not os.path.exists(ORI_FILENAME):
+        for filename, mod, mod_i in zip(ORI_FILENAMES, MOD_LIST, LABEL_LIST):
+            data = load_dat(filename)
 
-    #     # if plot_flag:
-    #     #     print(data.shape)
-    #     #     symbol = data[320:320+80]
-    #     #     print(symbol.shape)
-    #     #     ori_symbol = symbol[SYMBOL_CP:]
-    #     #     fft_symbol = np.fft.fftshift(np.fft.fft(ori_symbol))
-    #     #     plt.plot(fft_symbol.real, fft_symbol.imag, 'o')
-    #     #     plt.show()
-    #     #     exit()
+            # if plot_flag:
+            #     print(data.shape)
+            #     symbol = data[320:320+80]
+            #     print(symbol.shape)
+            #     ori_symbol = symbol[SYMBOL_CP:]
+            #     fft_symbol = np.fft.fftshift(np.fft.fft(ori_symbol))
+            #     plt.plot(fft_symbol.real, fft_symbol.imag, 'o')
+            #     plt.show()
+            #     exit()
 
-    #     plot_flag = False
+            plot_flag = False
 
-    #     _X_c = remove_headers(data)
-    #     print(_X_c.shape, np.max(np.abs(_X_c)))
+            _X_c = remove_headers(data)
+            print(_X_c.shape, np.max(np.abs(_X_c)))
 
-    #     _Y = np.array([mod_i for x in range(_X_c.shape[0])])
+            _Y = np.array([mod_i for x in range(_X_c.shape[0])])
 
-    #     _X_i = np.expand_dims(np.real(_X_c), axis=1)
-    #     _X_q = np.expand_dims(np.imag(_X_c), axis=1)
+            _X_i = np.expand_dims(np.real(_X_c), axis=1)
+            _X_q = np.expand_dims(np.imag(_X_c), axis=1)
 
-    #     _X = np.concatenate((_X_i, _X_q), axis=1)
+            _X = np.concatenate((_X_i, _X_q), axis=1)
 
-    #     if X is None and Y is None:
-    #         X = _X
-    #         Y = _Y
-    #     else:
-    #         X = np.concatenate((X, _X))
-    #         Y = np.concatenate((Y, _Y))
+            if X is None and Y is None:
+                X = _X
+                Y = _Y
+            else:
+                X = np.concatenate((X, _X))
+                Y = np.concatenate((Y, _Y))
 
-    # dataset_dict = {
-    #     'X': X,
-    #     'Y': Y
-    # }
-    # print(dataset_dict['X'].shape)
-    # print(dataset_dict['Y'].shape)
+        dataset_dict = {
+            'X': X,
+            'Y': Y
+        }
+        print(dataset_dict['X'].shape)
+        print(dataset_dict['Y'].shape)
 
-    # with open(ORI_FILENAME, 'wb') as f:
-    #     pickle.dump(dataset_dict, f)
+        with open(ORI_FILENAME, 'wb') as f:
+            pickle.dump(dataset_dict, f)
     
-
     # =================================================================
     X, Y = None, None
     plot_flag = True
@@ -223,7 +223,7 @@ def main():
     print(dataset_dict['X'].shape)
     print(dataset_dict['Y'].shape)
 
-    with open(CH_FILENAME_02, 'wb') as f:
+    with open(CH_FILENAME, 'wb') as f:
         pickle.dump(dataset_dict, f)
     pass
 
