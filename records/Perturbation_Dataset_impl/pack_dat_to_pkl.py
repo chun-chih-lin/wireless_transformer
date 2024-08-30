@@ -3,6 +3,8 @@ import _pickle as pickle
 import sys, os
 import argparse
 
+import matplotlib.pyplot as plt
+
 from mapper import mapper
 from matplotlib import pyplot as plt
 
@@ -114,12 +116,26 @@ def save_to_pickle(dat_file):
 
 # ---------------------------------------------------------------------
 def main():
-
     X, Y = None, None
     len_per_sample = 128
 
+    plot_flag = True
+
     for filename, mod, mod_i in zip(FILENAMES, MOD_LIST, LABEL_LIST):
         data = load_dat(filename)
+
+        if plot_flag:
+            print(data.shape)
+            symbol = data[320:320+80]
+            print(symbol.shape)
+            ori_symbol = symbol[SYMBOL_CP:]
+            fft_symbol = np.fft.fftshift(np.fft.fft(ori_symbol))
+            plt.plot(fft_symbol.real, fft_symbol.imag, 'o')
+            plt.show()
+            exit()
+
+        plot_flag = False
+
         _X_c = remove_headers(data)
         print(_X_c.shape)
 
@@ -144,11 +160,12 @@ def main():
     print(dataset_dict['X'].shape)
     print(dataset_dict['Y'].shape)
 
-    save_pkl_fullname = f"modulation_4_wo_perturbation.pkl"
+    # save_pkl_fullname = f"modulation_4_wo_perturbation.pkl"
+    save_pkl_fullname = f"modulation_4_ori.pkl"
     print(f"{save_pkl_fullname = }")
 
-    with open(save_pkl_fullname, 'wb') as f:
-        pickle.dump(dataset_dict, f)
+    # with open(save_pkl_fullname, 'wb') as f:
+    #     pickle.dump(dataset_dict, f)
     pass
 
 if __name__ == '__main__':

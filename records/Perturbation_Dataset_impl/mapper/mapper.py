@@ -4,6 +4,7 @@ def get_angle(sym):
     return np.angle(sym, deg=True)
 
 def bpsk(sym):
+    print("BPSK---------------------------")
     magitude = np.max(np.abs(sym))
     sym = sym/magitude
     angle = get_angle(sym)
