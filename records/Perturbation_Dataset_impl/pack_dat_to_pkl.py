@@ -5,22 +5,35 @@ import argparse
 
 import matplotlib.pyplot as plt
 
-from mapper import mapper
+# from mapper import mapper
 from matplotlib import pyplot as plt
 
 if os.system("clear") != 0:
     os.system("cls")
 
 
-# BPSK_FILENAME="ch_Wi-Fi_BPSK.dat"
-# QPSK_FILENAME="ch_Wi-Fi_QPSK.dat"
-# QAM16_FILENAME="ch_Wi-Fi_16QAM.dat"
-# QAM64_FILENAME="ch_Wi-Fi_64QAM.dat"
+
+ORI_BPSK_FILENAME="WiFi-BPSK.dat"
+ORI_QPSK_FILENAME="WiFi-QPSK.dat"
+ORI_QAM16_FILENAME="WiFi-16QAM.dat"
+ORI_QAM64_FILENAME="WiFi-64QAM.dat"
+
+# CH_BPSK_FILENAME="ch_Wi-Fi_BPSK.dat"
+# CH_QPSK_FILENAME="ch_Wi-Fi_QPSK.dat"
+# CH_QAM16_FILENAME="ch_Wi-Fi_16QAM.dat"
+# CH_QAM64_FILENAME="ch_Wi-Fi_64QAM.dat"
 
 BPSK_FILENAME="ori_Wi-Fi_BPSK.dat"
 QPSK_FILENAME="ori_Wi-Fi_QPSK.dat"
 QAM16_FILENAME="ori_Wi-Fi_16QAM.dat"
 QAM64_FILENAME="ori_Wi-Fi_64QAM.dat"
+
+ORI_FILENAMES=[ORI_BPSK_FILENAME, ORI_QPSK_FILENAME, ORI_QAM16_FILENAME, ORI_QAM64_FILENAME]
+
+CH_FILENAME="modulation_4_wo_perturbation.pkl"
+CH_FILENAME_01="modulation_4_wo_perturbation_n01.pkl"
+CH_FILENAME_02="modulation_4_wo_perturbation_n02.pkl"
+ORI_FILENAME="modulation_4_ori.pkl"
 
 FILENAMES=[BPSK_FILENAME, QPSK_FILENAME, QAM16_FILENAME, QAM64_FILENAME]
 MOD_LIST=[2, 4, 16, 64]
@@ -28,10 +41,14 @@ LABEL_LIST=[0, 1, 2, 3]
 
 LEN_PREAMPLE=160
 LEN_TRAINING=160
+REMOVE_LAN=400
 
+TTL_SAMPLE=20_000
 SAMPLE_PKT=3921
 SYMBOL_LEN=80
 SYMBOL_CP=16
+
+NOISE_AMP=0.2
 
 REMOVE_CP_IDX = [i for i in range(SYMBOL_CP, SYMBOL_LEN)] + [i for i in range(SYMBOL_CP+SYMBOL_LEN, 2*SYMBOL_LEN)]
 # ---------------------------------------------------------------------
@@ -51,7 +68,7 @@ def remove_headers(samples):
         s_s = n_pkt*SAMPLE_PKT
         s_e = s_s + SAMPLE_PKT
         
-        pkt_sample = np.expand_dims(samples[s_s+LEN_PREAMPLE+LEN_TRAINING:s_e-1], axis=0)
+        pkt_sample = np.expand_dims(samples[s_s+REMOVE_LAN:s_e-1], axis=0)
 
         if data_field is None:
             data_field = pkt_sample
@@ -68,20 +85,10 @@ def remove_headers(samples):
     data_field = data_field.reshape(data_field.shape[0]*ttl_pkt, SYMBOL_LEN*2)
     # print(data_field.shape, data_field[0, 16:16+10])
 
-    data_field = data_field[:, REMOVE_CP_IDX]
-    # print(data_field.shape, data_field[0, :10])
+    data_field = data_field[:TTL_SAMPLE, REMOVE_CP_IDX]
 
-
-    data_field = np.concatenate((data_field, data_field[0:2, :]), axis=0)
-
-    # data_field_r = np.expand_dims(data_field.real, axis=1)
-    # data_field_i = np.expand_dims(data_field.imag, axis=1)
-
-    # data_field_2d = np.concatenate((data_field_r, data_field_i), axis=1)
-    # print(f"{data_field_2d.shape = }")
-
+    # data_field = np.concatenate((data_field, data_field[0:2, :]), axis=0)
     return data_field
-
 
 def cut_samples(samples, mod):
     data_field = samples[LEN_PREAMPLE+LEN_TRAINING:-1]
@@ -114,6 +121,11 @@ def symbol_to_bit(symbol, mod):
 def save_to_pickle(dat_file):
     pass
 
+def add_noise(data):
+    print(data.shape)
+    noise = np.random.normal(0, NOISE_AMP, size=data.shape) + 1.0j*np.random.normal(0, NOISE_AMP, size=data.shape)
+    return data + noise
+
 # ---------------------------------------------------------------------
 def main():
     X, Y = None, None
@@ -121,23 +133,74 @@ def main():
 
     plot_flag = True
 
-    for filename, mod, mod_i in zip(FILENAMES, MOD_LIST, LABEL_LIST):
+    # for filename, mod, mod_i in zip(ORI_FILENAMES, MOD_LIST, LABEL_LIST):
+    #     data = load_dat(filename)
+
+    #     # if plot_flag:
+    #     #     print(data.shape)
+    #     #     symbol = data[320:320+80]
+    #     #     print(symbol.shape)
+    #     #     ori_symbol = symbol[SYMBOL_CP:]
+    #     #     fft_symbol = np.fft.fftshift(np.fft.fft(ori_symbol))
+    #     #     plt.plot(fft_symbol.real, fft_symbol.imag, 'o')
+    #     #     plt.show()
+    #     #     exit()
+
+    #     plot_flag = False
+
+    #     _X_c = remove_headers(data)
+    #     print(_X_c.shape, np.max(np.abs(_X_c)))
+
+    #     _Y = np.array([mod_i for x in range(_X_c.shape[0])])
+
+    #     _X_i = np.expand_dims(np.real(_X_c), axis=1)
+    #     _X_q = np.expand_dims(np.imag(_X_c), axis=1)
+
+    #     _X = np.concatenate((_X_i, _X_q), axis=1)
+
+    #     if X is None and Y is None:
+    #         X = _X
+    #         Y = _Y
+    #     else:
+    #         X = np.concatenate((X, _X))
+    #         Y = np.concatenate((Y, _Y))
+
+    # dataset_dict = {
+    #     'X': X,
+    #     'Y': Y
+    # }
+    # print(dataset_dict['X'].shape)
+    # print(dataset_dict['Y'].shape)
+
+    # with open(ORI_FILENAME, 'wb') as f:
+    #     pickle.dump(dataset_dict, f)
+    
+
+    # =================================================================
+    X, Y = None, None
+    plot_flag = True
+    for filename, mod, mod_i in zip(ORI_FILENAMES, MOD_LIST, LABEL_LIST):
         data = load_dat(filename)
 
-        if plot_flag:
-            print(data.shape)
-            symbol = data[320:320+80]
-            print(symbol.shape)
-            ori_symbol = symbol[SYMBOL_CP:]
-            fft_symbol = np.fft.fftshift(np.fft.fft(ori_symbol))
-            plt.plot(fft_symbol.real, fft_symbol.imag, 'o')
-            plt.show()
-            exit()
+        _X_c_ori = remove_headers(data)
+        _X_c = add_noise(_X_c_ori)
 
-        plot_flag = False
+        # if plot_flag:
+        #     print(_X_c.shape)
+        #     symbol_ori = _X_c_ori[0, :64]
+        #     symbol = _X_c[0, :64]
+        #     print(symbol.shape)
+        #     # ori_symbol_ori = symbol_ori[SYMBOL_CP:]
+        #     fft_symbol_ori = np.fft.fftshift(np.fft.fft(symbol_ori))
 
-        _X_c = remove_headers(data)
-        print(_X_c.shape)
+        #     # ori_symbol = symbol[SYMBOL_CP:]
+        #     fft_symbol = np.fft.fftshift(np.fft.fft(symbol))
+
+        #     plt.plot(fft_symbol_ori.real, fft_symbol_ori.imag, 'rx')
+        #     plt.plot(fft_symbol.real, fft_symbol.imag, 'o')
+        #     plt.show()
+
+        print(_X_c.shape, np.max(np.abs(_X_c)))
 
         _Y = np.array([mod_i for x in range(_X_c.shape[0])])
 
@@ -160,12 +223,8 @@ def main():
     print(dataset_dict['X'].shape)
     print(dataset_dict['Y'].shape)
 
-    # save_pkl_fullname = f"modulation_4_wo_perturbation.pkl"
-    save_pkl_fullname = f"modulation_4_ori.pkl"
-    print(f"{save_pkl_fullname = }")
-
-    # with open(save_pkl_fullname, 'wb') as f:
-    #     pickle.dump(dataset_dict, f)
+    with open(CH_FILENAME_02, 'wb') as f:
+        pickle.dump(dataset_dict, f)
     pass
 
 if __name__ == '__main__':
