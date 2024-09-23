@@ -39,6 +39,13 @@ CLEAN_02_DATA_FILENAME="modulation_4_wo_perturbation_n02.pkl"
 PERT_DATA_FILENAME="modulation_4_w_perturbation_clip_0.5.npy"
 PERT_DATA_INDEX="modulation_4_w_perturbation_clip_0.5_index.npy"
 
+
+CNN_PERT_DATA_FILENAME="cnn_modulation_4_w_perturbation_clip_1.0.npy"
+CNN_PERT_DATA_INDEX="cnn_modulation_4_w_perturbation_clip_1.0_index.npy"
+
+# CNN_PERT_DATA_FILENAME="cnn_modulation_4_w_perturbation_clip_0.5.npy"
+# CNN_PERT_DATA_INDEX="cnn_modulation_4_w_perturbation_clip_0.5_index.npy"
+
 CH_FILENAMES=[CH_BPSK_FILENAME, CH_QPSK_FILENAME, CH_QAM16_FILENAME, CH_QAM64_FILENAME]
 ORI_FILENAMES=[ORI_BPSK_FILENAME, ORI_QPSK_FILENAME, ORI_QAM16_FILENAME, ORI_QAM64_FILENAME]
 MOD_LIST=[2, 4, 16, 64]
@@ -47,21 +54,21 @@ LABEL_LIST=[0, 1, 2, 3]
 OFDM_SYMBOL_LEN=64
 
 # ---------------------------------------------------------------------
-def get_index():
-    return list(np.load(PERT_DATA_INDEX))
+def get_index(indexfilename=PERT_DATA_INDEX):
+    return list(np.load(indexfilename))
 
-def get_clean_data():
+def get_clean_data(filename=CLEAN_01_DATA_FILENAME):
     index = get_index()
-    with open(CLEAN_01_DATA_FILENAME, 'rb') as f:
+    with open(filename, 'rb') as f:
         data = pickle.load(f, encoding='latin1')
     return data['X'][index, :, :], data['Y'][index]
 
-def get_pert_data():
-    return np.load(PERT_DATA_FILENAME)
+def get_pert_data(filename=PERT_DATA_FILENAME):
+    return np.load(filename)
     
-def get_ori_data():
-    index = get_index()
-    with open(ORI_DATA_FILENAME, 'rb') as f:
+def get_ori_data(filename=ORI_DATA_FILENAME, indexfilename=PERT_DATA_INDEX):
+    index = get_index(indexfilename=indexfilename)
+    with open(filename, 'rb') as f:
         data = pickle.load(f, encoding='latin1')
     return data['X'][index, :, :]
 
@@ -162,9 +169,9 @@ def calculate_ber(ori_data, clean_data, pert_data, label):
 
 # ---------------------------------------------------------------------
 def main():
-    ori_data_collection = get_ori_data()
-    pert_data_collection = get_pert_data()
-    clean_data_collection, data_label = get_clean_data()
+    ori_data_collection = get_ori_data(filename=ORI_DATA_FILENAME, indexfilename=CNN_PERT_DATA_INDEX)
+    pert_data_collection = get_pert_data(filename=CNN_PERT_DATA_FILENAME)
+    clean_data_collection, data_label = get_clean_data(filename=CLEAN_DATA_FILENAME)
 
     ttl_bit, ttl_chan_bit, ttl_pert_bit = 0, 0, 0
 
@@ -180,7 +187,7 @@ def main():
         ttl_chan_bit += num_bit_chan
         ttl_pert_bit += num_bit_pert
 
-    print(f"{ttl_chan_bit/ttl_bit}, {ttl_pert_bit/ttl_bit}")
+    print(f"BER w/o pertuebation: {(1 - ttl_chan_bit/ttl_bit)*100}%, BER w/ pertuebation: {(1 - ttl_pert_bit/ttl_bit)*100}%")
     pass
 
 # ---------------------------------------------------------------------
