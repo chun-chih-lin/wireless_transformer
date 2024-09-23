@@ -13,8 +13,6 @@ args = parser.parse_args()
 if os.system('clear') != 0:
     os.system('cls')
 
-
-
 def main():
     with open(args.s, 'rb') as f:
         data = pickle.load(f, encoding='latin1')
@@ -22,11 +20,11 @@ def main():
     print(data['X'].shape)
     print(data['Y'].shape)
 
+    labels = data['Y'].shape[0]/20_000
 
-    show_list = [x*20_000 for x in range(10)]
+    show_list = [int(x*labels) for x in range(10)]
     print(data['Y'][show_list])
     print(data['X'][show_list, :, :])
-
 
 if __name__ == "__main__":
     main()

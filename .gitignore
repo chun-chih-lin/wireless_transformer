@@ -18,6 +18,8 @@ records/Perturbation_Dataset_impl/*.dat
 records/Perturbation_Dataset_impl/*.npy
 records/Perturbation_Dataset_impl/*.pkl
 
+records/New_dataset_May/*.zip
+
 *.pkl
 
 *.tar
