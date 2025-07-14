@@ -42,16 +42,16 @@ blocks:
     min_len: '200'
     orient: QtCore.Qt.Horizontal
     rangeType: float
-    start: 2400e6
+    start: 2300e6
     step: 5e6
-    stop: 3800e6
-    value: 2500e6
+    stop: 5920e6
+    value: 2360e6
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1040, 212.0]
+    coordinate: [1040, 204.0]
     rotation: 0
     state: enabled
 - name: gain
@@ -72,9 +72,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1008, 412.0]
+    coordinate: [984, 396.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: gain_db
   id: variable_qtgui_range
   parameters:
@@ -85,15 +85,15 @@ blocks:
     orient: QtCore.Qt.Horizontal
     rangeType: int
     start: '0'
-    step: '10'
+    step: '5'
     stop: '70'
-    value: '50'
+    value: '20'
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [880, 412.0]
+    coordinate: [864, 396.0]
     rotation: 0
     state: enabled
 - name: pam4

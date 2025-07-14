@@ -70,11 +70,10 @@ class psk8_generator(gr.top_block, Qt.QWidget):
         4, 1, digital.constellation.AMPLITUDE_NORMALIZATION).base()
         self.QAM64.set_npwr(1.0)
         self.sps = sps = 8
-        self.samp_rate = samp_rate = 32000
+        self.samp_rate = samp_rate = 200000
         self.mod = mod = QAM64
-        self.gain_db = gain_db = 50
-        self.gain = gain = .5
-        self.carrier_freq = carrier_freq = 2500e6
+        self.gain_db = gain_db = 20
+        self.carrier_freq = carrier_freq = 2360e6
         self.QPSK = QPSK = digital.constellation_qpsk().base()
         self.QPSK.set_npwr(1.0)
         self.QAM16 = QAM16 = digital.constellation_16qam().base()
@@ -88,10 +87,10 @@ class psk8_generator(gr.top_block, Qt.QWidget):
         # Blocks
         ##################################################
 
-        self._gain_db_range = qtgui.Range(0, 70, 10, 50, 200)
+        self._gain_db_range = qtgui.Range(0, 70, 5, 20, 200)
         self._gain_db_win = qtgui.RangeWidget(self._gain_db_range, self.set_gain_db, "'gain_db'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._gain_db_win)
-        self._carrier_freq_range = qtgui.Range(2400e6, 3800e6, 5e6, 2500e6, 200)
+        self._carrier_freq_range = qtgui.Range(2300e6, 5920e6, 5e6, 2360e6, 200)
         self._carrier_freq_win = qtgui.RangeWidget(self._carrier_freq_range, self.set_carrier_freq, "'carrier_freq'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._carrier_freq_win)
         self.uhd_usrp_sink_0 = uhd.usrp_sink(
@@ -208,9 +207,6 @@ class psk8_generator(gr.top_block, Qt.QWidget):
             flt_size=32,
             atten=100)
         self.pfb_arb_resampler_xxx_0.declare_sample_delay(0)
-        self._gain_range = qtgui.Range(0.0, 1.0, 0.05, .5, 200)
-        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._gain_win)
         self.digital_constellation_modulator_0 = digital.generic_mod(
             constellation=mod,
             differential=True,
@@ -277,12 +273,6 @@ class psk8_generator(gr.top_block, Qt.QWidget):
     def set_gain_db(self, gain_db):
         self.gain_db = gain_db
         self.uhd_usrp_sink_0.set_gain(self.gain_db, 0)
-
-    def get_gain(self):
-        return self.gain
-
-    def set_gain(self, gain):
-        self.gain = gain
 
     def get_carrier_freq(self):
         return self.carrier_freq

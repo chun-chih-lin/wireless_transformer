@@ -54,16 +54,16 @@ blocks:
     min_len: '200'
     orient: QtCore.Qt.Horizontal
     rangeType: float
-    start: 2400e6
+    start: 2300e6
     step: 5e6
-    stop: 3800e6
-    value: 2500e6
+    stop: 5920e6
+    value: 2360e6
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [632, 652.0]
+    coordinate: [400, 316.0]
     rotation: 0
     state: enabled
 - name: gain
@@ -84,9 +84,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [768, 652.0]
+    coordinate: [1096, 372.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: gain_db
   id: variable_qtgui_range
   parameters:
@@ -97,15 +97,15 @@ blocks:
     orient: QtCore.Qt.Horizontal
     rangeType: int
     start: '0'
-    step: '10'
+    step: '5'
     stop: '70'
-    value: '50'
+    value: '20'
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [912, 652.0]
+    coordinate: [976, 372.0]
     rotation: 0
     state: enabled
 - name: input_gain
@@ -138,7 +138,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [536, 652.0]
+    coordinate: [880, 372.0]
     rotation: 0
     state: enabled
 - name: analog_sig_source_x_0_0
@@ -161,7 +161,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [872, 292.0]
+    coordinate: [864, 244.0]
     rotation: 0
     state: enabled
 - name: band_pass_filter_0_0
@@ -186,7 +186,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [896, 132.0]
+    coordinate: [888, 84.0]
     rotation: 0
     state: enabled
 - name: blocks_add_const_vxx_0_0
@@ -204,7 +204,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [608, 188.0]
+    coordinate: [600, 140.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_0_0
@@ -222,7 +222,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [264, 188.0]
+    coordinate: [256, 140.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_0_0_0
@@ -240,7 +240,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 364.0]
+    coordinate: [416, 228.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_xx_0_0_0
@@ -258,7 +258,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1088, 192.0]
+    coordinate: [1080, 144.0]
     rotation: 0
     state: enabled
 - name: blocks_wavfile_source_0
@@ -277,7 +277,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [48, 180.0]
+    coordinate: [40, 132.0]
     rotation: 0
     state: enabled
 - name: hilbert_fc_0
@@ -295,7 +295,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [744, 188.0]
+    coordinate: [736, 140.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -376,7 +376,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 348.0]
+    coordinate: [624, 212.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0
@@ -473,7 +473,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 436.0]
+    coordinate: [624, 300.0]
     rotation: 0
     state: enabled
 - name: rational_resampler_xxx_0
@@ -493,7 +493,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [424, 164.0]
+    coordinate: [416, 116.0]
     rotation: 0
     state: enabled
 - name: rational_resampler_xxx_0_0_0
@@ -513,7 +513,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [232, 340.0]
+    coordinate: [232, 204.0]
     rotation: 0
     state: enabled
 - name: uhd_usrp_sink_0
@@ -790,7 +790,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 516.0]
+    coordinate: [624, 380.0]
     rotation: 0
     state: enabled
 - name: virtual_sink_0
@@ -803,7 +803,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1224, 204.0]
+    coordinate: [1216, 156.0]
     rotation: 0
     state: enabled
 - name: virtual_source_0
@@ -816,7 +816,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [80, 364.0]
+    coordinate: [80, 228.0]
     rotation: 0
     state: enabled
 

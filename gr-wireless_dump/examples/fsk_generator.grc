@@ -42,16 +42,16 @@ blocks:
     min_len: '200'
     orient: QtCore.Qt.Horizontal
     rangeType: float
-    start: 2400e6
+    start: 2300e6
     step: 5e6
-    stop: 3800e6
-    value: 2500e6
+    stop: 5920e6
+    value: 2360e6
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [984, 300.0]
+    coordinate: [968, 220.0]
     rotation: 0
     state: enabled
 - name: gain
@@ -72,9 +72,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 500.0]
+    coordinate: [912, 404.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: gain_db
   id: variable_qtgui_range
   parameters:
@@ -85,15 +85,15 @@ blocks:
     orient: QtCore.Qt.Horizontal
     rangeType: int
     start: '0'
-    step: '10'
+    step: '5'
     stop: '70'
-    value: '50'
+    value: '20'
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [832, 500.0]
+    coordinate: [792, 404.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -105,7 +105,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [712, 508.0]
+    coordinate: [696, 436.0]
     rotation: 0
     state: enabled
 - name: sps
@@ -117,7 +117,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [592, 124.0]
+    coordinate: [576, 52.0]
     rotation: 0
     state: enabled
 - name: blocks_file_source_0
@@ -139,7 +139,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [376, 180.0]
+    coordinate: [360, 108.0]
     rotation: 0
     state: enabled
 - name: digital_gfsk_mod_0
@@ -160,7 +160,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [592, 196.0]
+    coordinate: [576, 124.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -241,7 +241,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [808, 284.0]
+    coordinate: [792, 212.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0
@@ -338,7 +338,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [808, 196.0]
+    coordinate: [792, 124.0]
     rotation: 0
     state: enabled
 - name: uhd_usrp_sink_0
@@ -615,7 +615,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [808, 364.0]
+    coordinate: [792, 292.0]
     rotation: 0
     state: enabled
 

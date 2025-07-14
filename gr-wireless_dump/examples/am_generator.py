@@ -67,9 +67,8 @@ class am_generator(gr.top_block, Qt.QWidget):
         ##################################################
         self.samp_rate = samp_rate = 200e3
         self.input_gain = input_gain = 2
-        self.gain_db = gain_db = 50
-        self.gain = gain = .5
-        self.carrier_freq = carrier_freq = 2500e6
+        self.gain_db = gain_db = 20
+        self.carrier_freq = carrier_freq = 2360e6
         self.audio_source_sampling_rate = audio_source_sampling_rate = 44.1e3
         self.am_sin_freq = am_sin_freq = 100e3
         self.am_sin_amp = am_sin_amp = 1
@@ -81,10 +80,10 @@ class am_generator(gr.top_block, Qt.QWidget):
         self._input_gain_range = qtgui.Range(0, 10, 0.1, 2, 200)
         self._input_gain_win = qtgui.RangeWidget(self._input_gain_range, self.set_input_gain, "'input_gain'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._input_gain_win)
-        self._gain_db_range = qtgui.Range(0, 70, 10, 50, 200)
+        self._gain_db_range = qtgui.Range(0, 70, 5, 20, 200)
         self._gain_db_win = qtgui.RangeWidget(self._gain_db_range, self.set_gain_db, "'gain_db'", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._gain_db_win)
-        self._carrier_freq_range = qtgui.Range(2400e6, 3800e6, 5e6, 2500e6, 200)
+        self._carrier_freq_range = qtgui.Range(2300e6, 5920e6, 5e6, 2360e6, 200)
         self._carrier_freq_win = qtgui.RangeWidget(self._carrier_freq_range, self.set_carrier_freq, "'carrier_freq'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._carrier_freq_win)
         self.uhd_usrp_sink_0 = uhd.usrp_sink(
@@ -200,9 +199,6 @@ class am_generator(gr.top_block, Qt.QWidget):
 
         self._qtgui_freq_sink_x_0_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_0_win)
-        self._gain_range = qtgui.Range(0.0, 1.0, 0.05, .5, 200)
-        self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "'gain'", "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._gain_win)
         self.blocks_wavfile_source_0_0 = blocks.wavfile_source('/home/chunchi/Desktop/wireless_transformer/gr-wireless_dump/examples/Rick Astley  Never Gonna Give You Up.wav', True)
         self.blocks_multiply_xx_0 = blocks.multiply_vff(1)
         self.blocks_multiply_const_vxx_0_0 = blocks.multiply_const_ff(input_gain)
@@ -257,12 +253,6 @@ class am_generator(gr.top_block, Qt.QWidget):
     def set_gain_db(self, gain_db):
         self.gain_db = gain_db
         self.uhd_usrp_sink_0.set_gain(self.gain_db, 0)
-
-    def get_gain(self):
-        return self.gain
-
-    def set_gain(self, gain):
-        self.gain = gain
 
     def get_carrier_freq(self):
         return self.carrier_freq
