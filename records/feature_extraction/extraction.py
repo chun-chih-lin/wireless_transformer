@@ -108,6 +108,7 @@ def extract_features(data):
     # ----------------------------
     
     print(f"{process_ary.shape = }")
+    start_time = process_time()
     # 1. get the Time features
     time_indent = 64
     print("----------------------------")
@@ -164,6 +165,9 @@ def extract_features(data):
         'X': X,
         'Y': Y
     }
+
+    end_time = process_time()
+    print(f"total time: {end_time - start_time}")
 
     save_pkl_name = f"{args.source_folder}{args.pattern}/{args.filename.split('.')[0]}-Time-Freq.pkl"
     save_flag = 'N'
